@@ -5,7 +5,7 @@ namespace PiHoleListUpdater.Models;
 class UpdaterConfig
 {
   [YamlMember(Alias = "block_lists")]
-  public string[] BlockLists { get; set; } = Array.Empty<string>();
+  public Dictionary<string, BlockListConfig[]> BlockLists { get; set; } = new();
 
   [YamlMember(Alias = "outputs")]
   public OutputsConfig Outputs { get; set; } = new();
@@ -30,4 +30,10 @@ class UpdaterConfig
     [YamlMember(Alias = "cached_response_dir")]
     public string CachedResponseDir { get; set; } = "TestData/";
   }
+}
+
+class BlockListConfig
+{
+  [YamlMember(Alias = "url")]
+  public string ListUrl { get; set; } = string.Empty;
 }

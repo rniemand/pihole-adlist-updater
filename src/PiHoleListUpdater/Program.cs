@@ -9,8 +9,13 @@ var domains = new HashSet<string>();
 
 foreach (var adList in config.BlockLists)
 {
-  var rawAdList = await webService.GetUrContentAsync(adList);
-  listParser.ParseList(domains, rawAdList);
+  Console.WriteLine($"Processing list: {adList.Key}");
+
+  foreach (BlockListConfig listConfig in adList.Value)
+  {
+    var rawAdList = await webService.GetUrContentAsync(listConfig.ListUrl);
+    listParser.ParseList(domains, rawAdList);
+  }
 }
 
 var sortedDomains = domains
