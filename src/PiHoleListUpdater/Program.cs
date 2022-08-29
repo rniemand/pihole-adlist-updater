@@ -3,7 +3,7 @@ using PiHoleListUpdater.Models;
 
 UpdaterConfig config = Utils.GetConfiguration();
 
-var webService = new WebService();
+var webService = new WebService(config);
 var listParser = new AdListParser();
 var domains = new HashSet<string>();
 
@@ -17,7 +17,7 @@ var sortedDomains = domains
   .OrderBy(x => x)
   .ToArray();
 
-if(File.Exists(config.Outputs.Everything))
+if (File.Exists(config.Outputs.Everything))
   File.Delete(config.Outputs.Everything);
 
 File.WriteAllText(config.Outputs.Everything, string.Join("\r\n", domains));
