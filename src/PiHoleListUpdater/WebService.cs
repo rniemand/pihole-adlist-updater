@@ -1,4 +1,4 @@
-﻿namespace PiHoleListUpdater;
+namespace PiHoleListUpdater;
 
 internal class WebService
 {
@@ -16,11 +16,19 @@ internal class WebService
     if (_usedDevResponses)
       return GetNextDevResponse();
 
-    Console.WriteLine($"Fetching URL: {url}");
-    var request = new HttpRequestMessage(HttpMethod.Get, url);
-    var response = await _httpClient.SendAsync(request);
-    response.EnsureSuccessStatusCode();
-    return await response.Content.ReadAsStringAsync();
+    try
+    {
+      Console.WriteLine($"Fetching URL: {url}");
+      var request = new HttpRequestMessage(HttpMethod.Get, url);
+      HttpResponseMessage response = await _httpClient.SendAsync(request);
+      response.EnsureSuccessStatusCode();
+      return await response.Content.ReadAsStringAsync();
+    }
+    catch (Exception)
+    {
+      // TODO: (LOGGING) Log this
+      return string.Empty;
+    }
   }
 
   private string GetNextDevResponse()

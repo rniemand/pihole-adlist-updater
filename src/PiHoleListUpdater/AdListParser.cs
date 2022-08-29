@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 
 namespace PiHoleListUpdater;
 
@@ -9,6 +9,9 @@ internal class AdListParser
 
   public void ParseList(HashSet<string> domains, string rawList)
   {
+    if (string.IsNullOrWhiteSpace(rawList))
+      return;
+
     var addedCount = 0;
     foreach (var line in rawList.Split("\n"))
     {
