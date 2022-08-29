@@ -1,3 +1,6 @@
+outputs:
+  everything: C:\Dev\personal\pihole-adlist\lists\everything.txt
+
 block_lists:
   - https://adaway.org/hosts.txt
   - https://v.firebog.net/hosts/AdguardDNS.txt
