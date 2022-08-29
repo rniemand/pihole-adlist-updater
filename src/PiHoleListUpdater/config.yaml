@@ -2,8 +2,8 @@ output_dir: C:\Dev\personal\pihole-adlist\lists\
 
 development:
   enabled: true
-  use_cached_lists: true
-  capture_responses: false
+  use_cached_lists: false
+  capture_responses: true
   cached_response_dir: C:\Dev\personal\_blocklists
   capture_response_dir: C:\Dev\personal\_blocklists
 
@@ -12,6 +12,8 @@ block_lists:
     - url: https://raw.githubusercontent.com/PolishFiltersTeam/KADhosts/master/KADhosts.txt
     - url: https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Spam/hosts
     - url: https://v.firebog.net/hosts/static/w3kbl.txt
+    - url: https://raw.githubusercontent.com/matomo-org/referrer-spam-blacklist/master/spammers.txt
+      restrictive: true
   advertising:
     - url: https://adaway.org/hosts.txt
     - url: https://v.firebog.net/hosts/AdguardDNS.txt

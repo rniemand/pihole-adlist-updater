@@ -14,7 +14,7 @@ foreach (var (listCategory, listEntries) in config.BlockLists)
   {
     var rawAdList = await webService.GetUrContentAsync(listConfig.ListUrl);
     var entries = listParser.ParseList(rawAdList);
-    var addCount = compiledBlockLists.AddEntries(listCategory, entries);
+    var addCount = compiledBlockLists.AddEntries(listCategory, entries, listConfig.Restrictive);
     if(addCount > 0)
       Console.WriteLine($"  > Added {addCount} new entries");
   }
@@ -24,7 +24,11 @@ Console.WriteLine();
 Console.WriteLine("Generating specific lists");
 foreach (var listCategory in compiledBlockLists.Categories)
 {
-  var outListFile = Path.Join(config.OutputDir, $"{listCategory}.txt");
+  var outSafeListPath = Path.Join(config.OutputDir, $"{listCategory}.txt");
+  var outRestrictiveListPath = Path.Join(config.OutputDir, $"{listCategory}-all.txt");
+
+  var safeEntries = compiledBlockLists.GetListEntries(listCategory);
+  var allEntries = compiledBlockLists.GetAllListEntries(listCategory);
 
 
 }
