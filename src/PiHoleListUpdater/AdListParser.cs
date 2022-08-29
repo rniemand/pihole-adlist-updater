@@ -7,12 +7,12 @@ internal class AdListParser
   private static Regex TRIM_LINE_RX = new Regex("((\\d{1,3}\\.){3}\\d{1,}|(\\:[^\\s]+))\\s+",
     RegexOptions.Compiled | RegexOptions.Singleline);
 
-  public void ParseList(HashSet<string> domains, string rawList)
+  public List<string> ParseList(string rawList)
   {
     if (string.IsNullOrWhiteSpace(rawList))
-      return;
+      return new List<string>();
 
-    var addedCount = 0;
+    var entries = new List<string>();
     foreach (var line in rawList.Split("\n"))
     {
       if (line.StartsWith("#"))
@@ -25,14 +25,9 @@ internal class AdListParser
       if (string.IsNullOrWhiteSpace(cleanLine))
         continue;
 
-      if (domains.Contains(cleanLine))
-        continue;
-
-      domains.Add(cleanLine);
-      addedCount++;
+      entries.Add(cleanLine);
     }
 
-    if (addedCount > 0)
-      Console.WriteLine($"Added {addedCount} new domains");
+    return entries;
   }
 }

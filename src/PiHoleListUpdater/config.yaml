@@ -1,5 +1,4 @@
-outputs:
-  everything: C:\Dev\personal\pihole-adlist\lists\everything.txt
+output_dir: C:\Dev\personal\pihole-adlist\lists\
 
 development:
   enabled: true

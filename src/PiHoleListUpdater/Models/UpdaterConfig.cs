@@ -7,18 +7,12 @@ class UpdaterConfig
   [YamlMember(Alias = "block_lists")]
   public Dictionary<string, BlockListConfig[]> BlockLists { get; set; } = new();
 
-  [YamlMember(Alias = "outputs")]
-  public OutputsConfig Outputs { get; set; } = new();
+  [YamlMember(Alias = "output_dir")]
+  public string OutputDir { get; set; } = string.Empty;
 
   [YamlMember(Alias = "development")]
   public DevelopmentConfig Development { get; set; } = new();
-
-  public class OutputsConfig
-  {
-    [YamlMember(Alias = "everything")]
-    public string Everything { get; set; } = string.Empty;
-  }
-
+  
   public class DevelopmentConfig
   {
     [YamlMember(Alias = "enabled")]
