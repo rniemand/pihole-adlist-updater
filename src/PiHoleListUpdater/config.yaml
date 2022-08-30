@@ -55,3 +55,10 @@ block_lists:
     - url: https://zerodot1.gitlab.io/CoinBlockerLists/hosts_browser
     - url: https://v.firebog.net/hosts/Prigent-Adult.txt
       restrictive: true
+
+whitelist:
+  regex:
+    - .*\.whatsapp\.(net|com)$
+    - .*?\.gvt(\d{1,})\.com
+  exact:
+    - fonts.gstatic.com

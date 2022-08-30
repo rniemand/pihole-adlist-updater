@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.RegularExpressions;
 using PiHoleListUpdater.Models;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
@@ -22,6 +23,12 @@ static class Utils
       throw new Exception($"Unable to find configuration file: {exeRelative}");
 
     var configYaml = File.ReadAllText(exeRelative);
-    return YamlDeserializer.Deserialize<UpdaterConfig>(configYaml);
+    var config = YamlDeserializer.Deserialize<UpdaterConfig>(configYaml);
+
+    config.Whitelist.CompiledRegex = config.Whitelist.RegexPatterns
+      .Select(x => new Regex(x, RegexOptions.Compiled | RegexOptions.Singleline))
+      .ToArray();
+
+    return config;
   }
 }

@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using YamlDotNet.Serialization;
 
 namespace PiHoleListUpdater.Models;
@@ -12,6 +13,9 @@ class UpdaterConfig
 
   [YamlMember(Alias = "development")]
   public DevelopmentConfig Development { get; set; } = new();
+
+  [YamlMember(Alias = "whitelist")]
+  public WhiteListConfig Whitelist { get; set; } = new();
   
   public class DevelopmentConfig
   {
@@ -30,13 +34,16 @@ class UpdaterConfig
     [YamlMember(Alias = "capture_response_dir")]
     public string CaptureResponseDir { get; set; } = string.Empty;
   }
-}
 
-class BlockListConfig
-{
-  [YamlMember(Alias = "url")]
-  public string ListUrl { get; set; } = string.Empty;
+  public class WhiteListConfig
+  {
+    [YamlMember(Alias = "regex")]
+    public string[] RegexPatterns { get; set; } = Array.Empty<string>();
 
-  [YamlMember(Alias = "restrictive")]
-  public bool Restrictive { get; set; }
+    [YamlIgnore]
+    public Regex[] CompiledRegex { get; set; } = Array.Empty<Regex>();
+
+    [YamlMember(Alias = "exact")]
+    public string[] ExactDomains { get; set; } = Array.Empty<string>();
+  }
 }

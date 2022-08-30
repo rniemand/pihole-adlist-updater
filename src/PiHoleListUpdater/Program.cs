@@ -4,7 +4,7 @@ using PiHoleListUpdater.Models;
 UpdaterConfig config = Utils.GetConfiguration();
 
 var webService = new WebService(config);
-var listParser = new AdListParser();
+var listParser = new AdListParser(config);
 var compiledBlockLists = new CompiledBlockLists();
 
 foreach (var (listCategory, listEntries) in config.BlockLists)
