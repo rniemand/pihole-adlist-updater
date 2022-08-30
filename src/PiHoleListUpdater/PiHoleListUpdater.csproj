@@ -11,10 +11,4 @@
     <ProjectReference Include="..\PiHoleUpdater.Common\PiHoleUpdater.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="config.yaml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

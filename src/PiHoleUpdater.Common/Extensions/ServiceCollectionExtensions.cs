@@ -6,6 +6,7 @@ using PiHoleUpdater.Common.Logging;
 using PiHoleUpdater.Common.Models;
 using System.Text.RegularExpressions;
 using PiHoleUpdater.Common.Providers;
+using PiHoleUpdater.Common.Repo;
 using PiHoleUpdater.Common.Services;
 using PiHoleUpdater.Common.Utils;
 using YamlDotNet.Serialization.NamingConventions;
@@ -42,6 +43,7 @@ public static class ServiceCollectionExtensions
   public static IServiceCollection AddPiHoleUpdater(this IServiceCollection services)
   {
     return services
+      .AddSingleton<IDomainRepo, DomainRepo>()
       .AddSingleton<IBlockListEntryParser, BlockListEntryParser>()
       .AddSingleton<IBlockListFileWriter, BlockListFileWriter>()
       .AddSingleton<IBlockListWebProvider, BlockListWebProvider>()

@@ -35,7 +35,7 @@ public class ListUpdaterService : IListUpdaterService
   {
     var blockLists = new CompiledBlockLists();
 
-    UpdaterUtils.WriteHeading("Processing lists...");
+    _logger.LogInformation("Processing lists...");
     foreach (var (listCategory, listEntries) in _config.BlockLists)
     {
       Console.WriteLine($"Processing list: {listCategory}");
@@ -53,17 +53,17 @@ public class ListUpdaterService : IListUpdaterService
 
     if (_config.ListGeneration.GenerateCategoryLists)
     {
-      UpdaterUtils.WriteHeading("Generating category lists...");
+      _logger.LogInformation("Generating category lists...");
       foreach (var listCategory in blockLists.Categories)
         _blockListFileWriter.WriteCategoryLists(listCategory, blockLists);
     }
 
     if (_config.ListGeneration.GenerateCombinedLists)
     {
-      UpdaterUtils.WriteHeading("Generating combined lists...");
+      _logger.LogInformation("Generating combined lists...");
       _blockListFileWriter.WriteCombinedLists(blockLists);
     }
 
-    UpdaterUtils.WriteHeading("All done.");
+    _logger.LogInformation("All done.");
   }
 }

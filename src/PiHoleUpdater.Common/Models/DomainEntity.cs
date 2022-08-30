@@ -1,4 +1,4 @@
-namespace PiHoleListUpdater.Models;
+namespace PiHoleUpdater.Common.Models;
 
 class DomainEntity
 {
