@@ -13,11 +13,13 @@ Console.WriteLine("=============================================");
 foreach (var (listCategory, listEntries) in config.BlockLists)
 {
   Console.WriteLine($"Processing list: {listCategory}");
-  foreach (BlockListConfig listConfig in listEntries)
+  foreach (var listConfig in listEntries)
   {
-    var rawAdList = await webService.GetUrContentAsync(listConfig.ListUrl);
-    var entries = listParser.ParseList(rawAdList);
-    var addCount = blockLists.AddDomains(listCategory, entries, listConfig.Restrictive);
+    var rawBlockList = await webService.GetBlockListAsync(listConfig.ListUrl);
+    var addCount = blockLists.AddDomains(listCategory,
+      listParser.ParseList(rawBlockList),
+      listConfig.Restrictive);
+
     if(addCount > 0)
       Console.WriteLine($"  > Added {addCount} new entries");
   }
@@ -41,8 +43,3 @@ if (config.ListGeneration.GenerateCombinedLists)
   Console.WriteLine("=============================================");
   listDumper.WriteCombinedLists(blockLists);
 }
-
-
-
-Console.WriteLine();
-Console.WriteLine();

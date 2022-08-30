@@ -23,7 +23,7 @@ internal class BlockListWebService
       throw new Exception("No capture response directory defined");
   }
 
-  public async Task<string> GetUrContentAsync(string url)
+  public async Task<string> GetBlockListAsync(string url)
   {
     if (_usedDevResponses)
       return GetNextDevResponse();
