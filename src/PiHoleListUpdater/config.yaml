@@ -1,6 +1,8 @@
 output_dir: C:\Dev\personal\pihole-adlist\lists\
-generate_all_list: true
-generate_safe_list: true
+
+list_generation:
+  category_all: true
+  category_safe: true
 
 development:
   enabled: true

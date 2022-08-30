@@ -14,15 +14,15 @@ class BlockListDumper
   public void DumpList(string category, CompiledBlockLists lists)
   {
     Console.WriteLine($"  Dumping '{category}' list");
-    DumpSafeList(category, lists);
-    DumpAllList(category, lists);
+    DumpCategorySafeList(category, lists);
+    DumpCategoryAllList(category, lists);
   }
 
 
   // Internal methods
-  private void DumpSafeList(string category, CompiledBlockLists lists)
+  private void DumpCategorySafeList(string category, CompiledBlockLists lists)
   {
-    if(!_config.GenerateSafeList)
+    if(!_config.ListGeneration.CategorySafe)
       return;
 
     var entries = lists.GetListEntries(category);
@@ -30,9 +30,9 @@ class BlockListDumper
     WriteList(filePath, entries);
   }
 
-  private void DumpAllList(string category, CompiledBlockLists lists)
+  private void DumpCategoryAllList(string category, CompiledBlockLists lists)
   {
-    if (!_config.GenerateAllList)
+    if (!_config.ListGeneration.CategoryAll)
       return;
 
     var entries = lists.GetAllListEntries(category);

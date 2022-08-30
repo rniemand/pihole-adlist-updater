@@ -17,12 +17,11 @@ class UpdaterConfig
   [YamlMember(Alias = "whitelist")]
   public WhiteListConfig Whitelist { get; set; } = new();
 
-  [YamlMember(Alias = "generate_all_list")]
-  public bool GenerateAllList { get; set; }
+  [YamlMember(Alias = "list_generation")]
+  public ListGenerationConfig ListGeneration { get; set; } = new();
 
-  [YamlMember(Alias = "generate_safe_list")]
-  public bool GenerateSafeList { get; set; }
-  
+
+  // Internal classes
   public class DevelopmentConfig
   {
     [YamlMember(Alias = "enabled")]
@@ -51,5 +50,14 @@ class UpdaterConfig
 
     [YamlMember(Alias = "exact")]
     public string[] ExactDomains { get; set; } = Array.Empty<string>();
+  }
+
+  public class ListGenerationConfig
+  {
+    [YamlMember(Alias = "category_all")]
+    public bool CategoryAll { get; set; }
+
+    [YamlMember(Alias = "category_safe")]
+    public bool CategorySafe { get; set; }
   }
 }
