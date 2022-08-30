@@ -1,9 +1,16 @@
-using PiHoleListUpdater.Models;
+using PiHoleUpdater.Common.Logging;
+using PiHoleUpdater.Common.Models;
 
-namespace PiHoleListUpdater;
+namespace PiHoleUpdater.Common.Providers;
 
-internal class BlockListWebService
+public interface IBlockListWebProvider
 {
+  Task<string> GetBlockListAsync(string url);
+}
+
+public class BlockListWebProvider : IBlockListWebProvider
+{
+  private readonly ILoggerAdapter<BlockListWebProvider> _logger;
   private readonly HttpClient _httpClient = new();
   private readonly string[] _devResponseFiles;
   private readonly bool _usedDevResponses;
@@ -12,8 +19,9 @@ internal class BlockListWebService
   private int _currentResponseIdx;
   private int _captureResponseNumber = 1;
 
-  public BlockListWebService(UpdaterConfig config)
+  public BlockListWebProvider(ILoggerAdapter<BlockListWebProvider> logger, UpdaterConfig config)
   {
+    _logger = logger;
     _captureResponses = config.Development.CaptureResponses;
     _usedDevResponses = config.Development.Enabled && config.Development.UseCachedLists;
     _devResponseFiles = GetDevResponseFiles(config);
@@ -88,7 +96,7 @@ internal class BlockListWebService
     if (!Directory.Exists(_captureResponseDir))
       Directory.CreateDirectory(_captureResponseDir);
 
-    if(File.Exists(fileName))
+    if (File.Exists(fileName))
       File.Delete(fileName);
 
     Console.WriteLine($"Dumping captured response to: {fileName}");

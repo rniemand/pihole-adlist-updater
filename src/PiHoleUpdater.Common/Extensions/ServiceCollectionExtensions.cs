@@ -5,6 +5,7 @@ using NLog.Extensions.Logging;
 using PiHoleUpdater.Common.Logging;
 using PiHoleUpdater.Common.Models;
 using System.Text.RegularExpressions;
+using PiHoleUpdater.Common.Providers;
 using PiHoleUpdater.Common.Services;
 using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.Serialization;
@@ -40,6 +41,7 @@ public static class ServiceCollectionExtensions
   public static IServiceCollection AddPiHoleUpdater(this IServiceCollection services)
   {
     return services
+      .AddSingleton<IBlockListWebProvider, BlockListWebProvider>()
       .AddSingleton<IListUpdaterService, ListUpdaterService>();
   }
 
