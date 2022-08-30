@@ -1,12 +1,13 @@
 using PiHoleListUpdater;
 using PiHoleListUpdater.Models;
+using PiHoleListUpdater.Repo;
 
 var config = UpdaterUtils.GetConfiguration();
 var webService = new BlockListWebService(config);
 var listParser = new BlockListEntryParser(config);
 var listDumper = new BlockListFileWriter(config);
 var blockLists = new CompiledBlockLists();
-
+var domainRepo = new DomainRepo();
 
 UpdaterUtils.WriteHeading("Processing lists...");
 foreach (var (listCategory, listEntries) in config.BlockLists)

@@ -24,6 +24,7 @@ block_lists:
       restrictive: true
     - url: https://someonewhocares.org/hosts/zero/hosts
       restrictive: true
+
   advertising:
     - url: https://adaway.org/hosts.txt
     - url: https://v.firebog.net/hosts/AdguardDNS.txt
@@ -36,6 +37,7 @@ block_lists:
     - url: https://raw.githubusercontent.com/bigdargon/hostsVN/master/hosts
     - url: https://raw.githubusercontent.com/jdlingyu/ad-wars/master/hosts
       restrictive: true
+
   tracking:
     - url: https://v.firebog.net/hosts/Easyprivacy.txt
     - url: https://v.firebog.net/hosts/Prigent-Ads.txt
@@ -44,6 +46,7 @@ block_lists:
     - url: https://hostfiles.frogeye.fr/firstparty-trackers-hosts.txt
     - url: https://hostfiles.frogeye.fr/multiparty-trackers-hosts.txt
       restrictive: true
+
   malicious:
     - url: https://raw.githubusercontent.com/DandelionSprout/adfilt/master/Alternate%20versions%20Anti-Malware%20List/AntiMalwareHosts.txt
     - url: https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt
@@ -59,10 +62,12 @@ block_lists:
     - url: https://urlhaus.abuse.ch/downloads/hostfile/
     - url: https://v.firebog.net/hosts/Prigent-Malware.txt
       restrictive: true
+
   other:
     - url: https://zerodot1.gitlab.io/CoinBlockerLists/hosts_browser
     - url: https://v.firebog.net/hosts/Prigent-Adult.txt
       restrictive: true
+      enabled: false
 
 whitelist:
   regex:
