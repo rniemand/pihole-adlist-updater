@@ -3,14 +3,14 @@ using PiHoleListUpdater.Models;
 
 namespace PiHoleListUpdater;
 
-internal class AdListParser
+internal class BlockListParser
 {
   private static Regex TRIM_LINE_RX = new Regex("((\\d{1,3}\\.){3}\\d{1,}|(\\:[^\\s]+))\\s+",
     RegexOptions.Compiled | RegexOptions.Singleline);
 
   private readonly UpdaterConfig _config;
 
-  public AdListParser(UpdaterConfig config)
+  public BlockListParser(UpdaterConfig config)
   {
     _config = config;
   }

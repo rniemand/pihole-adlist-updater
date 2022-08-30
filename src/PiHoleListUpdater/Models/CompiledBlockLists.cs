@@ -30,7 +30,7 @@ class CompiledBlockLists
     return addCount;
   }
 
-  public IEnumerable<string> GetListEntries(string listCategory)
+  public List<string> GetListEntries(string listCategory)
   {
     if (string.IsNullOrWhiteSpace(listCategory))
       return new List<string>();
@@ -45,7 +45,7 @@ class CompiledBlockLists
       .ToList();
   }
 
-  public IEnumerable<string> GetAllListEntries(string listCategory)
+  public List<string> GetAllListEntries(string listCategory)
   {
     if (string.IsNullOrWhiteSpace(listCategory))
       return new List<string>();

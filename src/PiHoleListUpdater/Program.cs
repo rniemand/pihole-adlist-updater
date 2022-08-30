@@ -4,7 +4,8 @@ using PiHoleListUpdater.Models;
 UpdaterConfig config = Utils.GetConfiguration();
 
 var webService = new WebService(config);
-var listParser = new AdListParser(config);
+var listParser = new BlockListParser(config);
+var listDumper = new BlockListDumper(config);
 var compiledBlockLists = new CompiledBlockLists();
 
 foreach (var (listCategory, listEntries) in config.BlockLists)
@@ -24,13 +25,7 @@ Console.WriteLine();
 Console.WriteLine("Generating specific lists");
 foreach (var listCategory in compiledBlockLists.Categories)
 {
-  var outSafeListPath = Path.Join(config.OutputDir, $"{listCategory}.txt");
-  var outRestrictiveListPath = Path.Join(config.OutputDir, $"{listCategory}-all.txt");
-
-  var safeEntries = compiledBlockLists.GetListEntries(listCategory);
-  var allEntries = compiledBlockLists.GetAllListEntries(listCategory);
-
-
+  listDumper.DumpList(listCategory, compiledBlockLists);
 }
 
 Console.WriteLine();

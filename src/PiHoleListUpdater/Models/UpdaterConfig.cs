@@ -16,6 +16,12 @@ class UpdaterConfig
 
   [YamlMember(Alias = "whitelist")]
   public WhiteListConfig Whitelist { get; set; } = new();
+
+  [YamlMember(Alias = "generate_all_list")]
+  public bool GenerateAllList { get; set; }
+
+  [YamlMember(Alias = "generate_safe_list")]
+  public bool GenerateSafeList { get; set; }
   
   public class DevelopmentConfig
   {
