@@ -1,5 +1,7 @@
 output_dir: C:\Dev\personal\pihole-adlist\lists\
 
+db_connection_string: "Server=127.0.0.1;Uid=pihole;Pwd=password;Database=PiHoleDomains;Allow User Variables=true;SslMode=none"
+
 list_generation:
   generate_category_lists: true
   generate_combined_lists: true

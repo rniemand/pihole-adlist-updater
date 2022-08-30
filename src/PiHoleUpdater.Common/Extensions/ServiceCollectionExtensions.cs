@@ -47,7 +47,8 @@ public static class ServiceCollectionExtensions
       .AddSingleton<IBlockListEntryParser, BlockListEntryParser>()
       .AddSingleton<IBlockListFileWriter, BlockListFileWriter>()
       .AddSingleton<IBlockListWebProvider, BlockListWebProvider>()
-      .AddSingleton<IListUpdaterService, ListUpdaterService>();
+      .AddSingleton<IListUpdaterService, ListUpdaterService>()
+      .AddSingleton<IDomainTrackerService, DomainTrackerService>();
   }
 
 

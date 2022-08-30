@@ -20,6 +20,9 @@ public class UpdaterConfig
   [YamlMember(Alias = "list_generation")]
   public ListGenerationConfig ListGeneration { get; set; } = new();
 
+  [YamlMember(Alias = "db_connection_string")]
+  public string DbConnectionString { get; set; } = string.Empty;
+
 
   // Internal classes
   public class DevelopmentConfig

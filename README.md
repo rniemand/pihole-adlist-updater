@@ -8,6 +8,8 @@
 - Microsoft.Extensions.DependencyInjection
 - NLog.Extensions.Logging
 - Microsoft.Extensions.Configuration.Json
+- Dapper
+- MySql.Data
 
 ## Block List Providers
 

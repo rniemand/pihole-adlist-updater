@@ -13,20 +13,23 @@ public interface IListUpdaterService
 public class ListUpdaterService : IListUpdaterService
 {
   private readonly ILoggerAdapter<ListUpdaterService> _logger;
-  private readonly IBlockListWebProvider _blockListWebProvider;
+  private readonly IBlockListWebProvider _blockListProvider;
   private readonly IBlockListEntryParser _entryParser;
   private readonly IBlockListFileWriter _blockListFileWriter;
+  private readonly IDomainTrackerService _domainTracker;
   private readonly UpdaterConfig _config;
 
   public ListUpdaterService(ILoggerAdapter<ListUpdaterService> logger,
-    UpdaterConfig config,
     IBlockListWebProvider blockListWebProvider,
     IBlockListEntryParser entryParser,
-    IBlockListFileWriter blockListFileWriter)
+    IBlockListFileWriter blockListFileWriter,
+    IDomainTrackerService domainTracker,
+    UpdaterConfig config)
   {
     _logger = logger;
     _config = config;
-    _blockListWebProvider = blockListWebProvider;
+    _domainTracker = domainTracker;
+    _blockListProvider = blockListWebProvider;
     _entryParser = entryParser;
     _blockListFileWriter = blockListFileWriter;
   }
@@ -41,14 +44,14 @@ public class ListUpdaterService : IListUpdaterService
       Console.WriteLine($"Processing list: {listCategory}");
       foreach (BlockListConfig listConfig in listEntries)
       {
-        var rawBlockList = await _blockListWebProvider.GetBlockListAsync(listConfig.ListUrl);
-        var addCount = blockLists.AddDomains(listCategory,
-          _entryParser.ParseList(rawBlockList),
-          listConfig.Restrictive);
+        var rawBlockList = await _blockListProvider.GetBlockListAsync(listConfig.ListUrl);
+        var addCount = blockLists.AddDomains(listCategory, _entryParser.ParseList(rawBlockList), listConfig.Restrictive);
 
         if (addCount > 0)
           Console.WriteLine($"  > Added {addCount} new entries");
       }
+
+      await _domainTracker.TrackListEntries(listCategory, blockLists.GetRawEntries(listCategory));
     }
 
     if (_config.ListGeneration.GenerateCategoryLists)

@@ -79,4 +79,16 @@ public class CompiledBlockLists
       .Select(x => x.Domain)
       .ToList();
   }
+
+  public HashSet<BlockListEntry> GetRawEntries(string listCategory)
+  {
+    if (string.IsNullOrWhiteSpace(listCategory))
+      return new HashSet<BlockListEntry>();
+
+    var safeCategory = listCategory.ToLower().Trim();
+
+    return !Lists.ContainsKey(safeCategory)
+      ? new HashSet<BlockListEntry>()
+      : Lists[safeCategory];
+  }
 }

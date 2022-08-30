@@ -1,6 +1,6 @@
 namespace PiHoleUpdater.Common.Models;
 
-class DomainEntity
+public class DomainEntity
 {
   public long DomainId { get; set; }
   public DateOnly DateAdded { get; set; } = DateOnly.FromDateTime(DateTime.Now);
