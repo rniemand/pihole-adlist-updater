@@ -1,9 +1,14 @@
+using PiHoleUpdater.Common.Models;
 using System.Text.RegularExpressions;
-using PiHoleListUpdater.Models;
 
-namespace PiHoleListUpdater;
+namespace PiHoleUpdater.Common.Utils;
 
-internal class BlockListEntryParser
+public interface IBlockListEntryParser
+{
+  List<string> ParseList(string rawList);
+}
+
+public class BlockListEntryParser : IBlockListEntryParser
 {
   private static readonly Regex TrimLineRx = new("((\\d{1,3}\\.){3}\\d{1,}|(\\:[^\\s]+))\\s+",
     RegexOptions.Compiled | RegexOptions.Singleline);

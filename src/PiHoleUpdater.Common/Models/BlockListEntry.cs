@@ -1,6 +1,6 @@
-namespace PiHoleListUpdater.Models;
+namespace PiHoleUpdater.Common.Models;
 
-struct BlockListEntry
+public struct BlockListEntry
 {
   public string Domain { get; set; }
   public bool Restrictive { get; set; }

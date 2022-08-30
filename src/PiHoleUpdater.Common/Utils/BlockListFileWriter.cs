@@ -1,8 +1,14 @@
-using PiHoleListUpdater.Models;
+using PiHoleUpdater.Common.Models;
 
-namespace PiHoleListUpdater;
+namespace PiHoleUpdater.Common.Utils;
 
-class BlockListFileWriter
+public interface IBlockListFileWriter
+{
+  void WriteCategoryLists(string category, CompiledBlockLists lists);
+  void WriteCombinedLists(CompiledBlockLists lists);
+}
+
+public class BlockListFileWriter : IBlockListFileWriter
 {
   private readonly UpdaterConfig _config;
 
@@ -38,7 +44,7 @@ class BlockListFileWriter
 
   private void WriteCategorySafeList(string category, CompiledBlockLists lists)
   {
-    if(!_config.ListGeneration.CategorySafe)
+    if (!_config.ListGeneration.CategorySafe)
       return;
 
     var entries = lists.GetSafeEntries(category);

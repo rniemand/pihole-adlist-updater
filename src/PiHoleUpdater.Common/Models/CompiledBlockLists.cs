@@ -1,6 +1,6 @@
-namespace PiHoleListUpdater.Models;
+namespace PiHoleUpdater.Common.Models;
 
-class CompiledBlockLists
+public class CompiledBlockLists
 {
   public Dictionary<string, HashSet<BlockListEntry>> Lists { get; set; } = new();
   public string[] Categories => Lists.Keys.ToArray();

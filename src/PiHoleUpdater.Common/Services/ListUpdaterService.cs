@@ -1,6 +1,7 @@
 using PiHoleUpdater.Common.Logging;
 using PiHoleUpdater.Common.Models;
 using PiHoleUpdater.Common.Providers;
+using PiHoleUpdater.Common.Utils;
 
 namespace PiHoleUpdater.Common.Services;
 
@@ -13,21 +14,25 @@ public class ListUpdaterService : IListUpdaterService
 {
   private readonly ILoggerAdapter<ListUpdaterService> _logger;
   private readonly IBlockListWebProvider _blockListWebProvider;
+  private readonly IBlockListEntryParser _entryParser;
+  private readonly IBlockListFileWriter _blockListFileWriter;
   private readonly UpdaterConfig _config;
 
   public ListUpdaterService(ILoggerAdapter<ListUpdaterService> logger,
     UpdaterConfig config,
-    IBlockListWebProvider blockListWebProvider)
+    IBlockListWebProvider blockListWebProvider,
+    IBlockListEntryParser entryParser,
+    IBlockListFileWriter blockListFileWriter)
   {
     _logger = logger;
     _config = config;
     _blockListWebProvider = blockListWebProvider;
+    _entryParser = entryParser;
+    _blockListFileWriter = blockListFileWriter;
   }
 
   public async Task TickAsync(CancellationToken stoppingToken)
   {
-    var listParser = new BlockListEntryParser(_config);
-    var listDumper = new BlockListFileWriter(_config);
     var blockLists = new CompiledBlockLists();
 
     UpdaterUtils.WriteHeading("Processing lists...");
@@ -38,7 +43,7 @@ public class ListUpdaterService : IListUpdaterService
       {
         var rawBlockList = await _blockListWebProvider.GetBlockListAsync(listConfig.ListUrl);
         var addCount = blockLists.AddDomains(listCategory,
-          listParser.ParseList(rawBlockList),
+          _entryParser.ParseList(rawBlockList),
           listConfig.Restrictive);
 
         if (addCount > 0)
@@ -50,13 +55,13 @@ public class ListUpdaterService : IListUpdaterService
     {
       UpdaterUtils.WriteHeading("Generating category lists...");
       foreach (var listCategory in blockLists.Categories)
-        listDumper.WriteCategoryLists(listCategory, blockLists);
+        _blockListFileWriter.WriteCategoryLists(listCategory, blockLists);
     }
 
     if (_config.ListGeneration.GenerateCombinedLists)
     {
       UpdaterUtils.WriteHeading("Generating combined lists...");
-      listDumper.WriteCombinedLists(blockLists);
+      _blockListFileWriter.WriteCombinedLists(blockLists);
     }
 
     UpdaterUtils.WriteHeading("All done.");
