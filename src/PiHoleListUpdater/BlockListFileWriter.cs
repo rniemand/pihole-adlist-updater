@@ -2,31 +2,31 @@ using PiHoleListUpdater.Models;
 
 namespace PiHoleListUpdater;
 
-class BlockListDumper
+class BlockListFileWriter
 {
   private readonly UpdaterConfig _config;
 
-  public BlockListDumper(UpdaterConfig config)
+  public BlockListFileWriter(UpdaterConfig config)
   {
     _config = config;
   }
 
-  public void DumpCategoryList(string category, CompiledBlockLists lists)
+  public void WriteCategoryLists(string category, CompiledBlockLists lists)
   {
     Console.WriteLine($"  Dumping '{category}' list");
-    DumpCategorySafeList(category, lists);
-    DumpCategoryAllList(category, lists);
+    WriteCategorySafeList(category, lists);
+    WriteCategoryAllList(category, lists);
   }
 
-  public void DumpList(CompiledBlockLists lists)
+  public void WriteCombinedLists(CompiledBlockLists lists)
   {
-    DumpSafeList(lists);
-    DumpAllList(lists);
+    WriteSafeList(lists);
+    WriteAllList(lists);
   }
 
 
   // Internal methods
-  private void DumpSafeList(CompiledBlockLists lists)
+  private void WriteSafeList(CompiledBlockLists lists)
   {
     if (!_config.ListGeneration.CategorySafe)
       return;
@@ -36,7 +36,7 @@ class BlockListDumper
     WriteList(filePath, entries);
   }
 
-  private void DumpCategorySafeList(string category, CompiledBlockLists lists)
+  private void WriteCategorySafeList(string category, CompiledBlockLists lists)
   {
     if(!_config.ListGeneration.CategorySafe)
       return;
@@ -46,7 +46,7 @@ class BlockListDumper
     WriteList(filePath, entries);
   }
 
-  private void DumpAllList(CompiledBlockLists lists)
+  private void WriteAllList(CompiledBlockLists lists)
   {
     if (!_config.ListGeneration.CategorySafe)
       return;
@@ -56,7 +56,7 @@ class BlockListDumper
     WriteList(filePath, entries);
   }
 
-  private void DumpCategoryAllList(string category, CompiledBlockLists lists)
+  private void WriteCategoryAllList(string category, CompiledBlockLists lists)
   {
     if (!_config.ListGeneration.CategoryAll)
       return;

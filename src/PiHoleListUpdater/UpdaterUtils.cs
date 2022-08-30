@@ -6,7 +6,7 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace PiHoleListUpdater;
 
-static class Utils
+static class UpdaterUtils
 {
   public static readonly IDeserializer YamlDeserializer = new DeserializerBuilder()
     .WithNamingConvention(UnderscoredNamingConvention.Instance)
@@ -18,7 +18,7 @@ static class Utils
 
   public static UpdaterConfig GetConfiguration()
   {
-    var exeRelative = Utils.ExeRelative("config.yaml");
+    var exeRelative = UpdaterUtils.ExeRelative("config.yaml");
     if (!File.Exists(exeRelative))
       throw new Exception($"Unable to find configuration file: {exeRelative}");
 

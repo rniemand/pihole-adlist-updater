@@ -5,7 +5,7 @@ class CompiledBlockLists
   public Dictionary<string, HashSet<BlockListEntry>> Lists { get; set; } = new();
   public string[] Categories => Lists.Keys.ToArray();
 
-  public int AddEntries(string listCategory, IEnumerable<string> domains, bool restrictive)
+  public int AddDomains(string listCategory, IEnumerable<string> domains, bool restrictive)
   {
     if (string.IsNullOrWhiteSpace(listCategory))
       return 0;
@@ -78,17 +78,5 @@ class CompiledBlockLists
     return Lists[safeCategory]
       .Select(x => x.Domain)
       .ToList();
-  }
-}
-
-struct BlockListEntry
-{
-  public string Domain { get; set; }
-  public bool Restrictive { get; set; }
-
-  public BlockListEntry(string domain, bool restrictive)
-  {
-    Domain = domain;
-    Restrictive = restrictive;
   }
 }

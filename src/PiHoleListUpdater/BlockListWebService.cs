@@ -2,7 +2,7 @@ using PiHoleListUpdater.Models;
 
 namespace PiHoleListUpdater;
 
-internal class WebService
+internal class BlockListWebService
 {
   private readonly HttpClient _httpClient = new();
   private readonly string[] _devResponseFiles;
@@ -12,7 +12,7 @@ internal class WebService
   private int _currentResponseIdx;
   private int _captureResponseNumber = 1;
 
-  public WebService(UpdaterConfig config)
+  public BlockListWebService(UpdaterConfig config)
   {
     _captureResponses = config.Development.CaptureResponses;
     _usedDevResponses = config.Development.Enabled && config.Development.UseCachedLists;
