@@ -11,22 +11,48 @@ class BlockListDumper
     _config = config;
   }
 
-  public void DumpList(string category, CompiledBlockLists lists)
+  public void DumpCategoryList(string category, CompiledBlockLists lists)
   {
     Console.WriteLine($"  Dumping '{category}' list");
     DumpCategorySafeList(category, lists);
     DumpCategoryAllList(category, lists);
   }
 
+  public void DumpList(CompiledBlockLists lists)
+  {
+    DumpSafeList(lists);
+    DumpAllList(lists);
+  }
+
 
   // Internal methods
+  private void DumpSafeList(CompiledBlockLists lists)
+  {
+    if (!_config.ListGeneration.CategorySafe)
+      return;
+
+    var entries = lists.GetSafeEntries();
+    var filePath = Path.Join(_config.OutputDir, "_combined-safe.txt");
+    WriteList(filePath, entries);
+  }
+
   private void DumpCategorySafeList(string category, CompiledBlockLists lists)
   {
     if(!_config.ListGeneration.CategorySafe)
       return;
 
-    var entries = lists.GetListEntries(category);
+    var entries = lists.GetSafeEntries(category);
     var filePath = Path.Join(_config.OutputDir, $"{category}-safe.txt");
+    WriteList(filePath, entries);
+  }
+
+  private void DumpAllList(CompiledBlockLists lists)
+  {
+    if (!_config.ListGeneration.CategorySafe)
+      return;
+
+    var entries = lists.GetAllEntries();
+    var filePath = Path.Join(_config.OutputDir, "_combined-all.txt");
     WriteList(filePath, entries);
   }
 
@@ -35,7 +61,7 @@ class BlockListDumper
     if (!_config.ListGeneration.CategoryAll)
       return;
 
-    var entries = lists.GetAllListEntries(category);
+    var entries = lists.GetAllEntries(category);
     var filePath = Path.Join(_config.OutputDir, $"{category}-all.txt");
     WriteList(filePath, entries);
   }

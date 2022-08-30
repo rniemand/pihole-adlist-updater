@@ -8,6 +8,9 @@ var listParser = new BlockListParser(config);
 var listDumper = new BlockListDumper(config);
 var compiledBlockLists = new CompiledBlockLists();
 
+Console.WriteLine("=============================================");
+Console.WriteLine("Processing lists...");
+Console.WriteLine("=============================================");
 foreach (var (listCategory, listEntries) in config.BlockLists)
 {
   Console.WriteLine($"Processing list: {listCategory}");
@@ -21,23 +24,26 @@ foreach (var (listCategory, listEntries) in config.BlockLists)
   }
 }
 
-Console.WriteLine();
-Console.WriteLine("Generating specific lists");
-foreach (var listCategory in compiledBlockLists.Categories)
+if (config.ListGeneration.GenerateCategoryLists)
 {
-  listDumper.DumpList(listCategory, compiledBlockLists);
+  Console.WriteLine();
+  Console.WriteLine("=============================================");
+  Console.WriteLine("Generating category lists...");
+  Console.WriteLine("=============================================");
+  foreach (var listCategory in compiledBlockLists.Categories)
+    listDumper.DumpCategoryList(listCategory, compiledBlockLists);
 }
 
+if (config.ListGeneration.GenerateCombinedLists)
+{
+  Console.WriteLine();
+  Console.WriteLine("=============================================");
+  Console.WriteLine("Generating combined lists...");
+  Console.WriteLine("=============================================");
+  listDumper.DumpList(compiledBlockLists);
+}
+
+
+
 Console.WriteLine();
 Console.WriteLine();
-
-//var sortedDomains = domains
-//  .OrderBy(x => x)
-//  .ToArray();
-
-//if (File.Exists(config.Outputs.Everything))
-//  File.Delete(config.Outputs.Everything);
-
-//File.WriteAllText(config.Outputs.Everything, string.Join("\r\n", domains));
-
-//Console.WriteLine(sortedDomains.Length);

@@ -30,13 +30,24 @@ class CompiledBlockLists
     return addCount;
   }
 
-  public List<string> GetListEntries(string listCategory)
+  public List<string> GetSafeEntries()
+  {
+    return Lists
+      .SelectMany(x => x.Value)
+      .Where(x => !x.Restrictive)
+      .Select(x => x.Domain)
+      .OrderBy(x => x)
+      .Distinct()
+      .ToList();
+  }
+
+  public List<string> GetSafeEntries(string listCategory)
   {
     if (string.IsNullOrWhiteSpace(listCategory))
       return new List<string>();
 
     var safeCategory = listCategory.ToLower().Trim();
-    if(!Lists.ContainsKey(safeCategory))
+    if (!Lists.ContainsKey(safeCategory))
       return new List<string>();
 
     return Lists[safeCategory]
@@ -45,7 +56,17 @@ class CompiledBlockLists
       .ToList();
   }
 
-  public List<string> GetAllListEntries(string listCategory)
+  public List<string> GetAllEntries()
+  {
+    return Lists
+      .SelectMany(x => x.Value)
+      .Select(x => x.Domain)
+      .OrderBy(x => x)
+      .Distinct()
+      .ToList();
+  }
+
+  public List<string> GetAllEntries(string listCategory)
   {
     if (string.IsNullOrWhiteSpace(listCategory))
       return new List<string>();

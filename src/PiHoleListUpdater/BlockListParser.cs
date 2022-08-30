@@ -5,7 +5,7 @@ namespace PiHoleListUpdater;
 
 internal class BlockListParser
 {
-  private static Regex TRIM_LINE_RX = new Regex("((\\d{1,3}\\.){3}\\d{1,}|(\\:[^\\s]+))\\s+",
+  private static readonly Regex TrimLineRx = new Regex("((\\d{1,3}\\.){3}\\d{1,}|(\\:[^\\s]+))\\s+",
     RegexOptions.Compiled | RegexOptions.Singleline);
 
   private readonly UpdaterConfig _config;
@@ -32,7 +32,7 @@ internal class BlockListParser
       if (string.IsNullOrWhiteSpace(line))
         continue;
 
-      var cleanLine = TRIM_LINE_RX.Replace(line, "").Trim();
+      var cleanLine = TrimLineRx.Replace(line, "").Trim();
       if (string.IsNullOrWhiteSpace(cleanLine))
         continue;
 
