@@ -1,13 +1,25 @@
 using PiHoleListUpdater;
 using PiHoleListUpdater.Models;
-using PiHoleListUpdater.Repo;
+using Microsoft.Extensions.DependencyInjection;
+using PiHoleUpdater.Common;
+using PiHoleUpdater.Common.Extensions;
+using PiHoleUpdater.Common.Services;
+
+ServiceProvider serviceProvider = new ServiceCollection()
+  .AddLoggingAndConfig()
+  .AddPiHoleUpdater()
+  .BuildServiceProvider();
+
+await serviceProvider
+  .GetRequiredService<IListUpdaterService>()
+  .TickAsync(CancellationToken.None);
+
 
 var config = UpdaterUtils.GetConfiguration();
 var webService = new BlockListWebService(config);
 var listParser = new BlockListEntryParser(config);
 var listDumper = new BlockListFileWriter(config);
 var blockLists = new CompiledBlockLists();
-var domainRepo = new DomainRepo();
 
 UpdaterUtils.WriteHeading("Processing lists...");
 foreach (var (listCategory, listEntries) in config.BlockLists)

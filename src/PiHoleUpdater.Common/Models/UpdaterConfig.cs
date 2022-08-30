@@ -1,9 +1,9 @@
 using System.Text.RegularExpressions;
 using YamlDotNet.Serialization;
 
-namespace PiHoleListUpdater.Models;
+namespace PiHoleUpdater.Common.Models;
 
-class UpdaterConfig
+public class UpdaterConfig
 {
   [YamlMember(Alias = "block_lists")]
   public Dictionary<string, BlockListConfig[]> BlockLists { get; set; } = new();

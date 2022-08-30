@@ -1,8 +1,8 @@
 using YamlDotNet.Serialization;
 
-namespace PiHoleListUpdater.Models;
+namespace PiHoleUpdater.Common.Models;
 
-class BlockListConfig
+public class BlockListConfig
 {
   [YamlMember(Alias = "url")]
   public string ListUrl { get; set; } = string.Empty;

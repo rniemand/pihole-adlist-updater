@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiHoleListUpdater", "PiHoleListUpdater\PiHoleListUpdater.csproj", "{8ACEAA89-7B14-434F-AFF4-8D9FCE2BFB0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiHoleListUpdater", "PiHoleListUpdater\PiHoleListUpdater.csproj", "{8ACEAA89-7B14-434F-AFF4-8D9FCE2BFB0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiHoleUpdater.Common", "PiHoleUpdater.Common\PiHoleUpdater.Common.csproj", "{F2F87741-9AA6-4A92-80B7-51DA3EADA4F4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{8C759CA9-1905-4FA0-A3C3-75D886B98509}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +19,16 @@ Global
 		{8ACEAA89-7B14-434F-AFF4-8D9FCE2BFB0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8ACEAA89-7B14-434F-AFF4-8D9FCE2BFB0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8ACEAA89-7B14-434F-AFF4-8D9FCE2BFB0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2F87741-9AA6-4A92-80B7-51DA3EADA4F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2F87741-9AA6-4A92-80B7-51DA3EADA4F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2F87741-9AA6-4A92-80B7-51DA3EADA4F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2F87741-9AA6-4A92-80B7-51DA3EADA4F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F2F87741-9AA6-4A92-80B7-51DA3EADA4F4} = {8C759CA9-1905-4FA0-A3C3-75D886B98509}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BE5258E1-5294-44A3-9EE4-CF9E2C7C2F28}
