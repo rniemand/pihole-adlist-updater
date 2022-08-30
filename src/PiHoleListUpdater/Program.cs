@@ -7,9 +7,8 @@ var listParser = new BlockListEntryParser(config);
 var listDumper = new BlockListFileWriter(config);
 var blockLists = new CompiledBlockLists();
 
-Console.WriteLine("=============================================");
-Console.WriteLine("Processing lists...");
-Console.WriteLine("=============================================");
+
+UpdaterUtils.WriteHeading("Processing lists...");
 foreach (var (listCategory, listEntries) in config.BlockLists)
 {
   Console.WriteLine($"Processing list: {listCategory}");
@@ -27,19 +26,15 @@ foreach (var (listCategory, listEntries) in config.BlockLists)
 
 if (config.ListGeneration.GenerateCategoryLists)
 {
-  Console.WriteLine();
-  Console.WriteLine("=============================================");
-  Console.WriteLine("Generating category lists...");
-  Console.WriteLine("=============================================");
+  UpdaterUtils.WriteHeading("Generating category lists...");
   foreach (var listCategory in blockLists.Categories)
     listDumper.WriteCategoryLists(listCategory, blockLists);
 }
 
 if (config.ListGeneration.GenerateCombinedLists)
 {
-  Console.WriteLine();
-  Console.WriteLine("=============================================");
-  Console.WriteLine("Generating combined lists...");
-  Console.WriteLine("=============================================");
+  UpdaterUtils.WriteHeading("Generating combined lists...");
   listDumper.WriteCombinedLists(blockLists);
 }
+
+UpdaterUtils.WriteHeading("All done.");

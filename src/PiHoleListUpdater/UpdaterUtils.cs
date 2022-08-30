@@ -31,4 +31,12 @@ static class UpdaterUtils
 
     return config;
   }
+
+  public static void WriteHeading(string title)
+  {
+    Console.WriteLine();
+    Console.WriteLine("=============================================");
+    Console.WriteLine(title);
+    Console.WriteLine("=============================================");
+  }
 }
