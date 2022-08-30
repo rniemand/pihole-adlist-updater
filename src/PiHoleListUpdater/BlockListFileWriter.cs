@@ -28,7 +28,7 @@ class BlockListFileWriter
   // Internal methods
   private void WriteSafeList(CompiledBlockLists lists)
   {
-    if (!_config.ListGeneration.CategorySafe)
+    if (!_config.ListGeneration.CombinedSafe)
       return;
 
     var entries = lists.GetSafeEntries();
@@ -48,7 +48,7 @@ class BlockListFileWriter
 
   private void WriteAllList(CompiledBlockLists lists)
   {
-    if (!_config.ListGeneration.CategorySafe)
+    if (!_config.ListGeneration.CombinedAll)
       return;
 
     var entries = lists.GetAllEntries();
