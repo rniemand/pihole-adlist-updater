@@ -3,19 +3,19 @@ using System.Text.RegularExpressions;
 
 namespace PiHoleUpdater.Common.Utils;
 
-public interface IBlockListEntryParser
+public interface IBlockListParser
 {
   List<string> ParseList(string rawList);
 }
 
-public class BlockListEntryParser : IBlockListEntryParser
+public class BlockListParser : IBlockListParser
 {
   private static readonly Regex TrimLineRx = new("((\\d{1,3}\\.){3}\\d{1,}|(\\:[^\\s]+))\\s+",
     RegexOptions.Compiled | RegexOptions.Singleline);
 
   private readonly PiHoleUpdaterConfig _config;
 
-  public BlockListEntryParser(PiHoleUpdaterConfig config)
+  public BlockListParser(PiHoleUpdaterConfig config)
   {
     _config = config;
   }

@@ -14,25 +14,25 @@ public interface IListUpdaterService
 public class ListUpdaterService : IListUpdaterService
 {
   private readonly ILoggerAdapter<ListUpdaterService> _logger;
-  private readonly IBlockListWebProvider _blockListProvider;
-  private readonly IBlockListEntryParser _domainParser;
-  private readonly IBlockListFileWriter _blockListFileWriter;
-  private readonly IDomainTrackerService _domainTracker;
+  private readonly IBlockListProvider _listProvider;
+  private readonly IBlockListParser _listParser;
+  private readonly IBlockListFileWriter _listWriter;
+  private readonly IDomainTrackingService _domainTracker;
   private readonly PiHoleUpdaterConfig _config;
 
   public ListUpdaterService(ILoggerAdapter<ListUpdaterService> logger,
-    IBlockListWebProvider blockListWebProvider,
-    IBlockListEntryParser domainParser,
-    IBlockListFileWriter blockListFileWriter,
-    IDomainTrackerService domainTracker,
+    IBlockListProvider listProvider,
+    IBlockListParser listParser,
+    IBlockListFileWriter listWriter,
+    IDomainTrackingService domainTracker,
     PiHoleUpdaterConfig config)
   {
     _logger = logger;
     _config = config;
     _domainTracker = domainTracker;
-    _blockListProvider = blockListWebProvider;
-    _domainParser = domainParser;
-    _blockListFileWriter = blockListFileWriter;
+    _listProvider = listProvider;
+    _listParser = listParser;
+    _listWriter = listWriter;
   }
 
   public async Task TickAsync(CancellationToken stoppingToken)
@@ -45,8 +45,8 @@ public class ListUpdaterService : IListUpdaterService
       _logger.LogInformation("Processing block list: {name}", blockList.Name);
       foreach (BlockListConfigEntry entry in blockList.Entries)
       {
-        var rawList = await _blockListProvider.GetBlockListAsync(entry.Url);
-        var newEntryCount = blockLists.AddDomains(blockList.Name, _domainParser.ParseList(rawList), entry.Restrictive);
+        var rawList = await _listProvider.GetBlockListAsync(entry.Url);
+        var newEntryCount = blockLists.AddDomains(blockList.Name, _listParser.ParseList(rawList), entry.Restrictive);
         if (newEntryCount == 0)
           continue;
         _logger.LogDebug("Added {count} new entries to list: {list}", newEntryCount, blockList.Name);
@@ -58,13 +58,13 @@ public class ListUpdaterService : IListUpdaterService
     {
       _logger.LogInformation("Generating category lists...");
       foreach (var listCategory in blockLists.Categories)
-        _blockListFileWriter.WriteCategoryLists(listCategory, blockLists);
+        _listWriter.WriteCategoryLists(listCategory, blockLists);
     }
 
     if (_config.ListGeneration.GenerateCombinedLists)
     {
       _logger.LogInformation("Generating combined lists...");
-      _blockListFileWriter.WriteCombinedLists(blockLists);
+      _listWriter.WriteCombinedLists(blockLists);
     }
 
     _logger.LogInformation("All done.");

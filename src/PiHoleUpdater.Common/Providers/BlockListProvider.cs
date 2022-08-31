@@ -3,14 +3,14 @@ using PiHoleUpdater.Common.Models.Config;
 
 namespace PiHoleUpdater.Common.Providers;
 
-public interface IBlockListWebProvider
+public interface IBlockListProvider
 {
   Task<string> GetBlockListAsync(string url);
 }
 
-public class BlockListWebProvider : IBlockListWebProvider
+public class BlockListProvider : IBlockListProvider
 {
-  private readonly ILoggerAdapter<BlockListWebProvider> _logger;
+  private readonly ILoggerAdapter<BlockListProvider> _logger;
   private readonly HttpClient _httpClient = new();
   private readonly string[] _devResponseFiles;
   private readonly bool _usedDevResponses;
@@ -19,7 +19,7 @@ public class BlockListWebProvider : IBlockListWebProvider
   private int _currentResponseIdx;
   private int _captureResponseNumber = 1;
 
-  public BlockListWebProvider(ILoggerAdapter<BlockListWebProvider> logger, PiHoleUpdaterConfig config)
+  public BlockListProvider(ILoggerAdapter<BlockListProvider> logger, PiHoleUpdaterConfig config)
   {
     _logger = logger;
     _captureResponses = config.Development.CaptureResponses;

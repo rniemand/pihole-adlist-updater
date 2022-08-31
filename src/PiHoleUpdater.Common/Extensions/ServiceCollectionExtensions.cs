@@ -48,11 +48,11 @@ public static class ServiceCollectionExtensions
 
     return services
       .AddSingleton<IDomainRepo, DomainRepo>()
-      .AddSingleton<IBlockListEntryParser, BlockListEntryParser>()
+      .AddSingleton<IBlockListParser, BlockListParser>()
       .AddSingleton<IBlockListFileWriter, BlockListFileWriter>()
-      .AddSingleton<IBlockListWebProvider, BlockListWebProvider>()
+      .AddSingleton<IBlockListProvider, BlockListProvider>()
       .AddSingleton<IListUpdaterService, ListUpdaterService>()
-      .AddSingleton<IDomainTrackerService, DomainTrackerService>();
+      .AddSingleton<IDomainTrackingService, DomainTrackingService>();
   }
 
 

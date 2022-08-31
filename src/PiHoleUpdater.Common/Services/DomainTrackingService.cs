@@ -4,19 +4,19 @@ using PiHoleUpdater.Common.Repo;
 
 namespace PiHoleUpdater.Common.Services;
 
-public interface IDomainTrackerService
+public interface IDomainTrackingService
 {
   Task TrackListEntries(string listName, HashSet<BlockListEntry> listEntries);
 }
 
-public class DomainTrackerService : IDomainTrackerService
+public class DomainTrackingService : IDomainTrackingService
 {
-  private readonly ILoggerAdapter<DomainTrackerService> _logger;
+  private readonly ILoggerAdapter<DomainTrackingService> _logger;
   private readonly IDomainRepo _domainRepo;
   public const int InsertBatchSize = 100;
   public const int UpdateBatchSize = 5000;
 
-  public DomainTrackerService(ILoggerAdapter<DomainTrackerService> logger,
+  public DomainTrackingService(ILoggerAdapter<DomainTrackingService> logger,
     IDomainRepo domainRepo)
   {
     _logger = logger;
