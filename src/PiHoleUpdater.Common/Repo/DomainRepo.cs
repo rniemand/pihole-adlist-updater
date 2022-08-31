@@ -8,9 +8,10 @@ namespace PiHoleUpdater.Common.Repo;
 
 public interface IDomainRepo
 {
-  Task<IEnumerable<BlockListEntry>> GetListEntries(string listName);
-  Task<int> AddNewEntries(IEnumerable<BlockListEntry> entries);
-  Task<int> UpdateSeen(string listName, string[] domains);
+  Task<IEnumerable<BlockListEntry>> GetEntriesAsync(string listName);
+  Task<int> AddEntriesAsync(IEnumerable<BlockListEntry> entries);
+  Task<int> UpdateSeenCountAsync(string listName, string[] domains);
+  Task<int> DeleteEntriesAsync(string listName, string[] domains);
 }
 
 public class DomainRepo : IDomainRepo
@@ -26,7 +27,7 @@ public class DomainRepo : IDomainRepo
 
 
   // Interface methods
-  public async Task<IEnumerable<BlockListEntry>> GetListEntries(string listName)
+  public async Task<IEnumerable<BlockListEntry>> GetEntriesAsync(string listName)
   {
     ensureConnected();
 
@@ -41,7 +42,7 @@ public class DomainRepo : IDomainRepo
     return await _connection.QueryAsync<BlockListEntry>(query, new { ListName = listName });
   }
 
-  public async Task<int> AddNewEntries(IEnumerable<BlockListEntry> entries)
+  public async Task<int> AddEntriesAsync(IEnumerable<BlockListEntry> entries)
   {
     ensureConnected();
 
@@ -54,7 +55,7 @@ public class DomainRepo : IDomainRepo
     return await _connection.ExecuteAsync(query, entries);
   }
 
-  public async Task<int> UpdateSeen(string listName, string[] domains)
+  public async Task<int> UpdateSeenCountAsync(string listName, string[] domains)
   {
     ensureConnected();
 
@@ -62,6 +63,23 @@ public class DomainRepo : IDomainRepo
     UPDATE `Domains`
     SET
       `SeenCount` = `SeenCount` + 1
+    WHERE
+      `ListName` = @ListName
+      AND `Domain` IN @Domains";
+
+    return await _connection.ExecuteAsync(query, new
+    {
+      ListName = listName,
+      Domains = domains
+    });
+  }
+
+  public async Task<int> DeleteEntriesAsync(string listName, string[] domains)
+  {
+    ensureConnected();
+
+    const string query = @"
+    DELETE FROM `Domains`
     WHERE
       `ListName` = @ListName
       AND `Domain` IN @Domains";

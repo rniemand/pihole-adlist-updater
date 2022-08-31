@@ -7,13 +7,14 @@ namespace PiHoleUpdater.Common.Services;
 
 public interface IDomainTrackerService
 {
-  Task TrackListEntries(string listName, HashSet<BlockListEntry> entries);
+  Task TrackListEntries(string listName, HashSet<BlockListEntry> listEntries);
 }
 
 public class DomainTrackerService : IDomainTrackerService
 {
   private readonly ILoggerAdapter<DomainTrackerService> _logger;
   private readonly IDomainRepo _domainRepo;
+  public const int BatchUpdateSize = 5000;
 
   public DomainTrackerService(ILoggerAdapter<DomainTrackerService> logger,
     IDomainRepo domainRepo)
@@ -22,29 +23,74 @@ public class DomainTrackerService : IDomainTrackerService
     _domainRepo = domainRepo;
   }
 
-  public async Task TrackListEntries(string listName, HashSet<BlockListEntry> entries)
+  public async Task TrackListEntries(string listName, HashSet<BlockListEntry> listEntries)
   {
-    _logger.LogInformation("Processing {count} domains", entries.Count);
-    _logger.LogDebug("Fetching current entries for list: {list}", listName);
-    var dbEntriesHash = (await _domainRepo.GetListEntries(listName.Trim()))
+    _logger.LogInformation("Processing {count} domains", listEntries.Count);
+    var dbEntries = (await _domainRepo.GetEntriesAsync(listName.Trim()))
       .ToHashSet();
-    
-    var newEntries = entries.Where(e => !dbEntriesHash.Contains(e)).ToList();
-    if (newEntries.Count > 0)
-    {
-      _logger.LogInformation("Adding {count} new entries to {list}", newEntries.Count, listName);
-      await _domainRepo.AddNewEntries(newEntries);
-    }
 
-    var existingEntries = entries.Where(e => dbEntriesHash.Contains(e)).Select(x => x.Domain).ToArray();
-    if (existingEntries.Length > 0)
-    {
-      _logger.LogInformation("Updating {count} new entries to {list}", existingEntries.Length, listName);
-      await _domainRepo.UpdateSeen(listName, existingEntries);
-    }
+    await AddNewEntriesAsync(listName, listEntries
+      .Where(e => !dbEntries.Contains(e))
+      .ToList());
 
+    await UpdateSeenCountAsync(listName, listEntries
+      .Where(e => dbEntries.Contains(e))
+      .Select(x => x.Domain)
+      .ToList());
 
-    await Task.CompletedTask;
+    await DeleteEntriesAsync(listName, dbEntries
+      .Where(e => !listEntries.Contains(e))
+      .Select(x => x.Domain)
+      .ToList());
   }
 
+
+
+  // Internal methods
+  private async Task AddNewEntriesAsync(string listName, IReadOnlyCollection<BlockListEntry> domains)
+  {
+    if (domains.Count == 0)
+      return;
+
+    _logger.LogInformation("Adding {count} new entries to {list}", domains.Count, listName);
+    await _domainRepo.AddEntriesAsync(domains);
+  }
+
+  private async Task UpdateSeenCountAsync(string listName, IReadOnlyCollection<string> domains)
+  {
+    if (domains.Count == 0)
+      return;
+
+    if (domains.Count > 0)
+    {
+      var batch = new List<string>();
+
+      foreach (var entry in domains)
+      {
+        batch.Add(entry);
+
+        if (batch.Count < BatchUpdateSize)
+          continue;
+
+        _logger.LogInformation("Updating {count} new entries to {list}", batch.Count, listName);
+        await _domainRepo.UpdateSeenCountAsync(listName, batch.ToArray());
+        batch.Clear();
+      }
+
+      if (batch.Count > 0)
+      {
+        _logger.LogInformation("Updating {count} new entries to {list}", batch.Count, listName);
+        await _domainRepo.UpdateSeenCountAsync(listName, batch.ToArray());
+      }
+    }
+  }
+
+  private async Task DeleteEntriesAsync(string listName, IReadOnlyCollection<string> domains)
+  {
+    if (domains.Count == 0)
+      return;
+
+    _logger.LogInformation("Removing {count} new entries to {list}", domains.Count, listName);
+    await _domainRepo.DeleteEntriesAsync(listName, domains.ToArray());
+  }
 }
