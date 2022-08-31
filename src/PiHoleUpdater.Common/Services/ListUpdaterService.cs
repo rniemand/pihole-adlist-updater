@@ -1,3 +1,4 @@
+using PiHoleUpdater.Common.Abstractions;
 using PiHoleUpdater.Common.Logging;
 using PiHoleUpdater.Common.Models;
 using PiHoleUpdater.Common.Models.Config;
@@ -18,24 +19,44 @@ public class ListUpdaterService : IListUpdaterService
   private readonly IBlockListParser _listParser;
   private readonly IBlockListFileWriter _listWriter;
   private readonly IDomainTrackingService _domainTracker;
+  private readonly IDateTimeAbstraction _dateTime;
   private readonly PiHoleUpdaterConfig _config;
+  private DateTime _nextRunTime;
 
   public ListUpdaterService(ILoggerAdapter<ListUpdaterService> logger,
     IBlockListProvider listProvider,
     IBlockListParser listParser,
     IBlockListFileWriter listWriter,
     IDomainTrackingService domainTracker,
+    IDateTimeAbstraction dateTime,
     PiHoleUpdaterConfig config)
   {
     _logger = logger;
     _config = config;
+    _dateTime = dateTime;
     _domainTracker = domainTracker;
     _listProvider = listProvider;
     _listParser = listParser;
     _listWriter = listWriter;
+
+    _nextRunTime = dateTime.Now.AddMinutes(-1);
   }
 
+
+  // Interface methods
   public async Task TickAsync(CancellationToken stoppingToken)
+  {
+    if (_dateTime.Now < _nextRunTime)
+      return;
+
+    await RunListGenerationAsync();
+    _nextRunTime = _dateTime.Now.AddHours(12);
+    _logger.LogInformation("All done.");
+  }
+
+
+  // Internal methods
+  private async Task RunListGenerationAsync()
   {
     var blockLists = new CompiledBlockLists();
 
@@ -66,7 +87,5 @@ public class ListUpdaterService : IListUpdaterService
       _logger.LogInformation("Generating combined lists...");
       _listWriter.WriteCombinedLists(blockLists);
     }
-
-    _logger.LogInformation("All done.");
   }
 }
