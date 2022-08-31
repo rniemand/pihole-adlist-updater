@@ -18,7 +18,7 @@ public class CompiledBlockLists
 
     foreach (var domain in domains)
     {
-      var entry = new BlockListEntry(domain, restrictive);
+      var entry = new BlockListEntry(listCategory, domain, restrictive);
 
       if (Lists[safeCategory].Contains(entry))
         continue;

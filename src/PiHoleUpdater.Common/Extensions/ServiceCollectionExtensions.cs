@@ -11,6 +11,7 @@ using PiHoleUpdater.Common.Services;
 using PiHoleUpdater.Common.Utils;
 using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.Serialization;
+using Dapper;
 
 namespace PiHoleUpdater.Common.Extensions;
 
@@ -42,6 +43,9 @@ public static class ServiceCollectionExtensions
 
   public static IServiceCollection AddPiHoleUpdater(this IServiceCollection services)
   {
+    SqlMapper.AddTypeHandler(new SqlTimeOnlyTypeHandler());
+    SqlMapper.AddTypeHandler(new DapperSqlDateOnlyTypeHandler());
+
     return services
       .AddSingleton<IDomainRepo, DomainRepo>()
       .AddSingleton<IBlockListEntryParser, BlockListEntryParser>()

@@ -41,17 +41,18 @@ public class ListUpdaterService : IListUpdaterService
     _logger.LogInformation("Processing lists...");
     foreach (var (listCategory, listEntries) in _config.BlockLists)
     {
-      Console.WriteLine($"Processing list: {listCategory}");
+      var safeCategory = listCategory.ToLower().Trim();
+      Console.WriteLine($"Processing list: {safeCategory}");
       foreach (BlockListConfig listConfig in listEntries)
       {
         var rawBlockList = await _blockListProvider.GetBlockListAsync(listConfig.ListUrl);
-        var addCount = blockLists.AddDomains(listCategory, _entryParser.ParseList(rawBlockList), listConfig.Restrictive);
+        var addCount = blockLists.AddDomains(safeCategory, _entryParser.ParseList(rawBlockList), listConfig.Restrictive);
 
         if (addCount > 0)
           Console.WriteLine($"  > Added {addCount} new entries");
       }
 
-      await _domainTracker.TrackListEntries(listCategory, blockLists.GetRawEntries(listCategory));
+      await _domainTracker.TrackListEntries(safeCategory, blockLists.GetRawEntries(safeCategory));
     }
 
     if (_config.ListGeneration.GenerateCategoryLists)

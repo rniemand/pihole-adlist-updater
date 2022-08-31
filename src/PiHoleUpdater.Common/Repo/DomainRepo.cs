@@ -8,7 +8,9 @@ namespace PiHoleUpdater.Common.Repo;
 
 public interface IDomainRepo
 {
-  Task<IEnumerable<DomainEntity>> GetListEntries(string listName);
+  Task<IEnumerable<BlockListEntry>> GetListEntries(string listName);
+  Task<int> AddNewEntries(IEnumerable<BlockListEntry> entries);
+  Task<int> UpdateSeen(string listName, string[] domains);
 }
 
 public class DomainRepo : IDomainRepo
@@ -24,16 +26,51 @@ public class DomainRepo : IDomainRepo
 
 
   // Interface methods
-  public async Task<IEnumerable<DomainEntity>> GetListEntries(string listName)
+  public async Task<IEnumerable<BlockListEntry>> GetListEntries(string listName)
   {
+    ensureConnected();
+
     const string query = @"
-    SELECT *
+    SELECT
+      d.`Restrictive`,
+      d.`Domain`,
+      d.`ListName`
     FROM `Domains` d
     WHERE d.`ListName` = @ListName";
 
+    return await _connection.QueryAsync<BlockListEntry>(query, new { ListName = listName });
+  }
+
+  public async Task<int> AddNewEntries(IEnumerable<BlockListEntry> entries)
+  {
     ensureConnected();
 
-    return await _connection.QueryAsync<DomainEntity>(query, new { ListName = listName });
+    const string query = @"
+    INSERT INTO `Domains`
+      (`Restrictive`, `Domain`, `ListName`)
+    VALUES
+      (@Restrictive, @Domain, @ListName)";
+
+    return await _connection.ExecuteAsync(query, entries);
+  }
+
+  public async Task<int> UpdateSeen(string listName, string[] domains)
+  {
+    ensureConnected();
+
+    const string query = @"
+    UPDATE `Domains`
+    SET
+      `SeenCount` = `SeenCount` + 1
+    WHERE
+      `ListName` = @ListName
+      AND `Domain` IN @Domains";
+
+    return await _connection.ExecuteAsync(query, new
+    {
+      ListName = listName,
+      Domains = domains
+    });
   }
 
 
