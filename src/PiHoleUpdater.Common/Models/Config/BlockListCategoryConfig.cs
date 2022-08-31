@@ -2,7 +2,7 @@ using YamlDotNet.Serialization;
 
 namespace PiHoleUpdater.Common.Models.Config;
 
-public class BlockListConfig
+public class BlockListCategoryConfig
 {
   [YamlMember(Alias = "name")]
   public string Name

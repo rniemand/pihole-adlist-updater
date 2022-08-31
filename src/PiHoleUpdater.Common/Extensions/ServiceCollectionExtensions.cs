@@ -57,14 +57,14 @@ public static class ServiceCollectionExtensions
 
 
   // Internal methods
-  private static UpdaterConfig GetConfiguration()
+  private static PiHoleUpdaterConfig GetConfiguration()
   {
     var exeRelative = UpdaterUtils.ExeRelative("config.yaml");
     if (!File.Exists(exeRelative))
       throw new Exception($"Unable to find configuration file: {exeRelative}");
 
     var configYaml = File.ReadAllText(exeRelative);
-    var config = YamlDeserializer.Deserialize<UpdaterConfig>(configYaml);
+    var config = YamlDeserializer.Deserialize<PiHoleUpdaterConfig>(configYaml);
 
     config.Whitelist.CompiledRegex = config.Whitelist.RegexPatterns
       .Select(x => new Regex(x, RegexOptions.Compiled | RegexOptions.Singleline))

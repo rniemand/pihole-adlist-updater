@@ -20,7 +20,7 @@ public class DomainRepo : IDomainRepo
   private readonly ILoggerAdapter<DomainRepo> _logger;
   private readonly MySqlConnection _connection;
 
-  public DomainRepo(ILoggerAdapter<DomainRepo> logger, UpdaterConfig config)
+  public DomainRepo(ILoggerAdapter<DomainRepo> logger, PiHoleUpdaterConfig config)
   {
     _logger = logger;
     _connection = new MySqlConnection(config.DbConnectionString);

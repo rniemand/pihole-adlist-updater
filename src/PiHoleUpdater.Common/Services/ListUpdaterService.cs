@@ -18,14 +18,14 @@ public class ListUpdaterService : IListUpdaterService
   private readonly IBlockListEntryParser _domainParser;
   private readonly IBlockListFileWriter _blockListFileWriter;
   private readonly IDomainTrackerService _domainTracker;
-  private readonly UpdaterConfig _config;
+  private readonly PiHoleUpdaterConfig _config;
 
   public ListUpdaterService(ILoggerAdapter<ListUpdaterService> logger,
     IBlockListWebProvider blockListWebProvider,
     IBlockListEntryParser domainParser,
     IBlockListFileWriter blockListFileWriter,
     IDomainTrackerService domainTracker,
-    UpdaterConfig config)
+    PiHoleUpdaterConfig config)
   {
     _logger = logger;
     _config = config;
@@ -40,7 +40,7 @@ public class ListUpdaterService : IListUpdaterService
     var blockLists = new CompiledBlockLists();
 
     _logger.LogInformation("Processing lists...");
-    foreach (BlockListConfig blockList in _config.BlockLists.Where(x => x.Enabled))
+    foreach (BlockListCategoryConfig blockList in _config.BlockLists.Where(x => x.Enabled))
     {
       _logger.LogInformation("Processing block list: {name}", blockList.Name);
       foreach (BlockListConfigEntry entry in blockList.Entries)

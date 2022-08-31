@@ -11,9 +11,9 @@ public interface IBlockListFileWriter
 
 public class BlockListFileWriter : IBlockListFileWriter
 {
-  private readonly UpdaterConfig _config;
+  private readonly PiHoleUpdaterConfig _config;
 
-  public BlockListFileWriter(UpdaterConfig config)
+  public BlockListFileWriter(PiHoleUpdaterConfig config)
   {
     _config = config;
   }

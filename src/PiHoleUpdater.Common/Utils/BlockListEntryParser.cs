@@ -13,9 +13,9 @@ public class BlockListEntryParser : IBlockListEntryParser
   private static readonly Regex TrimLineRx = new("((\\d{1,3}\\.){3}\\d{1,}|(\\:[^\\s]+))\\s+",
     RegexOptions.Compiled | RegexOptions.Singleline);
 
-  private readonly UpdaterConfig _config;
+  private readonly PiHoleUpdaterConfig _config;
 
-  public BlockListEntryParser(UpdaterConfig config)
+  public BlockListEntryParser(PiHoleUpdaterConfig config)
   {
     _config = config;
   }

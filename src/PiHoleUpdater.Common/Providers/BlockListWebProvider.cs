@@ -19,7 +19,7 @@ public class BlockListWebProvider : IBlockListWebProvider
   private int _currentResponseIdx;
   private int _captureResponseNumber = 1;
 
-  public BlockListWebProvider(ILoggerAdapter<BlockListWebProvider> logger, UpdaterConfig config)
+  public BlockListWebProvider(ILoggerAdapter<BlockListWebProvider> logger, PiHoleUpdaterConfig config)
   {
     _logger = logger;
     _captureResponses = config.Development.CaptureResponses;
@@ -66,7 +66,7 @@ public class BlockListWebProvider : IBlockListWebProvider
 
 
   // Internal methods
-  private string[] GetDevResponseFiles(UpdaterConfig config)
+  private string[] GetDevResponseFiles(PiHoleUpdaterConfig config)
   {
     if (!_usedDevResponses)
       return Array.Empty<string>();
