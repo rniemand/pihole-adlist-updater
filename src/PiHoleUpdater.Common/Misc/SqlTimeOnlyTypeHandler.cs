@@ -1,7 +1,7 @@
 using System.Data;
 using Dapper;
 
-namespace PiHoleUpdater.Common.Repo;
+namespace PiHoleUpdater.Common.Misc;
 
 public class SqlTimeOnlyTypeHandler : SqlMapper.TypeHandler<TimeOnly>
 {
