@@ -18,58 +18,68 @@ development:
   capture_response_dir: C:\Dev\personal\_blocklists
 
 block_lists:
-  suspicious:
-    - url: https://raw.githubusercontent.com/PolishFiltersTeam/KADhosts/master/KADhosts.txt
-    - url: https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Spam/hosts
-    - url: https://v.firebog.net/hosts/static/w3kbl.txt
-    - url: https://raw.githubusercontent.com/matomo-org/referrer-spam-blacklist/master/spammers.txt
-      restrictive: true
-    - url: https://someonewhocares.org/hosts/zero/hosts
-      restrictive: true
+  - name: suspicious
+    enabled: true
+    entries:
+      - url: https://raw.githubusercontent.com/PolishFiltersTeam/KADhosts/master/KADhosts.txt
+      - url: https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Spam/hosts
+      - url: https://v.firebog.net/hosts/static/w3kbl.txt
+      - url: https://raw.githubusercontent.com/matomo-org/referrer-spam-blacklist/master/spammers.txt
+        restrictive: true
+      - url: https://someonewhocares.org/hosts/zero/hosts
+        restrictive: true
 
-  advertising:
-    - url: https://adaway.org/hosts.txt
-    - url: https://v.firebog.net/hosts/AdguardDNS.txt
-    - url: https://v.firebog.net/hosts/Admiral.txt
-    - url: https://raw.githubusercontent.com/anudeepND/blacklist/master/adservers.txt
-    - url: https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
-    - url: https://v.firebog.net/hosts/Easylist.txt
-    - url: https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext
-    - url: https://raw.githubusercontent.com/FadeMind/hosts.extras/master/UncheckyAds/hosts
-    - url: https://raw.githubusercontent.com/bigdargon/hostsVN/master/hosts
-    - url: https://raw.githubusercontent.com/jdlingyu/ad-wars/master/hosts
-      restrictive: true
+  - name: advertising
+    enabled: true
+    entries:
+      - url: https://adaway.org/hosts.txt
+      - url: https://v.firebog.net/hosts/AdguardDNS.txt
+      - url: https://v.firebog.net/hosts/Admiral.txt
+      - url: https://raw.githubusercontent.com/anudeepND/blacklist/master/adservers.txt
+      - url: https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
+      - url: https://v.firebog.net/hosts/Easylist.txt
+      - url: https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext
+      - url: https://raw.githubusercontent.com/FadeMind/hosts.extras/master/UncheckyAds/hosts
+      - url: https://raw.githubusercontent.com/bigdargon/hostsVN/master/hosts
+      - url: https://raw.githubusercontent.com/jdlingyu/ad-wars/master/hosts
+        restrictive: true
 
-  tracking:
-    - url: https://v.firebog.net/hosts/Easyprivacy.txt
-    - url: https://v.firebog.net/hosts/Prigent-Ads.txt
-    - url: https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.2o7Net/hosts
-    - url: https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
-    - url: https://hostfiles.frogeye.fr/firstparty-trackers-hosts.txt
-    - url: https://hostfiles.frogeye.fr/multiparty-trackers-hosts.txt
-      restrictive: true
+  - name: tracking
+    enabled: true
+    entries:
+      - url: https://v.firebog.net/hosts/Easyprivacy.txt
+      - url: https://v.firebog.net/hosts/Prigent-Ads.txt
+      - url: https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.2o7Net/hosts
+      - url: https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
+      - url: https://hostfiles.frogeye.fr/firstparty-trackers-hosts.txt
+      - url: https://hostfiles.frogeye.fr/multiparty-trackers-hosts.txt
+        restrictive: true
 
-  malicious:
-    - url: https://raw.githubusercontent.com/DandelionSprout/adfilt/master/Alternate%20versions%20Anti-Malware%20List/AntiMalwareHosts.txt
-    - url: https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt
-    - url: https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt
-    - url: https://v.firebog.net/hosts/Prigent-Crypto.txt
-    - url: https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Risk/hosts
-    - url: https://bitbucket.org/ethanr/dns-blacklists/raw/8575c9f96e5b4a1308f2f12394abd86d0927a4a0/bad_lists/Mandiant_APT1_Report_Appendix_D.txt
-    - url: https://phishing.army/download/phishing_army_blocklist_extended.txt
-    - url: https://malware-filter.gitlab.io/malware-filter/phishing-filter-hosts.txt
-    - url: https://gitlab.com/quidsup/notrack-blocklists/raw/master/notrack-malware.txt
-    - url: https://raw.githubusercontent.com/Spam404/lists/master/main-blacklist.txt
-    - url: https://raw.githubusercontent.com/AssoEchap/stalkerware-indicators/master/generated/hosts
-    - url: https://urlhaus.abuse.ch/downloads/hostfile/
-    - url: https://v.firebog.net/hosts/Prigent-Malware.txt
-      restrictive: true
+  - name: malicious
+    enabled: true
+    entries:
+      - url: https://raw.githubusercontent.com/DandelionSprout/adfilt/master/Alternate%20versions%20Anti-Malware%20List/AntiMalwareHosts.txt
+      - url: https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt
+      - url: https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt
+      - url: https://v.firebog.net/hosts/Prigent-Crypto.txt
+      - url: https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Risk/hosts
+      - url: https://bitbucket.org/ethanr/dns-blacklists/raw/8575c9f96e5b4a1308f2f12394abd86d0927a4a0/bad_lists/Mandiant_APT1_Report_Appendix_D.txt
+      - url: https://phishing.army/download/phishing_army_blocklist_extended.txt
+      - url: https://malware-filter.gitlab.io/malware-filter/phishing-filter-hosts.txt
+      - url: https://gitlab.com/quidsup/notrack-blocklists/raw/master/notrack-malware.txt
+      - url: https://raw.githubusercontent.com/Spam404/lists/master/main-blacklist.txt
+      - url: https://raw.githubusercontent.com/AssoEchap/stalkerware-indicators/master/generated/hosts
+      - url: https://urlhaus.abuse.ch/downloads/hostfile/
+      - url: https://v.firebog.net/hosts/Prigent-Malware.txt
+        restrictive: true
 
-  other:
-    - url: https://zerodot1.gitlab.io/CoinBlockerLists/hosts_browser
-    - url: https://v.firebog.net/hosts/Prigent-Adult.txt
-      restrictive: true
-      enabled: false
+  - name: other
+    enabled: false
+    entries:
+      - url: https://zerodot1.gitlab.io/CoinBlockerLists/hosts_browser
+      - url: https://v.firebog.net/hosts/Prigent-Adult.txt
+        restrictive: true
+        enabled: false
 
 whitelist:
   regex:

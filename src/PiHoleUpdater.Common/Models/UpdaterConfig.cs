@@ -6,7 +6,7 @@ namespace PiHoleUpdater.Common.Models;
 public class UpdaterConfig
 {
   [YamlMember(Alias = "block_lists")]
-  public Dictionary<string, BlockListConfig[]> BlockLists { get; set; } = new();
+  public BlockListConfig[] BlockLists { get; set; } = Array.Empty<BlockListConfig>();
 
   [YamlMember(Alias = "output_dir")]
   public string OutputDir { get; set; } = string.Empty;

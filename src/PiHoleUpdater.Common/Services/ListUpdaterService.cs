@@ -14,14 +14,14 @@ public class ListUpdaterService : IListUpdaterService
 {
   private readonly ILoggerAdapter<ListUpdaterService> _logger;
   private readonly IBlockListWebProvider _blockListProvider;
-  private readonly IBlockListEntryParser _entryParser;
+  private readonly IBlockListEntryParser _domainParser;
   private readonly IBlockListFileWriter _blockListFileWriter;
   private readonly IDomainTrackerService _domainTracker;
   private readonly UpdaterConfig _config;
 
   public ListUpdaterService(ILoggerAdapter<ListUpdaterService> logger,
     IBlockListWebProvider blockListWebProvider,
-    IBlockListEntryParser entryParser,
+    IBlockListEntryParser domainParser,
     IBlockListFileWriter blockListFileWriter,
     IDomainTrackerService domainTracker,
     UpdaterConfig config)
@@ -30,7 +30,7 @@ public class ListUpdaterService : IListUpdaterService
     _config = config;
     _domainTracker = domainTracker;
     _blockListProvider = blockListWebProvider;
-    _entryParser = entryParser;
+    _domainParser = domainParser;
     _blockListFileWriter = blockListFileWriter;
   }
 
@@ -39,20 +39,18 @@ public class ListUpdaterService : IListUpdaterService
     var blockLists = new CompiledBlockLists();
 
     _logger.LogInformation("Processing lists...");
-    foreach (var (listCategory, listEntries) in _config.BlockLists)
+    foreach (BlockListConfig blockList in _config.BlockLists.Where(x => x.Enabled))
     {
-      var safeCategory = listCategory.ToLower().Trim();
-      Console.WriteLine($"Processing list: {safeCategory}");
-      foreach (BlockListConfig listConfig in listEntries)
+      _logger.LogInformation("Processing block list: {name}", blockList.Name);
+      foreach (BlockListConfigEntry entry in blockList.Entries)
       {
-        var rawBlockList = await _blockListProvider.GetBlockListAsync(listConfig.ListUrl);
-        var addCount = blockLists.AddDomains(safeCategory, _entryParser.ParseList(rawBlockList), listConfig.Restrictive);
-
-        if (addCount > 0)
-          Console.WriteLine($"  > Added {addCount} new entries");
+        var rawList = await _blockListProvider.GetBlockListAsync(entry.Url);
+        var newEntryCount = blockLists.AddDomains(blockList.Name, _domainParser.ParseList(rawList), entry.Restrictive);
+        if (newEntryCount == 0)
+          continue;
+        _logger.LogDebug("Added {count} new entries to list: {list}", newEntryCount, blockList.Name);
       }
-
-      await _domainTracker.TrackListEntries(safeCategory, blockLists.GetRawEntries(safeCategory));
+      await _domainTracker.TrackListEntries(blockList.Name, blockLists.GetRawEntries(blockList.Name));
     }
 
     if (_config.ListGeneration.GenerateCategoryLists)
