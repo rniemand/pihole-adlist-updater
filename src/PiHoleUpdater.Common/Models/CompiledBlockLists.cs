@@ -1,3 +1,5 @@
+using PiHoleUpdater.Common.Models.Repo;
+
 namespace PiHoleUpdater.Common.Models;
 
 public class CompiledBlockLists

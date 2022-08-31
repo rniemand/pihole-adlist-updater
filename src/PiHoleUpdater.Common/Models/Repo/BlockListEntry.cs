@@ -1,4 +1,4 @@
-namespace PiHoleUpdater.Common.Models;
+namespace PiHoleUpdater.Common.Models.Repo;
 
 public struct BlockListEntry
 {

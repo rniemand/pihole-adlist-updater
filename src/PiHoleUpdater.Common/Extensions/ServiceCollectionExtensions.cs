@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using PiHoleUpdater.Common.Logging;
-using PiHoleUpdater.Common.Models;
 using System.Text.RegularExpressions;
 using PiHoleUpdater.Common.Providers;
 using PiHoleUpdater.Common.Repo;
@@ -12,6 +11,7 @@ using PiHoleUpdater.Common.Utils;
 using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.Serialization;
 using Dapper;
+using PiHoleUpdater.Common.Models.Config;
 
 namespace PiHoleUpdater.Common.Extensions;
 

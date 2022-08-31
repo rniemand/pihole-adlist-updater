@@ -1,5 +1,5 @@
 using PiHoleUpdater.Common.Logging;
-using PiHoleUpdater.Common.Models;
+using PiHoleUpdater.Common.Models.Repo;
 using PiHoleUpdater.Common.Repo;
 
 namespace PiHoleUpdater.Common.Services;

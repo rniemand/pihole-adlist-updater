@@ -1,4 +1,5 @@
 using PiHoleUpdater.Common.Models;
+using PiHoleUpdater.Common.Models.Config;
 
 namespace PiHoleUpdater.Common.Utils;
 

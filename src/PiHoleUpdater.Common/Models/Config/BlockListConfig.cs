@@ -1,6 +1,6 @@
 using YamlDotNet.Serialization;
 
-namespace PiHoleUpdater.Common.Models;
+namespace PiHoleUpdater.Common.Models.Config;
 
 public class BlockListConfig
 {
@@ -24,13 +24,4 @@ public class BlockListConfig
 
   [YamlMember(Alias = "entries")]
   public BlockListConfigEntry[] Entries { get; set; } = Array.Empty<BlockListConfigEntry>();
-}
-
-public class BlockListConfigEntry
-{
-  [YamlMember(Alias = "url")]
-  public string Url { get; set; } = string.Empty;
-
-  [YamlMember(Alias = "restrictive")]
-  public bool Restrictive { get; set; }
 }

@@ -1,8 +1,9 @@
 using MySql.Data.MySqlClient;
 using PiHoleUpdater.Common.Logging;
-using PiHoleUpdater.Common.Models;
 using System.Data;
 using Dapper;
+using PiHoleUpdater.Common.Models.Repo;
+using PiHoleUpdater.Common.Models.Config;
 
 namespace PiHoleUpdater.Common.Repo;
 

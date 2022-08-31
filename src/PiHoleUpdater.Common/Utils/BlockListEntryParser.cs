@@ -1,4 +1,4 @@
-using PiHoleUpdater.Common.Models;
+using PiHoleUpdater.Common.Models.Config;
 using System.Text.RegularExpressions;
 
 namespace PiHoleUpdater.Common.Utils;

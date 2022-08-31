@@ -1,5 +1,6 @@
 using PiHoleUpdater.Common.Logging;
 using PiHoleUpdater.Common.Models;
+using PiHoleUpdater.Common.Models.Config;
 using PiHoleUpdater.Common.Providers;
 using PiHoleUpdater.Common.Utils;
 

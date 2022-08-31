@@ -73,13 +73,17 @@ block_lists:
       - url: https://v.firebog.net/hosts/Prigent-Malware.txt
         restrictive: true
 
-  - name: other
+  - name: adult
     enabled: false
     entries:
-      - url: https://zerodot1.gitlab.io/CoinBlockerLists/hosts_browser
       - url: https://v.firebog.net/hosts/Prigent-Adult.txt
         restrictive: true
-        enabled: false
+        enabled: true
+
+  - name: other
+    enabled: true
+    entries:
+      - url: https://zerodot1.gitlab.io/CoinBlockerLists/hosts_browser
 
 whitelist:
   regex:
