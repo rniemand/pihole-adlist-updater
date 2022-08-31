@@ -37,7 +37,8 @@ public class DomainRepo : IDomainRepo
       d.`Domain`,
       d.`ListName`
     FROM `Domains` d
-    WHERE d.`ListName` = @ListName";
+    WHERE d.`ListName` = @ListName
+      AND d.`Deleted` = 0";
 
     return await _connection.QueryAsync<BlockListEntry>(query, new { ListName = listName });
   }
@@ -80,7 +81,9 @@ public class DomainRepo : IDomainRepo
     ensureConnected();
 
     const string query = @"
-    DELETE FROM `Domains`
+    UPDATE `Domains`
+    SET
+      `Deleted` = 1
     WHERE
       `ListName` = @ListName
       AND `Domain` IN @Domains";
