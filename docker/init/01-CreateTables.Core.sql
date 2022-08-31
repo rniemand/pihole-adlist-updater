@@ -1,5 +1,6 @@
 CREATE TABLE `Domains` (
 	`DateAdded` DATE NOT NULL DEFAULT curdate(),
+	`DateLastSeen` DATE NOT NULL DEFAULT curdate(),
 	`Restrictive` BIT(1) NOT NULL DEFAULT b'0',
 	`Domain` VARCHAR(256) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
 	`ListName` VARCHAR(32) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',

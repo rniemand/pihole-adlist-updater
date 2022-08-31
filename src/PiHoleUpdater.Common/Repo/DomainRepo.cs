@@ -62,7 +62,8 @@ public class DomainRepo : IDomainRepo
     const string query = @"
     UPDATE `Domains`
     SET
-      `SeenCount` = `SeenCount` + 1
+      `SeenCount` = `SeenCount` + 1,
+      `DateLastSeen` = curdate()
     WHERE
       `ListName` = @ListName
       AND `Domain` IN @Domains";

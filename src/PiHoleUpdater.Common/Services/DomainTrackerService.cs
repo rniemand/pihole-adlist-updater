@@ -1,4 +1,3 @@
-using PiHoleUpdater.Common.Extensions;
 using PiHoleUpdater.Common.Logging;
 using PiHoleUpdater.Common.Models;
 using PiHoleUpdater.Common.Repo;
@@ -14,7 +13,8 @@ public class DomainTrackerService : IDomainTrackerService
 {
   private readonly ILoggerAdapter<DomainTrackerService> _logger;
   private readonly IDomainRepo _domainRepo;
-  public const int BatchUpdateSize = 5000;
+  public const int InsertBatchSize = 1000;
+  public const int UpdateBatchSize = 5000;
 
   public DomainTrackerService(ILoggerAdapter<DomainTrackerService> logger,
     IDomainRepo domainRepo)
@@ -23,6 +23,8 @@ public class DomainTrackerService : IDomainTrackerService
     _domainRepo = domainRepo;
   }
 
+
+  // Interface methods
   public async Task TrackListEntries(string listName, HashSet<BlockListEntry> listEntries)
   {
     _logger.LogInformation("Processing {count} domains", listEntries.Count);
@@ -45,15 +47,36 @@ public class DomainTrackerService : IDomainTrackerService
   }
 
 
-
   // Internal methods
   private async Task AddNewEntriesAsync(string listName, IReadOnlyCollection<BlockListEntry> domains)
   {
     if (domains.Count == 0)
       return;
 
-    _logger.LogInformation("Adding {count} new entries to {list}", domains.Count, listName);
-    await _domainRepo.AddEntriesAsync(domains);
+    var batch = new List<BlockListEntry>();
+    var addedCount = 0;
+
+    foreach (BlockListEntry domain in domains)
+    {
+      batch.Add(domain);
+
+      if (batch.Count < InsertBatchSize)
+        continue;
+
+      addedCount += batch.Count;
+      _logger.LogInformation("Adding {count} new entries to {list} ({rem} remaining)",
+        batch.Count, listName, (domains.Count - addedCount));
+      await _domainRepo.AddEntriesAsync(batch);
+      batch.Clear();
+    }
+
+    if (batch.Count == 0)
+      return;
+
+    addedCount += batch.Count;
+    _logger.LogInformation("Adding {count} new entries to {list} ({rem} remaining)",
+      batch.Count, listName, (domains.Count - addedCount));
+    await _domainRepo.AddEntriesAsync(batch);
   }
 
   private async Task UpdateSeenCountAsync(string listName, IReadOnlyCollection<string> domains)
@@ -61,28 +84,25 @@ public class DomainTrackerService : IDomainTrackerService
     if (domains.Count == 0)
       return;
 
-    if (domains.Count > 0)
+    var batch = new List<string>();
+
+    foreach (var entry in domains)
     {
-      var batch = new List<string>();
+      batch.Add(entry);
 
-      foreach (var entry in domains)
-      {
-        batch.Add(entry);
+      if (batch.Count < UpdateBatchSize)
+        continue;
 
-        if (batch.Count < BatchUpdateSize)
-          continue;
-
-        _logger.LogInformation("Updating {count} new entries to {list}", batch.Count, listName);
-        await _domainRepo.UpdateSeenCountAsync(listName, batch.ToArray());
-        batch.Clear();
-      }
-
-      if (batch.Count > 0)
-      {
-        _logger.LogInformation("Updating {count} new entries to {list}", batch.Count, listName);
-        await _domainRepo.UpdateSeenCountAsync(listName, batch.ToArray());
-      }
+      _logger.LogInformation("Updating {count} new entries to {list}", batch.Count, listName);
+      await _domainRepo.UpdateSeenCountAsync(listName, batch.ToArray());
+      batch.Clear();
     }
+
+    if(batch.Count == 0)
+      return;
+
+    _logger.LogInformation("Updating {count} new entries to {list}", batch.Count, listName);
+    await _domainRepo.UpdateSeenCountAsync(listName, batch.ToArray());
   }
 
   private async Task DeleteEntriesAsync(string listName, IReadOnlyCollection<string> domains)
