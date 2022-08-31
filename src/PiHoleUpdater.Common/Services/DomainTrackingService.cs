@@ -13,7 +13,7 @@ public class DomainTrackingService : IDomainTrackingService
 {
   private readonly ILoggerAdapter<DomainTrackingService> _logger;
   private readonly IDomainRepo _domainRepo;
-  public const int InsertBatchSize = 100;
+  public const int InsertBatchSize = 500;
   public const int UpdateBatchSize = 5000;
 
   public DomainTrackingService(ILoggerAdapter<DomainTrackingService> logger,
