@@ -13,6 +13,8 @@ public interface IDomainRepo
   Task<int> AddEntriesAsync(IEnumerable<BlockListEntry> entries);
   Task<int> UpdateSeenCountAsync(string listName, string[] domains);
   Task<int> DeleteEntriesAsync(string listName, string[] domains);
+  Task<IEnumerable<SimpleDomainEntity>> GetCompiledListAsync(string listName, bool includeRestrictive);
+  Task<IEnumerable<SimpleDomainEntity>> GetCompiledListAsync(bool includeRestrictive);
 }
 
 public class DomainRepo : IDomainRepo
@@ -93,6 +95,46 @@ public class DomainRepo : IDomainRepo
     {
       ListName = listName,
       Domains = domains
+    });
+  }
+
+  public async Task<IEnumerable<SimpleDomainEntity>> GetCompiledListAsync(string listName, bool includeRestrictive)
+  {
+    ensureConnected();
+
+    const string query = @"
+    SELECT
+	    d.`Domain`
+    FROM `Domains` d
+    WHERE
+	    d.`Deleted` = 0
+	    AND d.`ListName` = @ListName
+	    AND d.`Restrictive` IN @Restrictive
+    ORDER BY d.`Domain` ASC";
+
+    return await _connection.QueryAsync<SimpleDomainEntity>(query, new
+    {
+      ListName = listName,
+      Restrictive = includeRestrictive ? new[] { 0, 1 } : new[] { 0 }
+    });
+  }
+
+  public async Task<IEnumerable<SimpleDomainEntity>> GetCompiledListAsync(bool includeRestrictive)
+  {
+    ensureConnected();
+
+    const string query = @"
+    SELECT
+	    d.`Domain`
+    FROM `Domains` d
+    WHERE
+	    d.`Deleted` = 0
+	    AND d.`Restrictive` IN @Restrictive
+    ORDER BY d.`Domain` ASC";
+
+    return await _connection.QueryAsync<SimpleDomainEntity>(query, new
+    {
+      Restrictive = includeRestrictive ? new[] { 0, 1 } : new[] { 0 }
     });
   }
 

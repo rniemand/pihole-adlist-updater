@@ -11,7 +11,7 @@ list_generation:
   combined_safe: true
 
 development:
-  enabled: true
+  enabled: false
   use_cached_lists: true
   capture_responses: false
   cached_response_dir: C:\Dev\personal\_blocklists

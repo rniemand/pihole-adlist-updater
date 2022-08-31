@@ -79,13 +79,13 @@ public class ListUpdaterService : IListUpdaterService
     {
       _logger.LogInformation("Generating category lists...");
       foreach (var listCategory in blockLists.Categories)
-        _listWriter.WriteCategoryLists(listCategory, blockLists);
+        await _listWriter.WriteCategoryLists(listCategory);
     }
 
     if (_config.ListGeneration.GenerateCombinedLists)
     {
       _logger.LogInformation("Generating combined lists...");
-      _listWriter.WriteCombinedLists(blockLists);
+      await _listWriter.WriteCombinedLists();
     }
   }
 }

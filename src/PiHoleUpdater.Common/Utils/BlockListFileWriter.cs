@@ -1,74 +1,87 @@
-using PiHoleUpdater.Common.Models;
 using PiHoleUpdater.Common.Models.Config;
+using PiHoleUpdater.Common.Repo;
 
 namespace PiHoleUpdater.Common.Utils;
 
 public interface IBlockListFileWriter
 {
-  void WriteCategoryLists(string category, CompiledBlockLists lists);
-  void WriteCombinedLists(CompiledBlockLists lists);
+  Task WriteCategoryLists(string category);
+  Task WriteCombinedLists();
 }
 
 public class BlockListFileWriter : IBlockListFileWriter
 {
   private readonly PiHoleUpdaterConfig _config;
+  private readonly IDomainRepo _domainRepo;
 
-  public BlockListFileWriter(PiHoleUpdaterConfig config)
+  public BlockListFileWriter(PiHoleUpdaterConfig config, IDomainRepo domainRepo)
   {
     _config = config;
+    _domainRepo = domainRepo;
   }
 
-  public void WriteCategoryLists(string category, CompiledBlockLists lists)
+  public async Task WriteCategoryLists(string category)
   {
-    Console.WriteLine($"  Dumping '{category}' list");
-    WriteCategorySafeList(category, lists);
-    WriteCategoryAllList(category, lists);
+    await WriteCategorySafeList(category);
+    await WriteCategoryAllList(category);
   }
 
-  public void WriteCombinedLists(CompiledBlockLists lists)
+  public async Task WriteCombinedLists()
   {
-    WriteSafeList(lists);
-    WriteAllList(lists);
+    await WriteSafeList();
+    await WriteAllList();
   }
 
 
   // Internal methods
-  private void WriteSafeList(CompiledBlockLists lists)
+  private async Task WriteSafeList()
   {
     if (!_config.ListGeneration.CombinedSafe)
       return;
 
-    var entries = lists.GetSafeEntries();
+    var entries = (await _domainRepo.GetCompiledListAsync(false))
+      .Select(x => x.Domain)
+      .ToList();
+
     var filePath = Path.Join(_config.OutputDir, "_combined-safe.txt");
     WriteList(filePath, entries);
   }
 
-  private void WriteCategorySafeList(string category, CompiledBlockLists lists)
+  private async Task WriteCategorySafeList(string category)
   {
     if (!_config.ListGeneration.CategorySafe)
       return;
 
-    var entries = lists.GetSafeEntries(category);
+    var entries = (await _domainRepo.GetCompiledListAsync(category, false))
+      .Select(x => x.Domain)
+      .ToList();
+
     var filePath = Path.Join(_config.OutputDir, $"{category}-safe.txt");
     WriteList(filePath, entries);
   }
 
-  private void WriteAllList(CompiledBlockLists lists)
+  private async Task WriteAllList()
   {
     if (!_config.ListGeneration.CombinedAll)
       return;
 
-    var entries = lists.GetAllEntries();
+    var entries = (await _domainRepo.GetCompiledListAsync(true))
+      .Select(x => x.Domain)
+      .ToList();
+
     var filePath = Path.Join(_config.OutputDir, "_combined-all.txt");
     WriteList(filePath, entries);
   }
 
-  private void WriteCategoryAllList(string category, CompiledBlockLists lists)
+  private async Task WriteCategoryAllList(string category)
   {
     if (!_config.ListGeneration.CategoryAll)
       return;
 
-    var entries = lists.GetAllEntries(category);
+    var entries = (await _domainRepo.GetCompiledListAsync(category, true))
+      .Select(x => x.Domain)
+      .ToList();
+
     var filePath = Path.Join(_config.OutputDir, $"{category}-all.txt");
     WriteList(filePath, entries);
   }
