@@ -2,22 +2,39 @@
 
 Most lists used in this project come from: [https://firebog.net/](https://firebog.net/) unless otherwise stated.
 
+For ease of use you can make use of these combined lists, or use one (all) of the more specific lists listed below:
+
+- [combined.txt](https://raw.githubusercontent.com/rniemand/pihole-adlist/master/lists/_combined.txt) - contains entries from the following lists
+  - Suspicious
+  - Advertising
+  - Tracking
+  - Malicious
+  - Other
+- [combined-strict.txt](https://raw.githubusercontent.com/rniemand/pihole-adlist/master/lists/_combined-strict.txt) - contains entries from the following lists
+  - Suspicious - `strict`
+  - Advertising - `strict`
+  - Tracking - `strict`
+  - Malicious - `strict`
+  - Other - `strict`
+
+You will need to reference both combined list sets if you wish to have everything blocked 😊.
+
 ## Suspicious
 
-The `suspicious` list is comprised of the following sources:
+The [suspicious](https://raw.githubusercontent.com/rniemand/pihole-adlist/master/lists/suspicious.txt) list is comprised of the following sources:
 
 - ([Repo](https://github.com/FiltersHeroes/KADhosts)) :: https://raw.githubusercontent.com/PolishFiltersTeam/KADhosts/master/KADhosts.txt
 - ([Repo](https://github.com/FadeMind/hosts.extras)) :: https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Spam/hosts
 - https://v.firebog.net/hosts/static/w3kbl.txt
 
-The `suspicious-strict` list is comprised of the following sources:
+The [suspicious-strict](https://raw.githubusercontent.com/rniemand/pihole-adlist/master/lists/suspicious-strict.txt) list is comprised of the following sources:
 
 - ([Repo](https://github.com/matomo-org/referrer-spam-list)) :: https://raw.githubusercontent.com/matomo-org/referrer-spam-blacklist/master/spammers.txt
 - ([Site](https://someonewhocares.org/)) :: https://someonewhocares.org/hosts/zero/hosts
 
 ## Advertising
 
-The `advertising` list is comprised of the following sources:
+The [advertising](https://raw.githubusercontent.com/rniemand/pihole-adlist/master/lists/advertising.txt) list is comprised of the following sources:
 
 - ([Site](https://adaway.org/)) :: https://adaway.org/hosts.txt
 - https://v.firebog.net/hosts/AdguardDNS.txt
@@ -29,13 +46,13 @@ The `advertising` list is comprised of the following sources:
 - ([Repo](https://github.com/FadeMind/hosts.extras)) :: https://raw.githubusercontent.com/FadeMind/hosts.extras/master/UncheckyAds/hosts
 - ([Repo](https://github.com/bigdargon/hostsVN)) :: https://raw.githubusercontent.com/bigdargon/hostsVN/master/hosts
 
-The `advertising-strict` list is comprised of the following sources:
+The [advertising-strict](https://raw.githubusercontent.com/rniemand/pihole-adlist/master/lists/advertising-strict.txt) list is comprised of the following sources:
 
 - ([Repo](https://github.com/jdlingyu/ad-wars)) :: https://raw.githubusercontent.com/jdlingyu/ad-wars/master/hosts
 
 ## Tracking
 
-The `tracking` list is comprised of the following sources:
+The [tracking](https://raw.githubusercontent.com/rniemand/pihole-adlist/master/lists/tracking.txt) list is comprised of the following sources:
 
 - https://v.firebog.net/hosts/Easyprivacy.txt
 - https://v.firebog.net/hosts/Prigent-Ads.txt
@@ -43,13 +60,13 @@ The `tracking` list is comprised of the following sources:
 - ([Repo](https://github.com/crazy-max/WindowsSpyBlocker)) :: https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
 - ([Site](https://hostfiles.frogeye.fr/)) :: https://hostfiles.frogeye.fr/firstparty-trackers-hosts.txt
 
-The `tracking-strict` list is comprised of the following sources:
+The [tracking-strict](https://raw.githubusercontent.com/rniemand/pihole-adlist/master/lists/tracking-strict.txt) list is comprised of the following sources:
 
 - ([Site](https://hostfiles.frogeye.fr/)) https://hostfiles.frogeye.fr/multiparty-trackers-hosts.txt
 
 ## Malicious
 
-The `malicious` list is comprised of the following sources:
+The [malicious](https://raw.githubusercontent.com/rniemand/pihole-adlist/master/lists/malicious.txt) list is comprised of the following sources:
 
 - ([Repo](https://github.com/DandelionSprout/adfilt)) :: https://raw.githubusercontent.com/DandelionSprout/adfilt/master/Alternate%20versions%20Anti-Malware%20List/AntiMalwareHosts.txt
 - ([Site](https://osint.digitalside.it/)) :: https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt
@@ -64,12 +81,16 @@ The `malicious` list is comprised of the following sources:
 - ([Repo](https://github.com/AssoEchap/stalkerware-indicators)) :: https://raw.githubusercontent.com/AssoEchap/stalkerware-indicators/master/generated/hosts
 - ([Site](https://urlhaus.abuse.ch/)) :: https://urlhaus.abuse.ch/downloads/hostfile/
 
-The `malicious-strict` list is comprised of the following sources:
+The [malicious-strict](https://raw.githubusercontent.com/rniemand/pihole-adlist/master/lists/malicious-strict.txt) list is comprised of the following sources:
 
 - https://v.firebog.net/hosts/Prigent-Malware.txt
 
 ## Other
 
-The `other` list is comprised of the following sources:
+The [other](https://raw.githubusercontent.com/rniemand/pihole-adlist/master/lists/other.txt) list is comprised of the following sources:
 
 - ([Site](https://zerodot1.gitlab.io/CoinBlockerListsWeb/)) :: https://zerodot1.gitlab.io/CoinBlockerLists/hosts_browser
+
+The [other-strict](https://raw.githubusercontent.com/rniemand/pihole-adlist/master/lists/other-strict.txt) list is comprised of the following sources:
+
+- Nothing, yet...

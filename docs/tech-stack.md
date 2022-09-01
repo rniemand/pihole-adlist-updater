@@ -1,3 +1,3 @@
 ## Technology Used
 
-- Docker
+- [Docker](https://www.docker.com/) - used for [local development](./development.md).

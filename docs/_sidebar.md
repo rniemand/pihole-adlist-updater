@@ -3,3 +3,4 @@
 - [Blocklists](./blocklists.md)
 - [Tech. Stack](./tech-stack.md)
 - [Development](./development.md)
+- [Configuration](./configuration.md)
