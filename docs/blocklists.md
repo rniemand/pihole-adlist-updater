@@ -4,15 +4,13 @@ Most lists used in this project come from: [https://firebog.net/](https://firebo
 
 ## Suspicious
 
-Outputted as [suspicious-all.txt](https://raw.githubusercontent.com/rniemand/pihole-adlist/master/lists/suspicious-all.txt) and [suspicious-safe.txt](https://raw.githubusercontent.com/rniemand/pihole-adlist/master/lists/suspicious-safe.txt).
-
 The `safe` list is comprised of the following sources:
 
 - https://raw.githubusercontent.com/PolishFiltersTeam/KADhosts/master/KADhosts.txt
 - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Spam/hosts
 - https://v.firebog.net/hosts/static/w3kbl.txt
 
-The `all` list is comprised of the following sources:
+The `strict` list is comprised of the following sources:
 
 - https://raw.githubusercontent.com/matomo-org/referrer-spam-blacklist/master/spammers.txt
 - https://someonewhocares.org/hosts/zero/hosts
@@ -31,7 +29,7 @@ The `safe` list is comprised of the following sources:
 - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/UncheckyAds/hosts
 - https://raw.githubusercontent.com/bigdargon/hostsVN/master/hosts
 
-The `all` list is comprised of the following sources:
+The `strict` list is comprised of the following sources:
 
 - https://raw.githubusercontent.com/jdlingyu/ad-wars/master/hosts
 
@@ -45,7 +43,7 @@ The `safe` list is comprised of the following sources:
 - https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
 - https://hostfiles.frogeye.fr/firstparty-trackers-hosts.txt
 
-The `all` list is comprised of the following sources:
+The `strict` list is comprised of the following sources:
 
 - https://hostfiles.frogeye.fr/multiparty-trackers-hosts.txt
 
@@ -66,7 +64,7 @@ The `safe` list is comprised of the following sources:
 - https://raw.githubusercontent.com/AssoEchap/stalkerware-indicators/master/generated/hosts
 - https://urlhaus.abuse.ch/downloads/hostfile/
 
-The `all` list is comprised of the following sources:
+The `strict` list is comprised of the following sources:
 
 - https://v.firebog.net/hosts/Prigent-Malware.txt
 

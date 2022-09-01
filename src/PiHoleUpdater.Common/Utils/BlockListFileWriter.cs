@@ -22,19 +22,19 @@ public class BlockListFileWriter : IBlockListFileWriter
 
   public async Task WriteCategoryLists(string category)
   {
-    await WriteCategorySafeList(category);
-    await WriteCategoryAllList(category);
+    await WriteCategoryList(category);
+    await WriteCategoryStrictList(category);
   }
 
   public async Task WriteCombinedLists()
   {
-    await WriteSafeList();
-    await WriteAllList();
+    await WriteList();
+    await WriteStrictList();
   }
 
 
   // Internal methods
-  private async Task WriteSafeList()
+  private async Task WriteList()
   {
     if (!_config.ListGeneration.CombinedSafe)
       return;
@@ -43,11 +43,11 @@ public class BlockListFileWriter : IBlockListFileWriter
       .Select(x => x.Domain)
       .ToList();
 
-    var filePath = Path.Join(_config.OutputDir, "_combined-safe.txt");
+    var filePath = Path.Join(_config.OutputDir, "_combined.txt");
     WriteList(filePath, entries);
   }
 
-  private async Task WriteCategorySafeList(string category)
+  private async Task WriteCategoryList(string category)
   {
     if (!_config.ListGeneration.CategorySafe)
       return;
@@ -56,11 +56,11 @@ public class BlockListFileWriter : IBlockListFileWriter
       .Select(x => x.Domain)
       .ToList();
 
-    var filePath = Path.Join(_config.OutputDir, $"{category}-safe.txt");
+    var filePath = Path.Join(_config.OutputDir, $"{category}.txt");
     WriteList(filePath, entries);
   }
 
-  private async Task WriteAllList()
+  private async Task WriteStrictList()
   {
     if (!_config.ListGeneration.CombinedAll)
       return;
@@ -69,11 +69,11 @@ public class BlockListFileWriter : IBlockListFileWriter
       .Select(x => x.Domain)
       .ToList();
 
-    var filePath = Path.Join(_config.OutputDir, "_combined-all.txt");
+    var filePath = Path.Join(_config.OutputDir, "_combined-strict.txt");
     WriteList(filePath, entries);
   }
 
-  private async Task WriteCategoryAllList(string category)
+  private async Task WriteCategoryStrictList(string category)
   {
     if (!_config.ListGeneration.CategoryAll)
       return;
@@ -82,7 +82,7 @@ public class BlockListFileWriter : IBlockListFileWriter
       .Select(x => x.Domain)
       .ToList();
 
-    var filePath = Path.Join(_config.OutputDir, $"{category}-all.txt");
+    var filePath = Path.Join(_config.OutputDir, $"{category}-strict.txt");
     WriteList(filePath, entries);
   }
 

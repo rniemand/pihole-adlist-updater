@@ -58,6 +58,7 @@ public class ListUpdaterService : IListUpdaterService
   // Internal methods
   private async Task RunListGenerationAsync()
   {
+    // TODO: remove this - using DB and lists now...
     var blockLists = new CompiledBlockLists();
 
     _logger.LogInformation("Processing lists...");
@@ -67,7 +68,7 @@ public class ListUpdaterService : IListUpdaterService
       foreach (BlockListConfigEntry entry in blockList.Entries)
       {
         var rawList = await _listProvider.GetBlockListAsync(entry.Url);
-        var newEntryCount = blockLists.AddDomains(blockList.Name, _listParser.ParseList(rawList), entry.Restrictive);
+        var newEntryCount = blockLists.AddDomains(blockList.Name, _listParser.ParseList(rawList), entry.Strict);
         if (newEntryCount == 0)
           continue;
         _logger.LogDebug("Added {count} new entries to list: {list}", newEntryCount, blockList.Name);

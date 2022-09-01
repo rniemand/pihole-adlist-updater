@@ -36,7 +36,7 @@ public class CompiledBlockLists
   {
     return Lists
       .SelectMany(x => x.Value)
-      .Where(x => !x.Restrictive)
+      .Where(x => !x.Strict)
       .Select(x => x.Domain)
       .OrderBy(x => x)
       .Distinct()
@@ -53,7 +53,7 @@ public class CompiledBlockLists
       return new List<string>();
 
     return Lists[safeCategory]
-      .Where(x => !x.Restrictive)
+      .Where(x => !x.Strict)
       .Select(x => x.Domain)
       .ToList();
   }
