@@ -1,4 +1,5 @@
 using PiHoleUpdater.Common.Logging;
+using PiHoleUpdater.Common.Models.Config;
 using PiHoleUpdater.Common.Models.Repo;
 using PiHoleUpdater.Common.Repo;
 
@@ -13,14 +14,17 @@ public class DomainTrackingService : IDomainTrackingService
 {
   private readonly ILoggerAdapter<DomainTrackingService> _logger;
   private readonly IDomainRepo _domainRepo;
-  public const int InsertBatchSize = 500;
-  public const int UpdateBatchSize = 5000;
+  private readonly int _insertBatchSize;
+  private readonly int _updateBatchSize;
 
   public DomainTrackingService(ILoggerAdapter<DomainTrackingService> logger,
-    IDomainRepo domainRepo)
+    IDomainRepo domainRepo,
+    PiHoleUpdaterConfig config)
   {
     _logger = logger;
     _domainRepo = domainRepo;
+    _insertBatchSize = config.ListGeneration.InsertBatchSize;
+    _updateBatchSize = config.ListGeneration.UpdateBatchSize;
   }
 
 
@@ -60,7 +64,7 @@ public class DomainTrackingService : IDomainTrackingService
     {
       batch.Add(domain);
 
-      if (batch.Count < InsertBatchSize)
+      if (batch.Count < _insertBatchSize)
         continue;
 
       addedCount += batch.Count;
@@ -90,7 +94,7 @@ public class DomainTrackingService : IDomainTrackingService
     {
       batch.Add(entry);
 
-      if (batch.Count < UpdateBatchSize)
+      if (batch.Count < _updateBatchSize)
         continue;
 
       _logger.LogInformation("Updating {count} new entries to {list}", batch.Count, listName);
@@ -98,7 +102,7 @@ public class DomainTrackingService : IDomainTrackingService
       batch.Clear();
     }
 
-    if(batch.Count == 0)
+    if (batch.Count == 0)
       return;
 
     _logger.LogInformation("Updating {count} new entries to {list}", batch.Count, listName);

@@ -21,4 +21,10 @@ public class ListGenerationConfig
 
   [YamlMember(Alias = "generate_combined_lists")]
   public bool GenerateCombinedLists { get; set; }
+
+  [YamlMember(Alias = "insert_batch_size")]
+  public int InsertBatchSize { get; set; } = 250;
+
+  [YamlMember(Alias = "update_batch_size")]
+  public int UpdateBatchSize { get; set; } = 5000;
 }
