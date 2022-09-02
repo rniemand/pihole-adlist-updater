@@ -4,13 +4,16 @@ using PiHoleUpdater.Common.Logging;
 using PiHoleUpdater.Common.Models;
 using PiHoleUpdater.Common.Models.Config;
 using PiHoleUpdater.Common.Providers;
+using Branch = LibGit2Sharp.Branch;
+using Repository = LibGit2Sharp.Repository;
+using Signature = LibGit2Sharp.Signature;
 
 namespace PiHoleUpdater.Common.Services;
 
 public interface IRepoManagerService
 {
-  Task UpdateLocalRepoAsync();
-  Task CommitChangesAsync();
+  void UpdateLocalRepo();
+  void CommitChanges();
 }
 
 public class RepoManagerService : IRepoManagerService
@@ -28,7 +31,7 @@ public class RepoManagerService : IRepoManagerService
     _credsProvider = credsProvider;
   }
 
-  public async Task UpdateLocalRepoAsync()
+  public void UpdateLocalRepo()
   {
     GithubCreds githubCreds = _credsProvider.GetCredentials();
     var repoPath = _config.LocalRepo;
@@ -44,21 +47,21 @@ public class RepoManagerService : IRepoManagerService
       throw new Exception("Failed to update local repo!");
   }
 
-  public async Task CommitChangesAsync()
+  public void CommitChanges()
   {
-    GithubCreds githubCreds = _credsProvider.GetCredentials();
     var repoPath = _config.LocalRepo;
-    var projectName = githubCreds.AppName;
+    var branchName = "master";
 
     if (!Directory.Exists(repoPath))
       throw new Exception("Unable to find local repository!");
 
     var localRepo = new Repository(repoPath);
-    var success = Pull(localRepo, projectName);
+    CommitChanges(localRepo);
 
+    Branch localRepoBranch = localRepo.Branches[branchName];
+    PushChanges(localRepo, localRepoBranch);
 
-
-    await Task.CompletedTask;
+    _logger.LogInformation("Pushed latest changes to GitHub");
   }
 
 
@@ -105,4 +108,41 @@ public class RepoManagerService : IRepoManagerService
       Username = creds.Username,
       Password = creds.AccessToken
     };
+
+  private void CommitChanges(IRepository repo)
+  {
+    _logger.LogInformation("Staging changes");
+    var creds = _credsProvider.GetCredentials();
+    LibGit2Sharp.Commands.Stage(repo, repo.Info.WorkingDirectory);
+
+    var commitMessage = $"Automated list update: {DateTime.Now:u}";
+    _logger.LogInformation("Committing and pushing: {message}", commitMessage);
+    var author = new LibGit2Sharp.Signature(creds.CommitAuthorName, creds.CommitAuthorEmail, DateTime.Now);
+    repo.Commit(commitMessage, author, author);
+  }
+
+  private void PushChanges(IRepository repository, LibGit2Sharp.Branch branch)
+  {
+    var remote = repository.Network.Remotes["origin"];
+
+    repository.Branches.Update(branch,
+      b => b.Remote = remote.Name,
+      b => b.UpstreamBranch = branch.CanonicalName);
+
+    repository.Network.Push(branch, new PushOptions
+    {
+      CredentialsProvider = (_, _, _) => CreateGithubAuth()
+    });
+  }
+
+  private UsernamePasswordCredentials CreateGithubAuth()
+  {
+    var creds = _credsProvider.GetCredentials();
+
+    return new UsernamePasswordCredentials()
+    {
+      Username = creds.Username,
+      Password = creds.AccessToken
+    };
+  }
 }
