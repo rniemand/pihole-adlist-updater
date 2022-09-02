@@ -7,3 +7,5 @@
 - `Microsoft.Extensions.Configuration.Json` ([NuGet](https://www.nuget.org/packages/Microsoft.Extensions.Configuration.Json))
 - `Dapper` ([NuGet](https://www.nuget.org/packages/Dapper) | [GitHub](https://github.com/DapperLib/Dapper))
 - `MySql.Data` ([NuGet](https://www.nuget.org/packages/MySql.Data) | [Site](https://dev.mysql.com/downloads/))
+- LibGit2Sharp
+- Octokit

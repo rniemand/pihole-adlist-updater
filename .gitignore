@@ -37,3 +37,5 @@ Obj/
 
 # MQTT Dumper Specific
 *.machine.yaml
+
+src/PiHoleUpdater.Common/github.creds.yaml

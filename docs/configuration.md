@@ -4,6 +4,7 @@ More to come.
 
 ```yaml
 output_dir: C:\Dev\personal\pihole-adlist\lists\
+local_repo: ...
 db_connection_string: "..."
 list_generation:
   generate_category_lists: true
@@ -35,6 +36,9 @@ whitelist:
 ```
 
 ## output_dir
+More to come...
+
+## local_repo
 More to come...
 
 ## db_connection_string

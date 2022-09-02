@@ -7,6 +7,9 @@ public class PiHoleUpdaterConfig
   [YamlMember(Alias = "output_dir")]
   public string OutputDir { get; set; } = string.Empty;
 
+  [YamlMember(Alias = "local_repo")]
+  public string LocalRepo { get; set; } = string.Empty;
+
   [YamlMember(Alias = "db_connection_string")]
   public string DbConnectionString { get; set; } = string.Empty;
 

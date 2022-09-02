@@ -52,8 +52,10 @@ public static class ServiceCollectionExtensions
       .AddSingleton<IDateTimeAbstraction, DateTimeAbstraction>()
       .AddSingleton<IDomainRepo, DomainRepo>()
       .AddSingleton<IBlockListParser, BlockListParser>()
+      .AddSingleton<IRepoManagerService, RepoManagerService>()
       .AddSingleton<IBlockListFileWriter, BlockListFileWriter>()
       .AddSingleton<IBlockListProvider, BlockListProvider>()
+      .AddSingleton<IGithubCredsProvider, GithubCredsProvider>()
       .AddSingleton<IListUpdaterService, ListUpdaterService>()
       .AddSingleton<IDomainTrackingService, DomainTrackingService>();
   }

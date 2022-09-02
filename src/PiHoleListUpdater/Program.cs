@@ -8,5 +8,10 @@ ServiceProvider serviceProvider = new ServiceCollection()
   .BuildServiceProvider();
 
 await serviceProvider
+  .GetRequiredService<IRepoManagerService>()
+  .UpdateLocalRepoAsync();
+
+await serviceProvider
   .GetRequiredService<IListUpdaterService>()
   .TickAsync(CancellationToken.None);
+
