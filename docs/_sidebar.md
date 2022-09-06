@@ -1,6 +1,9 @@
 - [Home](./README.md)
-- [External Projects](./external-projects.md)
 - [Blocklists](./blocklists.md)
-- [Tech. Stack](./tech-stack.md)
+- **Configuration**
+- [config.yaml](./config.yaml.md)
+- [github.creds.yaml](./github.creds.yaml.md)
+- **Development**
 - [Development](./development.md)
-- [Configuration](./configuration.md)
+- [External Projects](./external-projects.md)
+- [Tech. Stack](./tech-stack.md)

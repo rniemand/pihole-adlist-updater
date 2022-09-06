@@ -1,6 +1,7 @@
-More to come.
+# config.yaml
+Used to configure the overall behaviour of the application:
 
-## Overview
+## Sample Configuration
 
 ```yaml
 output_dir: C:\Dev\personal\pihole-adlist\lists\
@@ -35,23 +36,23 @@ whitelist:
     - fonts.gstatic.com
 ```
 
-## output_dir
+### output_dir
 More to come...
 
-## local_repo
+### local_repo
 More to come...
 
-## db_connection_string
+### db_connection_string
 More to come...
 
-## list_generation
+### list_generation
 More to come...
 
-## development
+### development
 More to come...
 
-## block_lists
+### block_lists
 More to come...
 
-## whitelist
+### whitelist
 More to come...
