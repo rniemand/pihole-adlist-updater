@@ -1,26 +1,16 @@
-output_dir: C:\Dev\pihole-adlist\lists\
+paths:
+  lists_output: C:\Dev\pihole-adlist\lists
+  lists_repo: C:\Dev\pihole-adlist
 
-local_repo: C:\Dev\pihole-adlist
-
-db_connection_string: "Server=127.0.0.1;Uid=pihole;Pwd=password;Database=PiHoleDomains;Allow User Variables=true;SslMode=none"
-
-list_generation:
-  generate_category_lists: true
-  generate_combined_lists: false
-  category_all: true
-  category_safe: true
-  combined_all: true
-  combined_safe: true
+database:
+  connection_string: "Server=127.0.0.1;Uid=pihole;Pwd=password;Database=PiHoleDomains;Allow User Variables=true;SslMode=none"
   insert_batch_size: 10000
   update_batch_size: 20000
-  domain_lookup_batch_size: 20000
+  lookup_batch_size: 20000
 
-development:
-  enabled: false
-  use_cached_lists: true
-  capture_responses: false
-  cached_response_dir: C:\Dev\_blocklists
-  capture_response_dir: C:\Dev\_blocklists
+list_generation:
+  category_lists: true
+  combined_lists: false
 
 block_lists:
   - name: suspicious

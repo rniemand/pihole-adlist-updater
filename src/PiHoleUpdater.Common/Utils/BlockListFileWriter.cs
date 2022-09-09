@@ -21,34 +21,11 @@ public class BlockListFileWriter : IBlockListFileWriter
     _domainRepo = domainRepo;
   }
 
+
+  // Public
   public async Task WriteCategoryLists(AdList list)
   {
-    await WriteCategoryList(list);
-  }
-
-  public async Task WriteCombinedLists()
-  {
-    await WriteList();
-  }
-
-
-  // Internal methods
-  private async Task WriteList()
-  {
-    if (!_config.ListGeneration.CombinedSafe)
-      return;
-
-    var entries = (await _domainRepo.GetCompiledListAsync())
-      .Select(x => x.Domain)
-      .ToList();
-
-    var filePath = Path.Join(_config.OutputDir, "_combined.txt");
-    WriteList(filePath, entries);
-  }
-
-  private async Task WriteCategoryList(AdList list)
-  {
-    if (!_config.ListGeneration.CategorySafe)
+    if (!_config.ListGeneration.GenerateCategoryLists)
       return;
 
     var entries = (await _domainRepo.GetCompiledListAsync(list))
@@ -56,14 +33,29 @@ public class BlockListFileWriter : IBlockListFileWriter
       .ToList();
 
     var listName = list.ToString("G").ToLower();
-    var filePath = Path.Join(_config.OutputDir, $"{listName}.txt");
+    var filePath = Path.Join(_config.Paths.ListsOutput, $"{listName}.txt");
     WriteList(filePath, entries);
   }
-  
-  private void WriteList(string filePath, IReadOnlyCollection<string> entries)
+
+  public async Task WriteCombinedLists()
   {
-    if (!Directory.Exists(_config.OutputDir))
-      Directory.CreateDirectory(_config.OutputDir);
+    if (!_config.ListGeneration.GenerateCombinedLists)
+      return;
+
+    var entries = (await _domainRepo.GetCompiledListAsync())
+      .Select(x => x.Domain)
+      .ToList();
+
+    var filePath = Path.Join(_config.Paths.ListsOutput, "_combined.txt");
+    WriteList(filePath, entries);
+  }
+
+
+  // Internal
+  private void WriteList(string filePath, IEnumerable<string> entries)
+  {
+    if (!Directory.Exists(_config.Paths.ListsOutput))
+      Directory.CreateDirectory(_config.Paths.ListsOutput);
 
     if (File.Exists(filePath))
       File.Delete(filePath);

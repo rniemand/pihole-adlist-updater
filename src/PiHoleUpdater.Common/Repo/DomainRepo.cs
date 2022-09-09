@@ -25,7 +25,7 @@ public class DomainRepo : IDomainRepo
 
   public DomainRepo(PiHoleUpdaterConfig config)
   {
-    _connection = new MySqlConnection(config.DbConnectionString);
+    _connection = new MySqlConnection(config.Database.ConnectionString);
   }
 
 
@@ -204,6 +204,6 @@ public class DomainRepo : IDomainRepo
     }
   }
 
-  private string GenerateDomainsList(IEnumerable<string> domains) =>
+  private static string GenerateDomainsList(IEnumerable<string> domains) =>
     string.Join(",\n", domains.Select(d => $"'{d}'"));
 }

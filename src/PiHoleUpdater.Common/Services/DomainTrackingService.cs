@@ -15,9 +15,7 @@ public class DomainTrackingService : IDomainTrackingService
 {
   private readonly ILoggerAdapter<DomainTrackingService> _logger;
   private readonly IDomainRepo _domainRepo;
-  private readonly int _insertBatchSize;
-  private readonly int _updateBatchSize;
-  private readonly int _domainLookupBatchSize;
+  private readonly PiHoleUpdaterConfig _config;
 
   public DomainTrackingService(ILoggerAdapter<DomainTrackingService> logger,
     IDomainRepo domainRepo,
@@ -25,9 +23,7 @@ public class DomainTrackingService : IDomainTrackingService
   {
     _logger = logger;
     _domainRepo = domainRepo;
-    _insertBatchSize = config.ListGeneration.InsertBatchSize;
-    _updateBatchSize = config.ListGeneration.UpdateBatchSize;
-    _domainLookupBatchSize = config.ListGeneration.DomainLookupBatchSize;
+    _config = config;
   }
 
 
@@ -75,7 +71,7 @@ public class DomainTrackingService : IDomainTrackingService
     foreach (var domain in domains)
     {
       batch.Add(domain);
-      if (batch.Count < _insertBatchSize)
+      if (batch.Count < _config.Database.InsertBatchSize)
         continue;
 
       addedCount += batch.Count;
@@ -116,7 +112,7 @@ public class DomainTrackingService : IDomainTrackingService
     foreach (var entry in domains)
     {
       batch.Add(entry);
-      if (batch.Count < _updateBatchSize)
+      if (batch.Count < _config.Database.UpdateBatchSize)
         continue;
 
       updatedCount += batch.Count;
@@ -161,7 +157,7 @@ public class DomainTrackingService : IDomainTrackingService
     foreach (var domain in domains)
     {
       batchDomains.Add(domain);
-      if (batchDomains.Count < _domainLookupBatchSize)
+      if (batchDomains.Count < _config.Database.LookupBatchSize)
         continue;
 
       totalSearched += batchDomains.Count;
