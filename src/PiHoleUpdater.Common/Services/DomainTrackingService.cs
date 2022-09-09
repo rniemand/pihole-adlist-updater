@@ -54,7 +54,7 @@ public class DomainTrackingService : IDomainTrackingService
     await AddNewEntriesAsync(list, dbEntriesToAdd);
 
     // Update the seen count for all existing DB entries
-    await UpdateSeenCountAsync(list, listEntries
+    await UpdateSeenCountAsync(listEntries
       .Where(e => !dbEntriesToAdd.Contains(e))
       .Select(x => x.Domain)
       .ToList());
@@ -82,7 +82,8 @@ public class DomainTrackingService : IDomainTrackingService
       Console.Write($"\r > Adding {batch.Count} new entries to {list} " +
                     $"({domainsCount - addedCount} remaining) " +
                     $"({addedCount} added) " +
-                    $"in {(DateTime.Now - startTime).TotalSeconds} seconds.");
+                    $"in {(DateTime.Now - startTime).TotalSeconds} seconds." +
+                    "          ");
       await _domainRepo.AddEntriesAsync(list, batch);
       batch.Clear();
     }
@@ -97,12 +98,13 @@ public class DomainTrackingService : IDomainTrackingService
     Console.Write($"\r > Adding {batch.Count} new entries to {list} " +
                   $"({domainsCount - addedCount} remaining) " +
                   $"({addedCount} added) " +
-                  $"in {(DateTime.Now - startTime).TotalSeconds} seconds.");
+                  $"in {(DateTime.Now - startTime).TotalSeconds} seconds." +
+                  "          ");
     await _domainRepo.AddEntriesAsync(list, batch);
     Console.WriteLine();
   }
 
-  private async Task UpdateSeenCountAsync(AdList list, IReadOnlyCollection<string> domains)
+  private async Task UpdateSeenCountAsync(IReadOnlyCollection<string> domains)
   {
     if (domains.Count == 0)
       return;
@@ -121,7 +123,8 @@ public class DomainTrackingService : IDomainTrackingService
       Console.Write($"\r > Updating seen count for {batch.Count} entries " +
                     $"({updatedCount} of {domains.Count}) " +
                     $"{domains.Count - updatedCount} remaining " +
-                    $"in {(DateTime.Now - startTime).TotalSeconds} seconds");
+                    $"in {(DateTime.Now - startTime).TotalSeconds} seconds" +
+                    "          ");
 
       await _domainRepo.UpdateSeenCountAsync(batch.ToArray());
       batch.Clear();
@@ -137,7 +140,8 @@ public class DomainTrackingService : IDomainTrackingService
     Console.Write($"\r > Updating seen count for {batch.Count} entries " +
                   $"({updatedCount} of {domains.Count}) " +
                   $"{domains.Count - updatedCount} remaining " +
-                  $"in {(DateTime.Now - startTime).TotalSeconds} seconds");
+                  $"in {(DateTime.Now - startTime).TotalSeconds} seconds" +
+                  "          ");
     Console.WriteLine();
 
     await _domainRepo.UpdateSeenCountAsync(batch.ToArray());
@@ -152,12 +156,18 @@ public class DomainTrackingService : IDomainTrackingService
     var domains = listEntries.Select(x => x.Domain).ToArray();
     var existingEntries = new HashSet<BlockListEntry>();
     var batchDomains = new List<string>();
+    var totalSearched = 0;
 
     foreach (var domain in domains)
     {
       batchDomains.Add(domain);
       if (batchDomains.Count < _domainLookupBatchSize)
         continue;
+
+      totalSearched += batchDomains.Count;
+      Console.Write($"\r > Searching next {batchDomains.Count} domains - " +
+                    $"{listEntries.Count - totalSearched} remaining" +
+                    "          ");
 
       var dbDomains = (await _domainRepo.GetEntriesByDomain(list, batchDomains.ToArray())).ToList();
       batchDomains.Clear();
@@ -168,18 +178,26 @@ public class DomainTrackingService : IDomainTrackingService
         existingEntries.Add(dbDomain);
 
       Console.Write($"\r > Found {dbDomains.Count} common domain(s) from other lists " +
-                    $"- found {existingEntries.Count} shared domain(s) in total");
+                    $"- found {existingEntries.Count} shared domain(s) in total" +
+                    "          ");
     }
 
     if (batchDomains.Count > 0)
     {
+      totalSearched += batchDomains.Count;
+      Console.Write($"\r > Searching next {batchDomains.Count} domains - " +
+                    $"{listEntries.Count - totalSearched} remaining" +
+                    "          ");
+
       var dbDomains = (await _domainRepo.GetEntriesByDomain(list, batchDomains.ToArray())).ToList();
       if (dbDomains.Count > 0)
       {
         foreach (var dbDomain in dbDomains)
           existingEntries.Add(dbDomain);
+
         Console.Write($"\r > Found {dbDomains.Count} common domain(s) from other lists " +
-                      $"- found {existingEntries.Count} shared domain(s) in total");
+                      $"- found {existingEntries.Count} shared domain(s) in total" +
+                      "          ");
       }
     }
 

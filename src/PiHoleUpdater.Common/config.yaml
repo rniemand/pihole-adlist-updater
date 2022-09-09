@@ -11,9 +11,9 @@ list_generation:
   category_safe: true
   combined_all: true
   combined_safe: true
-  insert_batch_size: 1000
-  update_batch_size: 10000
-  domain_lookup_batch_size: 2000
+  insert_batch_size: 10000
+  update_batch_size: 20000
+  domain_lookup_batch_size: 20000
 
 development:
   enabled: false
