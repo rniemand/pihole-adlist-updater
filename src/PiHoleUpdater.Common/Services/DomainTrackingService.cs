@@ -117,7 +117,7 @@ public class DomainTrackingService : IDomainTrackingService
         continue;
 
       updatedCount += batch.Count;
-      Console.Write($"\rUpdating seen count for {batch.Count} entries in list: {list} " +
+      Console.Write($"\r > Updating seen count for {batch.Count} entries in list: {list} " +
                     $"({updatedCount} of {domains.Count}) " +
                     $"{domains.Count - updatedCount} entries to go.");
 
@@ -126,12 +126,16 @@ public class DomainTrackingService : IDomainTrackingService
     }
 
     if (batch.Count == 0)
+    {
+      Console.WriteLine();
       return;
+    }
 
     updatedCount += batch.Count;
-    Console.Write($"\rUpdating seen count for {batch.Count} entries in list: {list} " +
+    Console.Write($"\r > Updating seen count for {batch.Count} entries in list: {list} " +
                   $"({updatedCount} of {domains.Count}) " +
                   $"{domains.Count - updatedCount} entries to go.");
+    Console.WriteLine();
 
     await _domainRepo.UpdateSeenCountAsync(batch.ToArray());
   }
@@ -157,9 +161,10 @@ public class DomainTrackingService : IDomainTrackingService
       if (dbDomains.Count == 0)
         continue;
 
-      _logger.LogDebug("Found {count} existing domain entries", dbDomains.Count);
       foreach (var dbDomain in dbDomains)
         existingEntries.Add(dbDomain);
+      Console.Write($"\r > Found {dbDomains.Count} common domain(s) from other lists " +
+                    $"- found {existingEntries.Count} shared domain(s) in total");
     }
 
     if (batchDomains.Count > 0)
@@ -167,17 +172,19 @@ public class DomainTrackingService : IDomainTrackingService
       var dbDomains = (await _domainRepo.GetEntriesByDomain(list, batchDomains.ToArray())).ToList();
       if (dbDomains.Count > 0)
       {
-        _logger.LogDebug("Found {count} existing domain entries", dbDomains.Count);
         foreach (var dbDomain in dbDomains)
           existingEntries.Add(dbDomain);
+        Console.Write($"\r > Found {dbDomains.Count} common domain(s) from other lists " +
+                      $"- found {existingEntries.Count} shared domain(s) in total");
       }
     }
+
+    Console.WriteLine();
 
     // Log and return all found entries
     _logger.LogInformation("Found {count} existing domain entries for list: {list}",
       existingEntries.Count,
-      list
-    );
+      list);
 
     return existingEntries;
   }

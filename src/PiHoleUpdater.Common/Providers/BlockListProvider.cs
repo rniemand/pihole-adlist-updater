@@ -38,9 +38,9 @@ public class BlockListProvider : IBlockListProvider
 
     try
     {
-      Console.WriteLine($"Fetching URL: {url}");
+      _logger.LogDebug("Fetching URL: {url}", url);
       var request = new HttpRequestMessage(HttpMethod.Get, url);
-      HttpResponseMessage response = await _httpClient.SendAsync(request);
+      var response = await _httpClient.SendAsync(request);
       response.EnsureSuccessStatusCode();
       var rawResponse = await response.Content.ReadAsStringAsync();
       CaptureResponse(rawResponse);
