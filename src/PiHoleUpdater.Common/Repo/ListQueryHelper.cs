@@ -27,12 +27,12 @@ public static class ListQueryHelper
   {
     return list switch
     {
-      AdList.Suspicious => "'Suspicious' as `ListName`",
-      AdList.Advertising => "'Advertising' as `ListName`",
-      AdList.Tracking => "'Tracking' as `ListName`",
-      AdList.Malicious => "'Malicious' as `ListName`",
-      AdList.Adult => "'Adult' as `ListName`",
-      AdList.Other => "'Other' as `ListName`",
+      AdList.Suspicious => "'suspicious' as `ListName`",
+      AdList.Advertising => "'advertising' as `ListName`",
+      AdList.Tracking => "'tracking' as `ListName`",
+      AdList.Malicious => "'malicious' as `ListName`",
+      AdList.Adult => "'adult' as `ListName`",
+      AdList.Other => "'other' as `ListName`",
       _ => throw new ArgumentOutOfRangeException(nameof(list), list, null)
     };
   }

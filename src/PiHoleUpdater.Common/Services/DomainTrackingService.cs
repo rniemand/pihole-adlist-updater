@@ -33,15 +33,26 @@ public class DomainTrackingService : IDomainTrackingService
   public async Task TrackListEntries(AdList list, HashSet<BlockListEntry> listEntries)
   {
     _logger.LogInformation("Processing {count} domains", listEntries.Count);
-    var dbEntries = (await _domainRepo.GetEntriesAsync(list))
+    var existingListEntries = (await _domainRepo.GetEntriesAsync(list))
       .ToHashSet();
 
+    var nonDbListEntries = listEntries
+      .Where(e => !existingListEntries.Contains(e))
+      .ToHashSet();
+
+    var existingDomains = await _domainRepo.GetEntriesByDomain(list,
+      nonDbListEntries.Select(x => x.Domain).ToArray());
+
+
+    Console.WriteLine();
+      Console.WriteLine();
+
     await AddNewEntriesAsync(list, listEntries
-      .Where(e => !dbEntries.Contains(e))
+      .Where(e => !existingListEntries.Contains(e))
       .ToList());
 
     await UpdateSeenCountAsync(list, listEntries
-      .Where(e => dbEntries.Contains(e))
+      .Where(e => existingListEntries.Contains(e))
       .Select(x => x.Domain)
       .ToList());
   }

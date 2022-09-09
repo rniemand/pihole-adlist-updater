@@ -61,13 +61,13 @@ public class ListUpdaterService : IListUpdaterService
   private async Task RunListGenerationAsync()
   {
     _logger.LogInformation("Processing lists...");
-    foreach (BlockListCategoryConfig blockList in _config.BlockLists.Where(x => x.Enabled))
+    foreach (var blockList in _config.BlockLists.Where(x => x.Enabled))
     {
       var entries = new HashSet<BlockListEntry>();
       var adList = blockList.Name;
 
       _logger.LogInformation("Processing block list: {name}", adList);
-      foreach (BlockListConfigEntry entry in blockList.Entries)
+      foreach (var entry in blockList.Entries)
       {
         var rawList = await _listProvider.GetBlockListAsync(entry.Url);
         var newEntryCount = _listParser.AppendNewEntries(entries, adList, rawList);

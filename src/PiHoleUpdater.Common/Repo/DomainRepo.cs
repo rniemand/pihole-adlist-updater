@@ -4,12 +4,14 @@ using Dapper;
 using PiHoleUpdater.Common.Enums;
 using PiHoleUpdater.Common.Models.Repo;
 using PiHoleUpdater.Common.Models.Config;
+using System.Collections.Generic;
 
 namespace PiHoleUpdater.Common.Repo;
 
 public interface IDomainRepo
 {
   Task<IEnumerable<BlockListEntry>> GetEntriesAsync(AdList list);
+  Task<IEnumerable<BlockListEntry>> GetEntriesByDomain(AdList list, string[] domains);
   Task<int> AddEntriesAsync(AdList list, IEnumerable<BlockListEntry> entries);
   Task<int> AddEntryAsync(AdList list, BlockListEntry entry);
   Task<int> UpdateSeenCountAsync(AdList list, string[] domains);
@@ -41,6 +43,20 @@ public class DomainRepo : IDomainRepo
       {ListQueryHelper.GenerateWhereFilter(list, "d")}";
 
     return await _connection.QueryAsync<BlockListEntry>(query);
+  }
+
+  public async Task<IEnumerable<BlockListEntry>> GetEntriesByDomain(AdList list, string[] domains)
+  {
+    EnsureConnected();
+
+    var query = @$"
+    SELECT
+      d.`Domain`,
+      {ListQueryHelper.GenerateSelectColumnName(list)}
+    FROM `Domains` d
+    WHERE d.`Domain` IN (@domains)";
+
+    return await _connection.QueryAsync<BlockListEntry>(query, new { domains });
   }
 
   public async Task<int> AddEntriesAsync(AdList list, IEnumerable<BlockListEntry> entries)
