@@ -50,33 +50,42 @@ public class DomainTrackingService : IDomainTrackingService
   // Internal methods
   private async Task AddNewEntriesAsync(AdList list, IReadOnlyCollection<BlockListEntry> domains)
   {
-    if (domains.Count == 0)
+    var domainsCount = domains.Count;
+    if (domainsCount == 0)
       return;
 
     var batch = new List<BlockListEntry>();
     var addedCount = 0;
+    var startTime = DateTime.Now;
 
     foreach (BlockListEntry domain in domains)
     {
       batch.Add(domain);
-
       if (batch.Count < _insertBatchSize)
         continue;
 
       addedCount += batch.Count;
-      _logger.LogInformation("Adding {count} new entries to {list} ({rem} remaining)",
-        batch.Count, list, (domains.Count - addedCount));
+      Console.Write($"\rAdding {batch.Count} new entries to {list} " +
+                    $"({domainsCount - addedCount} remaining) " +
+                    $"({addedCount} added) " +
+                    $"in {(DateTime.Now - startTime).TotalSeconds} seconds.");
       await _domainRepo.AddEntriesAsync(list, batch);
       batch.Clear();
     }
 
     if (batch.Count == 0)
+    {
+      Console.WriteLine();
       return;
+    }
 
     addedCount += batch.Count;
-    _logger.LogInformation("Adding {count} new entries to {list} ({rem} remaining)",
-      batch.Count, list, (domains.Count - addedCount));
+    Console.Write($"\rAdding {batch.Count} new entries to {list} " +
+                  $"({domainsCount - addedCount} remaining) " +
+                  $"({addedCount} added) " +
+                  $"in {(DateTime.Now - startTime).TotalSeconds} seconds.");
     await _domainRepo.AddEntriesAsync(list, batch);
+    Console.WriteLine();
   }
 
   private async Task UpdateSeenCountAsync(AdList list, IReadOnlyCollection<string> domains)

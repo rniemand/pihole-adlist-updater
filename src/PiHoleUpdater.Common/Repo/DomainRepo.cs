@@ -11,6 +11,7 @@ public interface IDomainRepo
 {
   Task<IEnumerable<BlockListEntry>> GetEntriesAsync(AdList list);
   Task<int> AddEntriesAsync(AdList list, IEnumerable<BlockListEntry> entries);
+  Task<int> AddEntryAsync(AdList list, BlockListEntry entry);
   Task<int> UpdateSeenCountAsync(AdList list, string[] domains);
   Task<IEnumerable<SimpleDomainEntity>> GetCompiledListAsync(AdList list);
   Task<IEnumerable<SimpleDomainEntity>> GetCompiledListAsync();
@@ -45,16 +46,27 @@ public class DomainRepo : IDomainRepo
   public async Task<int> AddEntriesAsync(AdList list, IEnumerable<BlockListEntry> entries)
   {
     EnsureConnected();
+    
+    var query = @$"
+    INSERT INTO `Domains`
+      (`Domain`, `{ListQueryHelper.GetColumnName(list)}`)
+    VALUES
+      (@Domain, 1)";
+    
+    return await _connection.ExecuteAsync(query, entries);
+  }
 
-    var currentTime = DateTime.Now.ToString("yyyy-MM-dd");
+  public async Task<int> AddEntryAsync(AdList list, BlockListEntry entry)
+  {
+    EnsureConnected();
 
     var query = @$"
     INSERT INTO `Domains`
-      (`DateAdded`, `DateLastSeen`, `Domain`, `{ListQueryHelper.GetColumnName(list)}`)
+      (`Domain`, `{ListQueryHelper.GetColumnName(list)}`)
     VALUES
-      ('{currentTime}', '{currentTime}', @Domain, 1)";
+      (@Domain, 1)";
 
-    return await _connection.ExecuteAsync(query, entries);
+    return await _connection.ExecuteAsync(query, entry);
   }
 
   public async Task<int> UpdateSeenCountAsync(AdList list, string[] domains)
