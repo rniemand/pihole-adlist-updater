@@ -70,7 +70,7 @@ public class ListUpdaterService : IListUpdaterService
       foreach (BlockListConfigEntry entry in blockList.Entries)
       {
         var rawList = await _listProvider.GetBlockListAsync(entry.Url);
-        var newEntryCount = _listParser.AppendNewEntries(entries, adList, entry.Strict, rawList);
+        var newEntryCount = _listParser.AppendNewEntries(entries, adList, rawList);
 
         if (newEntryCount == 0)
           continue;

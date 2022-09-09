@@ -1,7 +1,6 @@
 CREATE TABLE `Domains` (
 	`DateAdded` DATE NOT NULL DEFAULT curdate(),
 	`DateLastSeen` DATE NOT NULL DEFAULT curdate(),
-	`Strict` BIT(1) NOT NULL DEFAULT b'0',
 	`SuspiciousList` BIT(1) NOT NULL DEFAULT b'0',
 	`AdvertisingList` BIT(1) NOT NULL DEFAULT b'0',
 	`TrackingList` BIT(1) NOT NULL DEFAULT b'0',

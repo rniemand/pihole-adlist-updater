@@ -12,8 +12,8 @@ public interface IDomainRepo
   Task<IEnumerable<BlockListEntry>> GetEntriesAsync(AdList list);
   Task<int> AddEntriesAsync(AdList list, IEnumerable<BlockListEntry> entries);
   Task<int> UpdateSeenCountAsync(AdList list, string[] domains);
-  Task<IEnumerable<SimpleDomainEntity>> GetCompiledListAsync(AdList list, bool getStrict);
-  Task<IEnumerable<SimpleDomainEntity>> GetCompiledListAsync(bool getStrict);
+  Task<IEnumerable<SimpleDomainEntity>> GetCompiledListAsync(AdList list);
+  Task<IEnumerable<SimpleDomainEntity>> GetCompiledListAsync();
 }
 
 public class DomainRepo : IDomainRepo
@@ -33,7 +33,6 @@ public class DomainRepo : IDomainRepo
 
     var query = @$"
     SELECT
-      d.`Strict`,
       d.`Domain`,
       {ListQueryHelper.GenerateSelectColumnName(list)}
     FROM `Domains` d
@@ -51,9 +50,9 @@ public class DomainRepo : IDomainRepo
 
     var query = @$"
     INSERT INTO `Domains`
-      (`DateAdded`, `DateLastSeen`, `Strict`, `Domain`, `{ListQueryHelper.GetColumnName(list)}`)
+      (`DateAdded`, `DateLastSeen`, `Domain`, `{ListQueryHelper.GetColumnName(list)}`)
     VALUES
-      ('{currentTime}', '{currentTime}', @Strict, @Domain, 1)";
+      ('{currentTime}', '{currentTime}', @Domain, 1)";
 
     return await _connection.ExecuteAsync(query, entries);
   }
@@ -77,7 +76,7 @@ public class DomainRepo : IDomainRepo
     });
   }
   
-  public async Task<IEnumerable<SimpleDomainEntity>> GetCompiledListAsync(AdList list, bool getStrict)
+  public async Task<IEnumerable<SimpleDomainEntity>> GetCompiledListAsync(AdList list)
   {
     EnsureConnected();
 
@@ -87,16 +86,12 @@ public class DomainRepo : IDomainRepo
     FROM `Domains` d
     WHERE
 	    d.`{ListQueryHelper.GetColumnName(list)}` = 1
-	    AND d.`Strict` = @Strict
     ORDER BY d.`Domain` ASC";
 
-    return await _connection.QueryAsync<SimpleDomainEntity>(query, new
-    {
-      Strict = getStrict ? 1 : 0
-    });
+    return await _connection.QueryAsync<SimpleDomainEntity>(query);
   }
 
-  public async Task<IEnumerable<SimpleDomainEntity>> GetCompiledListAsync(bool getStrict)
+  public async Task<IEnumerable<SimpleDomainEntity>> GetCompiledListAsync()
   {
     EnsureConnected();
 
@@ -104,14 +99,9 @@ public class DomainRepo : IDomainRepo
     SELECT
 	    d.`Domain`
     FROM `Domains` d
-    WHERE
-	    d.`Strict` = @Strict
     ORDER BY d.`Domain` ASC";
 
-    return await _connection.QueryAsync<SimpleDomainEntity>(query, new
-    {
-      Strict = getStrict ? 1 : 0
-    });
+    return await _connection.QueryAsync<SimpleDomainEntity>(query);
   }
 
 
