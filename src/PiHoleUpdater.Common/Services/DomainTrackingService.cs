@@ -17,6 +17,7 @@ public class DomainTrackingService : IDomainTrackingService
   private readonly IDomainRepo _domainRepo;
   private readonly int _insertBatchSize;
   private readonly int _updateBatchSize;
+  private readonly int _domainLookupBatchSize;
 
   public DomainTrackingService(ILoggerAdapter<DomainTrackingService> logger,
     IDomainRepo domainRepo,
@@ -26,6 +27,7 @@ public class DomainTrackingService : IDomainTrackingService
     _domainRepo = domainRepo;
     _insertBatchSize = config.ListGeneration.InsertBatchSize;
     _updateBatchSize = config.ListGeneration.UpdateBatchSize;
+    _domainLookupBatchSize = config.ListGeneration.DomainLookupBatchSize;
   }
 
 
@@ -33,26 +35,27 @@ public class DomainTrackingService : IDomainTrackingService
   public async Task TrackListEntries(AdList list, HashSet<BlockListEntry> listEntries)
   {
     _logger.LogInformation("Processing {count} domains", listEntries.Count);
-    var existingListEntries = (await _domainRepo.GetEntriesAsync(list))
+    var existingDbEntries = (await _domainRepo.GetEntriesAsync(list)).ToHashSet();
+
+    // Find all entries that do not exists for "list" in the DB
+    var newListEntries = listEntries
+      .Where(e => !existingDbEntries.Contains(e))
       .ToHashSet();
 
-    var nonDbListEntries = listEntries
-      .Where(e => !existingListEntries.Contains(e))
+    // Check for, and assign any domains that exist in any other list
+    var commonListEntries = await FindExistingDomainsAsync(list, newListEntries);
+    await HandleCommonListEntriesAsync(list, commonListEntries);
+
+    // Find all domains that do not exist anywhere in the DB, and add them
+    var dbEntriesToAdd = newListEntries
+      .Where(e => !commonListEntries.Contains(e))
       .ToHashSet();
 
-    var existingDomains = await _domainRepo.GetEntriesByDomain(list,
-      nonDbListEntries.Select(x => x.Domain).ToArray());
+    await AddNewEntriesAsync(list, dbEntriesToAdd);
 
-
-    Console.WriteLine();
-      Console.WriteLine();
-
-    await AddNewEntriesAsync(list, listEntries
-      .Where(e => !existingListEntries.Contains(e))
-      .ToList());
-
+    // Update the seen count for all existing DB entries
     await UpdateSeenCountAsync(list, listEntries
-      .Where(e => existingListEntries.Contains(e))
+      .Where(e => !dbEntriesToAdd.Contains(e))
       .Select(x => x.Domain)
       .ToList());
   }
@@ -105,23 +108,94 @@ public class DomainTrackingService : IDomainTrackingService
       return;
 
     var batch = new List<string>();
+    var updatedCount = 0;
 
     foreach (var entry in domains)
     {
       batch.Add(entry);
-
       if (batch.Count < _updateBatchSize)
         continue;
 
-      _logger.LogInformation("Updating {count} new entries to {list}", batch.Count, list);
-      await _domainRepo.UpdateSeenCountAsync(list, batch.ToArray());
+      updatedCount += batch.Count;
+      Console.Write($"\rUpdating seen count for {batch.Count} entries in list: {list} " +
+                    $"({updatedCount} of {domains.Count}) " +
+                    $"{domains.Count - updatedCount} entries to go.");
+
+      await _domainRepo.UpdateSeenCountAsync(batch.ToArray());
       batch.Clear();
     }
 
     if (batch.Count == 0)
       return;
 
-    _logger.LogInformation("Updating {count} new entries to {list}", batch.Count, list);
-    await _domainRepo.UpdateSeenCountAsync(list, batch.ToArray());
+    updatedCount += batch.Count;
+    Console.Write($"\rUpdating seen count for {batch.Count} entries in list: {list} " +
+                  $"({updatedCount} of {domains.Count}) " +
+                  $"{domains.Count - updatedCount} entries to go.");
+
+    await _domainRepo.UpdateSeenCountAsync(batch.ToArray());
+  }
+
+  private async Task<HashSet<BlockListEntry>> FindExistingDomainsAsync(AdList list, IReadOnlyCollection<BlockListEntry> listEntries)
+  {
+    if (listEntries.Count == 0)
+      return new HashSet<BlockListEntry>();
+
+    _logger.LogInformation("Looking for common domains for list: {list}", list);
+    var domains = listEntries.Select(x => x.Domain).ToArray();
+    var existingEntries = new HashSet<BlockListEntry>();
+    var batchDomains = new List<string>();
+
+    foreach (var domain in domains)
+    {
+      batchDomains.Add(domain);
+      if (batchDomains.Count < _domainLookupBatchSize)
+        continue;
+
+      var dbDomains = (await _domainRepo.GetEntriesByDomain(list, batchDomains.ToArray())).ToList();
+      batchDomains.Clear();
+      if (dbDomains.Count == 0)
+        continue;
+
+      _logger.LogDebug("Found {count} existing domain entries", dbDomains.Count);
+      foreach (var dbDomain in dbDomains)
+        existingEntries.Add(dbDomain);
+    }
+
+    if (batchDomains.Count > 0)
+    {
+      var dbDomains = (await _domainRepo.GetEntriesByDomain(list, batchDomains.ToArray())).ToList();
+      if (dbDomains.Count > 0)
+      {
+        _logger.LogDebug("Found {count} existing domain entries", dbDomains.Count);
+        foreach (var dbDomain in dbDomains)
+          existingEntries.Add(dbDomain);
+      }
+    }
+
+    // Log and return all found entries
+    _logger.LogInformation("Found {count} existing domain entries for list: {list}",
+      existingEntries.Count,
+      list
+    );
+
+    return existingEntries;
+  }
+
+  private async Task HandleCommonListEntriesAsync(AdList list, IReadOnlyCollection<BlockListEntry> entries)
+  {
+    if (entries.Count == 0)
+      return;
+
+    _logger.LogTrace("Flagging {count} common list entries for list: {list}",
+      entries.Count,
+      list);
+
+    var domains = entries.Select(x => x.Domain).ToArray();
+    var rowCount = await _domainRepo.AssignDomainsToListAsync(list, domains);
+
+    _logger.LogDebug("Updated {count} common domains for list: {list}",
+      rowCount,
+      list);
   }
 }

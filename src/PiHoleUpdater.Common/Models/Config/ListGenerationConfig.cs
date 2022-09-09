@@ -27,4 +27,7 @@ public class ListGenerationConfig
 
   [YamlMember(Alias = "update_batch_size")]
   public int UpdateBatchSize { get; set; } = 5000;
+
+  [YamlMember(Alias = "domain_lookup_batch_size")]
+  public int DomainLookupBatchSize { get; set; } = 1000;
 }
