@@ -1,7 +1,7 @@
 using MySql.Data.MySqlClient;
-using PiHoleUpdater.Common.Logging;
 using System.Data;
 using Dapper;
+using PiHoleUpdater.Common.Enums;
 using PiHoleUpdater.Common.Models.Repo;
 using PiHoleUpdater.Common.Models.Config;
 
@@ -9,127 +9,103 @@ namespace PiHoleUpdater.Common.Repo;
 
 public interface IDomainRepo
 {
-  Task<IEnumerable<BlockListEntry>> GetEntriesAsync(string listName);
-  Task<int> AddEntriesAsync(IEnumerable<BlockListEntry> entries);
-  Task<int> UpdateSeenCountAsync(string listName, string[] domains);
-  Task<int> DeleteEntriesAsync(string listName, string[] domains);
-  Task<IEnumerable<SimpleDomainEntity>> GetCompiledListAsync(string listName, bool getStrict);
+  Task<IEnumerable<BlockListEntry>> GetEntriesAsync(AdList list);
+  Task<int> AddEntriesAsync(AdList list, IEnumerable<BlockListEntry> entries);
+  Task<int> UpdateSeenCountAsync(AdList list, string[] domains);
+  Task<IEnumerable<SimpleDomainEntity>> GetCompiledListAsync(AdList list, bool getStrict);
   Task<IEnumerable<SimpleDomainEntity>> GetCompiledListAsync(bool getStrict);
 }
 
 public class DomainRepo : IDomainRepo
 {
-  private readonly ILoggerAdapter<DomainRepo> _logger;
   private readonly MySqlConnection _connection;
 
-  public DomainRepo(ILoggerAdapter<DomainRepo> logger, PiHoleUpdaterConfig config)
+  public DomainRepo(PiHoleUpdaterConfig config)
   {
-    _logger = logger;
     _connection = new MySqlConnection(config.DbConnectionString);
   }
 
 
   // Interface methods
-  public async Task<IEnumerable<BlockListEntry>> GetEntriesAsync(string listName)
+  public async Task<IEnumerable<BlockListEntry>> GetEntriesAsync(AdList list)
   {
-    ensureConnected();
+    EnsureConnected();
 
-    const string query = @"
+    var query = @$"
     SELECT
       d.`Strict`,
       d.`Domain`,
-      d.`ListName`
+      {ListQueryHelper.GenerateSelectColumnName(list)}
     FROM `Domains` d
-    WHERE d.`ListName` = @ListName
-      AND d.`Deleted` = 0";
+    WHERE
+      {ListQueryHelper.GenerateWhereFilter(list, "d")}";
 
-    return await _connection.QueryAsync<BlockListEntry>(query, new { ListName = listName });
+    return await _connection.QueryAsync<BlockListEntry>(query);
   }
 
-  public async Task<int> AddEntriesAsync(IEnumerable<BlockListEntry> entries)
+  public async Task<int> AddEntriesAsync(AdList list, IEnumerable<BlockListEntry> entries)
   {
-    ensureConnected();
+    EnsureConnected();
 
-    const string query = @"
+    var currentTime = DateTime.Now.ToString("yyyy-MM-dd");
+
+    var query = @$"
     INSERT INTO `Domains`
-      (`Strict`, `Domain`, `ListName`)
+      (`DateAdded`, `DateLastSeen`, `Strict`, `Domain`, `{ListQueryHelper.GetColumnName(list)}`)
     VALUES
-      (@Strict, @Domain, @ListName)";
+      ('{currentTime}', '{currentTime}', @Strict, @Domain, 1)";
 
     return await _connection.ExecuteAsync(query, entries);
   }
 
-  public async Task<int> UpdateSeenCountAsync(string listName, string[] domains)
+  public async Task<int> UpdateSeenCountAsync(AdList list, string[] domains)
   {
-    ensureConnected();
+    EnsureConnected();
 
-    const string query = @"
+    var query = @$"
     UPDATE `Domains`
     SET
       `SeenCount` = `SeenCount` + 1,
-      `DateLastSeen` = curdate()
+      `DateLastSeen` = curdate(),
+      `{ListQueryHelper.GetColumnName(list)}` = 1
     WHERE
-      `ListName` = @ListName
       AND `Domain` IN @Domains";
 
     return await _connection.ExecuteAsync(query, new
     {
-      ListName = listName,
       Domains = domains
     });
   }
-
-  public async Task<int> DeleteEntriesAsync(string listName, string[] domains)
+  
+  public async Task<IEnumerable<SimpleDomainEntity>> GetCompiledListAsync(AdList list, bool getStrict)
   {
-    ensureConnected();
+    EnsureConnected();
 
-    const string query = @"
-    UPDATE `Domains`
-    SET
-      `Deleted` = 1
-    WHERE
-      `ListName` = @ListName
-      AND `Domain` IN @Domains";
-
-    return await _connection.ExecuteAsync(query, new
-    {
-      ListName = listName,
-      Domains = domains
-    });
-  }
-
-  public async Task<IEnumerable<SimpleDomainEntity>> GetCompiledListAsync(string listName, bool getStrict)
-  {
-    ensureConnected();
-
-    const string query = @"
+    var query = @$"
     SELECT
 	    d.`Domain`
     FROM `Domains` d
     WHERE
-	    d.`Deleted` = 0
-	    AND d.`ListName` = @ListName
+	    d.`{ListQueryHelper.GetColumnName(list)}` = 1
 	    AND d.`Strict` = @Strict
     ORDER BY d.`Domain` ASC";
 
     return await _connection.QueryAsync<SimpleDomainEntity>(query, new
     {
-      ListName = listName,
       Strict = getStrict ? 1 : 0
     });
   }
 
   public async Task<IEnumerable<SimpleDomainEntity>> GetCompiledListAsync(bool getStrict)
   {
-    ensureConnected();
+    EnsureConnected();
 
     const string query = @"
     SELECT
 	    d.`Domain`
     FROM `Domains` d
     WHERE
-	    d.`Deleted` = 0
-	    AND d.`Strict` = @Strict
+	    d.`Strict` = @Strict
     ORDER BY d.`Domain` ASC";
 
     return await _connection.QueryAsync<SimpleDomainEntity>(query, new
@@ -140,7 +116,7 @@ public class DomainRepo : IDomainRepo
 
 
   // Internal methods
-  private void ensureConnected()
+  private void EnsureConnected()
   {
     // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
     switch (_connection.State)

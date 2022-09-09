@@ -7,14 +7,14 @@ ServiceProvider serviceProvider = new ServiceCollection()
   .AddPiHoleUpdater()
   .BuildServiceProvider();
 
-serviceProvider
-  .GetRequiredService<IRepoManagerService>()
-  .UpdateLocalRepo();
+//serviceProvider
+//  .GetRequiredService<IRepoManagerService>()
+//  .UpdateLocalRepo();
 
 await serviceProvider
   .GetRequiredService<IListUpdaterService>()
   .TickAsync(CancellationToken.None);
 
-serviceProvider
-  .GetRequiredService<IRepoManagerService>()
-  .CommitChanges();
+//serviceProvider
+//  .GetRequiredService<IRepoManagerService>()
+//  .CommitChanges();

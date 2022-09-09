@@ -1,3 +1,4 @@
+using PiHoleUpdater.Common.Enums;
 using PiHoleUpdater.Common.Models.Config;
 using PiHoleUpdater.Common.Repo;
 
@@ -5,7 +6,7 @@ namespace PiHoleUpdater.Common.Utils;
 
 public interface IBlockListFileWriter
 {
-  Task WriteCategoryLists(string category);
+  Task WriteCategoryLists(AdList list);
   Task WriteCombinedLists();
 }
 
@@ -20,10 +21,10 @@ public class BlockListFileWriter : IBlockListFileWriter
     _domainRepo = domainRepo;
   }
 
-  public async Task WriteCategoryLists(string category)
+  public async Task WriteCategoryLists(AdList list)
   {
-    await WriteCategoryList(category);
-    await WriteCategoryStrictList(category);
+    await WriteCategoryList(list);
+    await WriteCategoryStrictList(list);
   }
 
   public async Task WriteCombinedLists()
@@ -47,16 +48,17 @@ public class BlockListFileWriter : IBlockListFileWriter
     WriteList(filePath, entries);
   }
 
-  private async Task WriteCategoryList(string category)
+  private async Task WriteCategoryList(AdList list)
   {
     if (!_config.ListGeneration.CategorySafe)
       return;
 
-    var entries = (await _domainRepo.GetCompiledListAsync(category, false))
+    var entries = (await _domainRepo.GetCompiledListAsync(list, false))
       .Select(x => x.Domain)
       .ToList();
 
-    var filePath = Path.Join(_config.OutputDir, $"{category}.txt");
+    var listName = list.ToString("G").ToLower();
+    var filePath = Path.Join(_config.OutputDir, $"{listName}.txt");
     WriteList(filePath, entries);
   }
 
@@ -73,23 +75,22 @@ public class BlockListFileWriter : IBlockListFileWriter
     WriteList(filePath, entries);
   }
 
-  private async Task WriteCategoryStrictList(string category)
+  private async Task WriteCategoryStrictList(AdList list)
   {
     if (!_config.ListGeneration.CategoryAll)
       return;
 
-    var entries = (await _domainRepo.GetCompiledListAsync(category, true))
+    var entries = (await _domainRepo.GetCompiledListAsync(list, true))
       .Select(x => x.Domain)
       .ToList();
 
-    var filePath = Path.Join(_config.OutputDir, $"{category}-strict.txt");
+    var listName = list.ToString("G").ToLower();
+    var filePath = Path.Join(_config.OutputDir, $"{listName}-strict.txt");
     WriteList(filePath, entries);
   }
 
   private void WriteList(string filePath, IReadOnlyCollection<string> entries)
   {
-    Console.WriteLine($"   - writing {entries.Count} to {filePath}");
-
     if (!Directory.Exists(_config.OutputDir))
       Directory.CreateDirectory(_config.OutputDir);
 

@@ -1,3 +1,5 @@
+using PiHoleUpdater.Common.Enums;
+using PiHoleUpdater.Common.Repo;
 using YamlDotNet.Serialization;
 
 namespace PiHoleUpdater.Common.Models.Config;
@@ -5,15 +7,10 @@ namespace PiHoleUpdater.Common.Models.Config;
 public class BlockListCategoryConfig
 {
   [YamlMember(Alias = "name")]
-  public string Name
+  public AdList Name
   {
-    get => _name;
-    set
-    {
-      if (string.IsNullOrWhiteSpace(value))
-        value = string.Empty;
-      _name = value.ToLower().Trim();
-    }
+    get => ListQueryHelper.AdListFromString(_name);
+    set => _name = value.ToString("G").ToLower().Trim();
   }
 
   [YamlIgnore]

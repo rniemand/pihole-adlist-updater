@@ -1,3 +1,4 @@
+using PiHoleUpdater.Common.Enums;
 using PiHoleUpdater.Common.Logging;
 using PiHoleUpdater.Common.Models.Config;
 using PiHoleUpdater.Common.Models.Repo;
@@ -7,7 +8,7 @@ namespace PiHoleUpdater.Common.Services;
 
 public interface IDomainTrackingService
 {
-  Task TrackListEntries(string listName, HashSet<BlockListEntry> listEntries);
+  Task TrackListEntries(AdList list, HashSet<BlockListEntry> listEntries);
 }
 
 public class DomainTrackingService : IDomainTrackingService
@@ -29,30 +30,25 @@ public class DomainTrackingService : IDomainTrackingService
 
 
   // Interface methods
-  public async Task TrackListEntries(string listName, HashSet<BlockListEntry> listEntries)
+  public async Task TrackListEntries(AdList list, HashSet<BlockListEntry> listEntries)
   {
     _logger.LogInformation("Processing {count} domains", listEntries.Count);
-    var dbEntries = (await _domainRepo.GetEntriesAsync(listName.Trim()))
+    var dbEntries = (await _domainRepo.GetEntriesAsync(list))
       .ToHashSet();
 
-    await AddNewEntriesAsync(listName, listEntries
+    await AddNewEntriesAsync(list, listEntries
       .Where(e => !dbEntries.Contains(e))
       .ToList());
 
-    await UpdateSeenCountAsync(listName, listEntries
+    await UpdateSeenCountAsync(list, listEntries
       .Where(e => dbEntries.Contains(e))
-      .Select(x => x.Domain)
-      .ToList());
-
-    await DeleteEntriesAsync(listName, dbEntries
-      .Where(e => !listEntries.Contains(e))
       .Select(x => x.Domain)
       .ToList());
   }
 
 
   // Internal methods
-  private async Task AddNewEntriesAsync(string listName, IReadOnlyCollection<BlockListEntry> domains)
+  private async Task AddNewEntriesAsync(AdList list, IReadOnlyCollection<BlockListEntry> domains)
   {
     if (domains.Count == 0)
       return;
@@ -69,8 +65,8 @@ public class DomainTrackingService : IDomainTrackingService
 
       addedCount += batch.Count;
       _logger.LogInformation("Adding {count} new entries to {list} ({rem} remaining)",
-        batch.Count, listName, (domains.Count - addedCount));
-      await _domainRepo.AddEntriesAsync(batch);
+        batch.Count, list, (domains.Count - addedCount));
+      await _domainRepo.AddEntriesAsync(list, batch);
       batch.Clear();
     }
 
@@ -79,11 +75,11 @@ public class DomainTrackingService : IDomainTrackingService
 
     addedCount += batch.Count;
     _logger.LogInformation("Adding {count} new entries to {list} ({rem} remaining)",
-      batch.Count, listName, (domains.Count - addedCount));
-    await _domainRepo.AddEntriesAsync(batch);
+      batch.Count, list, (domains.Count - addedCount));
+    await _domainRepo.AddEntriesAsync(list, batch);
   }
 
-  private async Task UpdateSeenCountAsync(string listName, IReadOnlyCollection<string> domains)
+  private async Task UpdateSeenCountAsync(AdList list, IReadOnlyCollection<string> domains)
   {
     if (domains.Count == 0)
       return;
@@ -97,24 +93,15 @@ public class DomainTrackingService : IDomainTrackingService
       if (batch.Count < _updateBatchSize)
         continue;
 
-      _logger.LogInformation("Updating {count} new entries to {list}", batch.Count, listName);
-      await _domainRepo.UpdateSeenCountAsync(listName, batch.ToArray());
+      _logger.LogInformation("Updating {count} new entries to {list}", batch.Count, list);
+      await _domainRepo.UpdateSeenCountAsync(list, batch.ToArray());
       batch.Clear();
     }
 
     if (batch.Count == 0)
       return;
 
-    _logger.LogInformation("Updating {count} new entries to {list}", batch.Count, listName);
-    await _domainRepo.UpdateSeenCountAsync(listName, batch.ToArray());
-  }
-
-  private async Task DeleteEntriesAsync(string listName, IReadOnlyCollection<string> domains)
-  {
-    if (domains.Count == 0)
-      return;
-
-    _logger.LogInformation("Removing {count} new entries to {list}", domains.Count, listName);
-    await _domainRepo.DeleteEntriesAsync(listName, domains.ToArray());
+    _logger.LogInformation("Updating {count} new entries to {list}", batch.Count, list);
+    await _domainRepo.UpdateSeenCountAsync(list, batch.ToArray());
   }
 }

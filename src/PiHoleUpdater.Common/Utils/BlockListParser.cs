@@ -1,11 +1,14 @@
 using PiHoleUpdater.Common.Models.Config;
+using PiHoleUpdater.Common.Models.Repo;
+using PiHoleUpdater.Common.Repo;
 using System.Text.RegularExpressions;
+using PiHoleUpdater.Common.Enums;
 
 namespace PiHoleUpdater.Common.Utils;
 
 public interface IBlockListParser
 {
-  List<string> ParseList(string rawList);
+  int AppendNewEntries(HashSet<BlockListEntry> domains, AdList list, bool strict, string rawList);
 }
 
 public class BlockListParser : IBlockListParser
@@ -20,42 +23,50 @@ public class BlockListParser : IBlockListParser
     _config = config;
   }
 
-  public List<string> ParseList(string rawList)
+  public int AppendNewEntries(HashSet<BlockListEntry> domains, AdList list, bool strict, string rawList)
   {
     if (string.IsNullOrWhiteSpace(rawList))
-      return new List<string>();
+      return 0;
 
-    var entries = new List<string>();
+    var listName = ListQueryHelper.StringFromAdList(list);
     var wlRegex = _config.Whitelist.CompiledRegex;
     var wlExact = _config.Whitelist.ExactDomains;
+    var addedCount = 0;
 
-    foreach (var line in rawList.Split("\n"))
+    foreach (var line in rawList.Split("\n", StringSplitOptions.RemoveEmptyEntries))
     {
-      if (line.StartsWith("#"))
-        continue;
-
       if (string.IsNullOrWhiteSpace(line))
         continue;
 
-      var cleanLine = TrimLineRx.Replace(line, "").Trim();
+      var trimmedLIne = line.Trim();
+
+      if (trimmedLIne.StartsWith("#") || trimmedLIne.StartsWith("|") || trimmedLIne.EndsWith("^"))
+        continue;
+
+      var cleanLine = TrimLineRx.Replace(trimmedLIne, "").Trim();
       if (string.IsNullOrWhiteSpace(cleanLine))
         continue;
 
       if (wlExact.Any(x => x.Equals(cleanLine, StringComparison.InvariantCultureIgnoreCase)))
-      {
-        Console.WriteLine($"  - skipping {cleanLine} (exact match)");
         continue;
-      }
 
       if (wlRegex.Any(x => x.IsMatch(cleanLine)))
-      {
-        Console.WriteLine($"  - skipping {cleanLine} (regex match)");
         continue;
-      }
 
-      entries.Add(cleanLine);
+      var blockListEntry = new BlockListEntry
+      {
+        Strict = strict,
+        ListName = listName,
+        Domain = cleanLine
+      };
+
+      if (domains.Contains(blockListEntry))
+        continue;
+
+      domains.Add(blockListEntry);
+      addedCount++;
     }
 
-    return entries;
+    return addedCount;
   }
 }
