@@ -9,5 +9,6 @@ public enum AdList
   Adult,
   Other,
   Spam,
+  Combined,
   Unknown
 }

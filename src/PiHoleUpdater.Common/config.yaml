@@ -64,20 +64,10 @@ ad_lists:
         project_url: https://firebog.net/
         maintainer: "firebog"
 
-      - url: https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext
-        type: Site
-        project_url: https://pgl.yoyo.org/
-        maintainer: "pgl.yoyo.org"
-
       - url: https://raw.githubusercontent.com/FadeMind/hosts.extras/master/UncheckyAds/hosts
         type: GitHub
         project_url: https://github.com/FadeMind/hosts.extras
         maintainer:  "FadeMind"
-
-      - url: https://raw.githubusercontent.com/bigdargon/hostsVN/master/hosts
-        type: GitHub
-        project_url: https://github.com/bigdargon/hostsVN
-        maintainer: "bigdargon"
 
       - url: https://abp.oisd.nl/basic/
         type: Site
@@ -93,6 +83,11 @@ ad_lists:
         type: GitHub
         project_url: https://github.com/r-a-y/mobile-hosts
         maintainer: "r-a-y"
+
+      - url: https://blocklistproject.github.io/Lists/alt-version/ads-nl.txt
+        type: GitHub
+        project_url: https://github.com/blocklistproject
+        maintainer: "The Block List Project"
 
   - name: tracking
     sources:
@@ -135,6 +130,23 @@ ad_lists:
         type: GitLab
         project_url: https://gitlab.com/my-privacy-dns/matrix/matrix
         maintainer: "Spirillen Marsupilami"
+
+      - url: https://raw.githubusercontent.com/RooneyMcNibNug/pihole-stuff/master/SNAFU.txt
+        type: GitHub
+        project_url: https://github.com/RooneyMcNibNug/pihole-stuff
+        maintainer: RooneyMcNibNug
+
+  - name: combined
+    sources:
+      - url: https://raw.githubusercontent.com/anudeepND/blacklist/master/adservers.txt
+        type: GitHub
+        project_url: https://github.com/anudeepND/blacklist
+        maintainer: anudeepND
+
+      - url: https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext
+        type: Site
+        project_url: https://patreon.com/blocklist
+        maintainer: "Peter Lowe"
 
   - name: malicious
     sources:
