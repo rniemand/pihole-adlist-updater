@@ -20,3 +20,15 @@ await serviceProvider
 
 if (config.Repo.Enabled)
   repoService.CommitChanges();
+
+/*
+ * TODO:
+ *   - Add support for extracting portions out of a specific block list
+ *   - Add support for these values | ":: 0-checksrv.net.daraz.com"
+ *   - port additional lists from here | https://obutterbach.medium.com/unlock-the-full-potential-of-pihole-e795342e0e36
+ *
+ * LISTS:
+ *   - https://gitlab.com/quidsup/notrack-blocklists/raw/master/notrack-blocklist.txt
+ *   - https://raw.githubusercontent.com/notracking/hosts-blocklists/master/hostnames.txt
+ *
+ */

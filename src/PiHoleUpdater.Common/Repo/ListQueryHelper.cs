@@ -19,6 +19,7 @@ public static class ListQueryHelper
       AdList.Malicious => filter + "`MaliciousList` = 1",
       AdList.Adult => filter + "`AdultList` = 1",
       AdList.Other => filter + "`OtherList` = 1",
+      AdList.Spam => filter + "`SpamList` = 1",
       _ => throw new ArgumentOutOfRangeException(nameof(list), list, null)
     };
   }
@@ -33,6 +34,7 @@ public static class ListQueryHelper
       AdList.Malicious => "'malicious' as `ListName`",
       AdList.Adult => "'adult' as `ListName`",
       AdList.Other => "'other' as `ListName`",
+      AdList.Spam => "'spam' as `ListName`",
       _ => throw new ArgumentOutOfRangeException(nameof(list), list, null)
     };
   }
@@ -47,6 +49,7 @@ public static class ListQueryHelper
       AdList.Malicious => "MaliciousList",
       AdList.Adult => "AdultList",
       AdList.Other => "OtherList",
+      AdList.Spam => "SpamList",
       _ => throw new ArgumentOutOfRangeException(nameof(list), list, null)
     };
   }
@@ -61,6 +64,7 @@ public static class ListQueryHelper
       "malicious" => AdList.Malicious,
       "adult" => AdList.Adult,
       "other" => AdList.Other,
+      "spam" => AdList.Spam,
       "unknown" => AdList.Unknown,
       _ => throw new ArgumentOutOfRangeException(str)
     };

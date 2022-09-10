@@ -47,6 +47,12 @@ public class BlockListParser : IBlockListParser
       if (string.IsNullOrWhiteSpace(cleanLine))
         continue;
 
+      if (cleanLine.Contains(" "))
+        cleanLine = cleanLine.Split(" ")[0];
+
+      if (cleanLine.Contains("#"))
+        cleanLine = cleanLine.Split("#")[0];
+
       if (wlExact.Any(x => x.Equals(cleanLine, StringComparison.InvariantCultureIgnoreCase)))
         continue;
 

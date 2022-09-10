@@ -7,7 +7,7 @@ database:
 list_repo:
   checkout_dir: C:\Dev\pihole-adlist
   creds_file: ./github.creds.yaml
-  enabled: false
+  enabled: true
 
 list_generation:
   output_dir: C:\Dev\pihole-adlist\lists
@@ -84,6 +84,16 @@ ad_lists:
         project_url: https://oisd.nl/
         maintainer: "oisd"
 
+      - url: https://raw.githubusercontent.com/DRSDavidSoft/additional-hosts/master/domains/blacklist/adservers-and-trackers.txt
+        type: GitHub
+        project_url: https://github.com/DRSDavidSoft/additional-hosts
+        maintainer: DRSDavidSoft
+
+      - url: https://raw.githubusercontent.com/r-a-y/mobile-hosts/master/AdguardMobileAds.txt
+        type: GitHub
+        project_url: https://github.com/r-a-y/mobile-hosts
+        maintainer: "r-a-y"
+
   - name: tracking
     sources:
       - url: https://v.firebog.net/hosts/Easyprivacy.txt
@@ -115,6 +125,16 @@ ad_lists:
         type: GitHub
         project_url: https://github.com/lightswitch05/hosts
         maintainer: lightswitch05
+
+      - url: https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt
+        type: Site
+        project_url: https://disconnect.me/
+        maintainer: "Disconnect.me"
+
+      - url: https://gitlab.com/my-privacy-dns/matrix/matrix/-/raw/master/source/tracking/domains.list
+        type: GitLab
+        project_url: https://gitlab.com/my-privacy-dns/matrix/matrix
+        maintainer: "Spirillen Marsupilami"
 
   - name: malicious
     sources:
@@ -192,6 +212,13 @@ ad_lists:
         type: GitLab
         project_url: https://gitlab.com/ZeroDot1/CoinBlockerLists/-/tree/master/
         maintainer: "ZeroDot1"
+
+  - name: spam
+    sources:
+      - url: https://raw.githubusercontent.com/matomo-org/referrer-spam-blacklist/master/spammers.txt
+        type: GitHub
+        project_url: https://github.com/matomo-org/referrer-spam-blacklist
+        maintainer: "Matomo Analytics"
 
 whitelist:
   regex:

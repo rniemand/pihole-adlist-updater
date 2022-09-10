@@ -7,6 +7,7 @@ CREATE TABLE `Domains` (
 	`MaliciousList` BIT(1) NOT NULL DEFAULT b'0',
 	`AdultList` BIT(1) NOT NULL DEFAULT b'0',
 	`OtherList` BIT(1) NOT NULL DEFAULT b'0',
+	`SpamList` BIT(1) NOT NULL DEFAULT b'0',
 	`SeenCount` INT(11) NOT NULL DEFAULT '1',
 	`Domain` VARCHAR(256) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
 	INDEX `SuspiciousList` (`SuspiciousList`) USING BTREE,
@@ -14,8 +15,9 @@ CREATE TABLE `Domains` (
 	INDEX `TrackingList` (`TrackingList`) USING BTREE,
 	INDEX `MaliciousList` (`MaliciousList`) USING BTREE,
 	INDEX `AdultList` (`AdultList`) USING BTREE,
-	INDEX `OtherList` (`OtherList`) USING BTREE
+	INDEX `OtherList` (`OtherList`) USING BTREE,
+	INDEX `SpamList` (`SpamList`) USING BTREE
 )
 COLLATE='utf8mb4_general_ci'
-ENGINE=MyISAM
+ENGINE=InnoDB
 ;
