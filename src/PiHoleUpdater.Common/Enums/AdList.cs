@@ -8,5 +8,7 @@ public enum AdList
   Malicious,
   Adult,
   Other,
+  Spam,
+  Combined,
   Unknown
 }

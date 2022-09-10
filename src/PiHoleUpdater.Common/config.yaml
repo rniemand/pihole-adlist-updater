@@ -18,54 +18,219 @@ ad_lists:
   - name: suspicious
     sources:
       - url: https://raw.githubusercontent.com/PolishFiltersTeam/KADhosts/master/KADhosts.txt
+        type: GitHub
+        project_url: https://github.com/FiltersHeroes/KADhosts
+        maintainer: "Filters Heroes"
+
       - url: https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Spam/hosts
+        type: GitHub
+        project_url: https://github.com/FadeMind/hosts.extras
+        maintainer: "FadeMind"
+
       - url: https://v.firebog.net/hosts/static/w3kbl.txt
+        type: firebog
+        project_url: https://firebog.net/
+        maintainer: "firebog"
 
   - name: advertising
     sources:
       - url: https://adaway.org/hosts.txt
+        type: AdAway
+        project_url: https://adaway.org/
+        maintainer: "AdAway"
+
       - url: https://v.firebog.net/hosts/AdguardDNS.txt
+        type: firebog
+        project_url: https://firebog.net/
+        maintainer: "firebog"
+
       - url: https://v.firebog.net/hosts/Admiral.txt
+        type: firebog
+        project_url: https://firebog.net/
+        maintainer: "firebog"
+
       - url: https://raw.githubusercontent.com/anudeepND/blacklist/master/adservers.txt
+        type: GitHub
+        project_url: https://github.com/anudeepND/blacklist
+        maintainer: "anudeepND"
+
       - url: https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
+        type: Site
+        project_url: https://disconnect.me/
+        maintainer: "Disconnect.me"
+
       - url: https://v.firebog.net/hosts/Easylist.txt
-      - url: https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext
+        type: firebog
+        project_url: https://firebog.net/
+        maintainer: "firebog"
+
       - url: https://raw.githubusercontent.com/FadeMind/hosts.extras/master/UncheckyAds/hosts
-      - url: https://raw.githubusercontent.com/bigdargon/hostsVN/master/hosts
+        type: GitHub
+        project_url: https://github.com/FadeMind/hosts.extras
+        maintainer:  "FadeMind"
+
       - url: https://abp.oisd.nl/basic/
+        type: Site
+        project_url: https://oisd.nl/
+        maintainer: "oisd"
+
+      - url: https://raw.githubusercontent.com/DRSDavidSoft/additional-hosts/master/domains/blacklist/adservers-and-trackers.txt
+        type: GitHub
+        project_url: https://github.com/DRSDavidSoft/additional-hosts
+        maintainer: DRSDavidSoft
+
+      - url: https://raw.githubusercontent.com/r-a-y/mobile-hosts/master/AdguardMobileAds.txt
+        type: GitHub
+        project_url: https://github.com/r-a-y/mobile-hosts
+        maintainer: "r-a-y"
+
+      - url: https://blocklistproject.github.io/Lists/alt-version/ads-nl.txt
+        type: GitHub
+        project_url: https://github.com/blocklistproject
+        maintainer: "The Block List Project"
 
   - name: tracking
     sources:
       - url: https://v.firebog.net/hosts/Easyprivacy.txt
+        type: firebog
+        project_url: https://firebog.net/
+        maintainer: "firebog"
+
       - url: https://v.firebog.net/hosts/Prigent-Ads.txt
+        type: firebog
+        project_url: https://firebog.net/
+        maintainer: "firebog"
+
       - url: https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.2o7Net/hosts
+        type: GitHub
+        project_url: https://github.com/FadeMind/hosts.extras
+        maintainer:  "FadeMind"
+
       - url: https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
+        type: GitHub
+        project_url: https://github.com/crazy-max/WindowsSpyBlocker
+        maintainer: "crazy-max"
+
       - url: https://hostfiles.frogeye.fr/firstparty-trackers-hosts.txt
+        type: Site
+        project_url: https://hostfiles.frogeye.fr/
+        maintainer: "Geoffrey Frogeye"
+
       - url: https://raw.githubusercontent.com/lightswitch05/hosts/master/docs/lists/tracking-aggressive-extended.txt
+        type: GitHub
+        project_url: https://github.com/lightswitch05/hosts
+        maintainer: lightswitch05
+
+      - url: https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt
+        type: Site
+        project_url: https://disconnect.me/
+        maintainer: "Disconnect.me"
+
+      - url: https://gitlab.com/my-privacy-dns/matrix/matrix/-/raw/master/source/tracking/domains.list
+        type: GitLab
+        project_url: https://gitlab.com/my-privacy-dns/matrix/matrix
+        maintainer: "Spirillen Marsupilami"
+
+      - url: https://raw.githubusercontent.com/RooneyMcNibNug/pihole-stuff/master/SNAFU.txt
+        type: GitHub
+        project_url: https://github.com/RooneyMcNibNug/pihole-stuff
+        maintainer: RooneyMcNibNug
+
+  - name: combined
+    sources:
+      - url: https://raw.githubusercontent.com/anudeepND/blacklist/master/adservers.txt
+        type: GitHub
+        project_url: https://github.com/anudeepND/blacklist
+        maintainer: anudeepND
+
+      - url: https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext
+        type: Site
+        project_url: https://patreon.com/blocklist
+        maintainer: "Peter Lowe"
 
   - name: malicious
     sources:
       - url: https://raw.githubusercontent.com/DandelionSprout/adfilt/master/Alternate%20versions%20Anti-Malware%20List/AntiMalwareHosts.txt
+        type: GitHub
+        project_url: https://github.com/DandelionSprout/adfilt
+        maintainer: DandelionSprout
+
       - url: https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt
+        type: Site
+        project_url: https://osint.digitalside.it/
+        maintainer: "DigitalSide Threat Intel"
+
       - url: https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt
+        type: Site
+        project_url: https://disconnect.me/
+        maintainer: "Disconnect.me"
+
       - url: https://v.firebog.net/hosts/Prigent-Crypto.txt
+        type: firebog
+        project_url: https://firebog.net/
+        maintainer: "firebog"
+
       - url: https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Risk/hosts
+        type: GitHub
+        project_url: https://github.com/FadeMind/hosts.extras
+        maintainer:  "FadeMind"
+
       - url: https://bitbucket.org/ethanr/dns-blacklists/raw/8575c9f96e5b4a1308f2f12394abd86d0927a4a0/bad_lists/Mandiant_APT1_Report_Appendix_D.txt
+        type: BitBucket
+        project_url: https://bitbucket.org/ethanr/dns-blacklists/src/master/
+        maintainer: "Ethan Robish"
+
       - url: https://phishing.army/download/phishing_army_blocklist_extended.txt
+        type: Site
+        project_url: https://phishing.army/
+        maintainer: "Phishing Army"
+
       - url: https://malware-filter.gitlab.io/malware-filter/phishing-filter-hosts.txt
+        type: GitLab
+        project_url: https://gitlab.com/malware-filter/urlhaus-filter
+        maintainer: "Ming Di Leom"
+
       - url: https://gitlab.com/quidsup/notrack-blocklists/raw/master/notrack-malware.txt
+        type: GitLab
+        project_url: https://gitlab.com/quidsup/notrack-blocklists
+        maintainer: "Quids"
+
       - url: https://raw.githubusercontent.com/Spam404/lists/master/main-blacklist.txt
+        type: GitHub
+        project_url: https://github.com/Spam404/lists
+        maintainer: "Spam404"
+
       - url: https://raw.githubusercontent.com/AssoEchap/stalkerware-indicators/master/generated/hosts
+        type: GitHub
+        project_url: https://github.com/AssoEchap/stalkerware-indicators
+        maintainer: "AssoEchap"
+
       - url: https://urlhaus.abuse.ch/downloads/hostfile/
+        type: Site
+        project_url: https://urlhaus.abuse.ch/
+        maintainer: "abuse.ch"
 
   - name: adult
     enabled: false
     sources:
       - url: https://v.firebog.net/hosts/Prigent-Adult.txt
+        type: firebog
+        project_url: https://firebog.net/
+        maintainer: "firebog"
 
   - name: other
     sources:
       - url: https://zerodot1.gitlab.io/CoinBlockerLists/hosts_browser
+        type: GitLab
+        project_url: https://gitlab.com/ZeroDot1/CoinBlockerLists/-/tree/master/
+        maintainer: "ZeroDot1"
+
+  - name: spam
+    sources:
+      - url: https://raw.githubusercontent.com/matomo-org/referrer-spam-blacklist/master/spammers.txt
+        type: GitHub
+        project_url: https://github.com/matomo-org/referrer-spam-blacklist
+        maintainer: "Matomo Analytics"
 
 whitelist:
   regex:
