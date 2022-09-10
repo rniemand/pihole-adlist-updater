@@ -6,6 +6,7 @@ using PiHoleUpdater.Common.Models.Repo;
 using PiHoleUpdater.Common.Providers;
 using PiHoleUpdater.Common.Repo;
 using PiHoleUpdater.Common.Utils;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace PiHoleUpdater.Common.Services;
 
@@ -92,7 +93,12 @@ public class AdListService : IAdListService
         if (listType == AdList.Unknown)
           continue;
 
-        await _listWriter.WriteCategoryLists(listType);
+        var adListCategory = _config.AdListCategories
+          .FirstOrDefault(x => x.Name == listType && x.Enabled);
+        if(adListCategory is null)
+          continue;
+
+        await _listWriter.WriteCategoryLists(adListCategory);
       }
     }
 
