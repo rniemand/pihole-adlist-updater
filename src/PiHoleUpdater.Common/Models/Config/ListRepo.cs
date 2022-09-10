@@ -9,4 +9,7 @@ public class ListRepo
 
   [YamlMember(Alias = "creds_file")]
   public string CredentialsFile { get; set; } = "./github.creds.yaml";
+
+  [YamlMember(Alias = "enabled")]
+  public bool Enabled { get; set; } = true;
 }

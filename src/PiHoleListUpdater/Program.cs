@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using PiHoleUpdater.Common.Extensions;
+using PiHoleUpdater.Common.Models.Config;
 using PiHoleUpdater.Common.Services;
 
 var serviceProvider = new ServiceCollection()
@@ -7,14 +8,15 @@ var serviceProvider = new ServiceCollection()
   .AddPiHoleUpdater()
   .BuildServiceProvider();
 
-serviceProvider
-  .GetRequiredService<IRepoManagerService>()
-  .UpdateLocalRepo();
+var config = serviceProvider.GetRequiredService<PiHoleUpdaterConfig>();
+var repoService = serviceProvider.GetRequiredService<IRepoManagerService>();
+
+if (config.Repo.Enabled)
+  repoService.UpdateLocalRepo();
 
 await serviceProvider
   .GetRequiredService<IAdListService>()
   .TickAsync(CancellationToken.None);
 
-//serviceProvider
-//  .GetRequiredService<IRepoManagerService>()
-//  .CommitChanges();
+if (config.Repo.Enabled)
+  repoService.CommitChanges();

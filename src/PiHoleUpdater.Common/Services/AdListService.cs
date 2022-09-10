@@ -20,7 +20,7 @@ public class AdListService : IAdListService
   private readonly IBlockListProvider _listProvider;
   private readonly IBlockListParser _listParser;
   private readonly IBlockListFileWriter _listWriter;
-  private readonly IDomainTrackingService _domainTracker;
+  private readonly IDomainService _domainTracker;
   private readonly IDateTimeAbstraction _dateTime;
   private readonly PiHoleUpdaterConfig _config;
   private DateTime _nextRunTime;
@@ -29,7 +29,7 @@ public class AdListService : IAdListService
     IBlockListProvider listProvider,
     IBlockListParser listParser,
     IBlockListFileWriter listWriter,
-    IDomainTrackingService domainTracker,
+    IDomainService domainTracker,
     IDateTimeAbstraction dateTime,
     PiHoleUpdaterConfig config)
   {
@@ -76,10 +76,11 @@ public class AdListService : IAdListService
         if (addedCount == 0)
           continue;
 
-        _logger.LogDebug("Added {count} new entries to list: {list}", addedCount, listName);
+        Console.Write($"\r > Added {addedCount} new entries to {listName}          ");
       }
+      Console.WriteLine();
 
-      await _domainTracker.TrackListEntries(listName, domains);
+      await _domainTracker.TrackEntriesAsync(listName, domains);
     }
 
     if (_config.ListGeneration.GenerateCategoryLists)

@@ -6,18 +6,18 @@ using PiHoleUpdater.Common.Repo;
 
 namespace PiHoleUpdater.Common.Services;
 
-public interface IDomainTrackingService
+public interface IDomainService
 {
-  Task TrackListEntries(AdList list, HashSet<BlockListEntry> listEntries);
+  Task TrackEntriesAsync(AdList list, HashSet<BlockListEntry> listEntries);
 }
 
-public class DomainTrackingService : IDomainTrackingService
+public class DomainService : IDomainService
 {
-  private readonly ILoggerAdapter<DomainTrackingService> _logger;
+  private readonly ILoggerAdapter<DomainService> _logger;
   private readonly IDomainRepo _domainRepo;
   private readonly PiHoleUpdaterConfig _config;
 
-  public DomainTrackingService(ILoggerAdapter<DomainTrackingService> logger,
+  public DomainService(ILoggerAdapter<DomainService> logger,
     IDomainRepo domainRepo,
     PiHoleUpdaterConfig config)
   {
@@ -28,7 +28,7 @@ public class DomainTrackingService : IDomainTrackingService
 
 
   // Interface methods
-  public async Task TrackListEntries(AdList list, HashSet<BlockListEntry> listEntries)
+  public async Task TrackEntriesAsync(AdList list, HashSet<BlockListEntry> listEntries)
   {
     _logger.LogInformation("Processing {count} domains", listEntries.Count);
     var existingDbEntries = (await _domainRepo.GetEntriesAsync(list)).ToHashSet();
@@ -172,10 +172,6 @@ public class DomainTrackingService : IDomainTrackingService
 
       foreach (var dbDomain in dbDomains)
         existingEntries.Add(dbDomain);
-
-      Console.Write($"\r > Found {dbDomains.Count} common domain(s) from other lists " +
-                    $"- found {existingEntries.Count} shared domain(s) in total" +
-                    "          ");
     }
 
     if (batchDomains.Count > 0)
@@ -190,10 +186,6 @@ public class DomainTrackingService : IDomainTrackingService
       {
         foreach (var dbDomain in dbDomains)
           existingEntries.Add(dbDomain);
-
-        Console.Write($"\r > Found {dbDomains.Count} common domain(s) from other lists " +
-                      $"- found {existingEntries.Count} shared domain(s) in total" +
-                      "          ");
       }
     }
 
