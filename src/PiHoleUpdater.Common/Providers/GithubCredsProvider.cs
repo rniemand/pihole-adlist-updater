@@ -1,5 +1,5 @@
-using PiHoleUpdater.Common.Logging;
 using PiHoleUpdater.Common.Models;
+using PiHoleUpdater.Common.Models.Config;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -12,25 +12,29 @@ public interface IGithubCredsProvider
 
 public class GithubCredsProvider : IGithubCredsProvider
 {
-  private readonly ILoggerAdapter<GithubCredsProvider> _logger;
+  private readonly GithubCreds _credentials;
 
-  public GithubCredsProvider(ILoggerAdapter<GithubCredsProvider> logger)
+  public GithubCredsProvider(PiHoleUpdaterConfig config)
   {
-    _logger = logger;
+    _credentials = LoadCredentials(config);
   }
 
-  public GithubCreds GetCredentials()
+  public GithubCreds GetCredentials() => _credentials;
+
+  private static GithubCreds LoadCredentials(PiHoleUpdaterConfig config)
   {
-    var filePath = UpdaterUtils.ExeRelative("github.creds.yaml");
+    var filePath = config.Repo.CredentialsFile;
+    if (filePath.StartsWith("./"))
+      filePath = UpdaterUtils.ExeRelative(filePath.Replace("./", ""));
 
     if (!File.Exists(filePath))
       throw new Exception("Unable to find: github.creds.yaml");
 
-    IDeserializer YamlDeserializer = new DeserializerBuilder()
+    var yamlDeserializer = new DeserializerBuilder()
       .WithNamingConvention(UnderscoredNamingConvention.Instance)
       .IgnoreUnmatchedProperties()
       .Build();
 
-    return YamlDeserializer.Deserialize<GithubCreds>(File.ReadAllText(filePath));
+    return yamlDeserializer.Deserialize<GithubCreds>(File.ReadAllText(filePath));
   }
 }

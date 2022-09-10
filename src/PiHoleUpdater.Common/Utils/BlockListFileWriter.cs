@@ -33,7 +33,7 @@ public class BlockListFileWriter : IBlockListFileWriter
       .ToList();
 
     var listName = list.ToString("G").ToLower();
-    var filePath = Path.Join(_config.Paths.ListsOutput, $"{listName}.txt");
+    var filePath = Path.Join(_config.ListGeneration.OutputDir, $"{listName}.txt");
     WriteList(filePath, entries);
   }
 
@@ -46,7 +46,7 @@ public class BlockListFileWriter : IBlockListFileWriter
       .Select(x => x.Domain)
       .ToList();
 
-    var filePath = Path.Join(_config.Paths.ListsOutput, "_combined.txt");
+    var filePath = Path.Join(_config.ListGeneration.OutputDir, "_combined.txt");
     WriteList(filePath, entries);
   }
 
@@ -54,8 +54,8 @@ public class BlockListFileWriter : IBlockListFileWriter
   // Internal
   private void WriteList(string filePath, IEnumerable<string> entries)
   {
-    if (!Directory.Exists(_config.Paths.ListsOutput))
-      Directory.CreateDirectory(_config.Paths.ListsOutput);
+    if (!Directory.Exists(_config.ListGeneration.OutputDir))
+      Directory.CreateDirectory(_config.ListGeneration.OutputDir);
 
     if (File.Exists(filePath))
       File.Delete(filePath);

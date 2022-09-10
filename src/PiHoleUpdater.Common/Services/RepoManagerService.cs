@@ -34,7 +34,7 @@ public class RepoManagerService : IRepoManagerService
   public void UpdateLocalRepo()
   {
     var githubCreds = _credsProvider.GetCredentials();
-    var repoPath = _config.Paths.ListsRepo;
+    var repoPath = _config.Repo.CheckoutDir;
     var projectName = githubCreds.AppName;
 
     if (!Directory.Exists(repoPath))
@@ -49,7 +49,7 @@ public class RepoManagerService : IRepoManagerService
 
   public void CommitChanges()
   {
-    var repoPath = _config.Paths.ListsRepo;
+    var repoPath = _config.Repo.CheckoutDir;
     var branchName = "master";
 
     if (!Directory.Exists(repoPath))

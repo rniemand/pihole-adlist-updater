@@ -4,12 +4,12 @@ namespace PiHoleUpdater.Common.Models.Config;
 
 public class PiHoleUpdaterConfig
 {
-  [YamlMember(Alias = "paths")]
-  public PathsConfig Paths { get; set; } = new();
-
   [YamlMember(Alias = "database")]
   public DatabaseConfig Database { get; set; } = new();
-  
+
+  [YamlMember(Alias = "list_repo")]
+  public ListRepo Repo { get; set; } = new();
+
   [YamlMember(Alias = "list_generation")]
   public ListGenerationConfig ListGeneration { get; set; } = new();
   

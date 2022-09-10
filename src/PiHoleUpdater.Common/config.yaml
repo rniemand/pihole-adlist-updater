@@ -1,14 +1,15 @@
-paths:
-  lists_output: C:\Dev\pihole-adlist\lists
-  lists_repo: C:\Dev\pihole-adlist
-
 database:
   connection_string: "Server=127.0.0.1;Uid=pihole;Pwd=password;Database=PiHoleDomains;Allow User Variables=true;SslMode=none"
   insert_batch_size: 15000
   update_batch_size: 30000
   lookup_batch_size: 25000
 
+list_repo:
+  checkout_dir: C:\Dev\pihole-adlist
+  creds_file: ./github.creds.yaml
+
 list_generation:
+  output_dir: C:\Dev\pihole-adlist\lists
   category_lists: true
   combined_lists: false
 

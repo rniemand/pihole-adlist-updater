@@ -22,7 +22,6 @@ public class BlockListProvider : IBlockListProvider
   {
     try
     {
-      _logger.LogDebug("Fetching list: {list}", sourceList.List);
       var request = new HttpRequestMessage(HttpMethod.Get, sourceList.Url);
       var response = await _httpClient.SendAsync(request);
       response.EnsureSuccessStatusCode();
