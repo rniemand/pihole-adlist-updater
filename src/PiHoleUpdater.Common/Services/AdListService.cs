@@ -9,14 +9,14 @@ using PiHoleUpdater.Common.Utils;
 
 namespace PiHoleUpdater.Common.Services;
 
-public interface IListUpdaterService
+public interface IAdListService
 {
   Task TickAsync(CancellationToken stoppingToken);
 }
 
-public class ListUpdaterService : IListUpdaterService
+public class AdListService : IAdListService
 {
-  private readonly ILoggerAdapter<ListUpdaterService> _logger;
+  private readonly ILoggerAdapter<AdListService> _logger;
   private readonly IBlockListProvider _listProvider;
   private readonly IBlockListParser _listParser;
   private readonly IBlockListFileWriter _listWriter;
@@ -25,7 +25,7 @@ public class ListUpdaterService : IListUpdaterService
   private readonly PiHoleUpdaterConfig _config;
   private DateTime _nextRunTime;
 
-  public ListUpdaterService(ILoggerAdapter<ListUpdaterService> logger,
+  public AdListService(ILoggerAdapter<AdListService> logger,
     IBlockListProvider listProvider,
     IBlockListParser listParser,
     IBlockListFileWriter listWriter,
@@ -60,37 +60,44 @@ public class ListUpdaterService : IListUpdaterService
   // Internal methods
   private async Task RunListGenerationAsync()
   {
-    _logger.LogInformation("Processing lists...");
-    foreach (var blockList in _config.BlockLists.Where(x => x.Enabled))
+    _logger.LogInformation("Generating AdLists");
+    foreach (var adListCategory in _config.AdListCategories.Where(x => x.Enabled))
     {
-      var entries = new HashSet<BlockListEntry>();
-      var adList = blockList.Name;
+      var domains = new HashSet<BlockListEntry>();
+      var listName = adListCategory.Name;
 
-      _logger.LogInformation("Processing block list: {name}", adList);
-      foreach (var entry in blockList.Entries)
+      _logger.LogInformation("Processing list: {list}", listName);
+      foreach (var sourceList in adListCategory.Sources.Where(s => s.Enabled))
       {
-        var rawList = await _listProvider.GetBlockListAsync(entry.Url);
-        var newEntryCount = _listParser.AppendNewEntries(entries, adList, rawList);
+        sourceList.List = adListCategory.Name;
+        var rawListResponse = await _listProvider.GetBlockListAsync(sourceList);
 
-        if (newEntryCount == 0)
+        var addedCount = _listParser.AppendNewEntries(domains, listName, rawListResponse);
+        if (addedCount == 0)
           continue;
 
-        _logger.LogDebug("Added {count} new entries to list: {list}", newEntryCount, adList);
+        _logger.LogDebug("Added {count} new entries to list: {list}", addedCount, listName);
       }
 
-      await _domainTracker.TrackListEntries(adList, entries);
+      await _domainTracker.TrackListEntries(listName, domains);
     }
 
     if (_config.ListGeneration.GenerateCategoryLists)
     {
-      _logger.LogInformation("Generating category lists...");
+      _logger.LogInformation("Generating category lists");
       foreach (var listCategory in Enum.GetNames<AdList>())
-        await _listWriter.WriteCategoryLists(ListQueryHelper.AdListFromString(listCategory));
+      {
+        var listType = ListQueryHelper.AdListFromString(listCategory);
+        if (listType == AdList.Unknown)
+          continue;
+
+        await _listWriter.WriteCategoryLists(listType);
+      }
     }
 
     if (_config.ListGeneration.GenerateCombinedLists)
     {
-      _logger.LogInformation("Generating combined lists...");
+      _logger.LogInformation("Generating combined list");
       await _listWriter.WriteCombinedLists();
     }
   }

@@ -1,10 +1,11 @@
 using PiHoleUpdater.Common.Logging;
+using PiHoleUpdater.Common.Models.Config;
 
 namespace PiHoleUpdater.Common.Providers;
 
 public interface IBlockListProvider
 {
-  Task<string> GetBlockListAsync(string url);
+  Task<string> GetBlockListAsync(AdListSourceConfig sourceList);
 }
 
 public class BlockListProvider : IBlockListProvider
@@ -17,12 +18,12 @@ public class BlockListProvider : IBlockListProvider
     _logger = logger;
   }
 
-  public async Task<string> GetBlockListAsync(string url)
+  public async Task<string> GetBlockListAsync(AdListSourceConfig sourceList)
   {
     try
     {
-      _logger.LogDebug("Fetching URL: {url}", url);
-      var request = new HttpRequestMessage(HttpMethod.Get, url);
+      _logger.LogDebug("Fetching list: {list}", sourceList.List);
+      var request = new HttpRequestMessage(HttpMethod.Get, sourceList.Url);
       var response = await _httpClient.SendAsync(request);
       response.EnsureSuccessStatusCode();
       var rawResponse = await response.Content.ReadAsStringAsync();

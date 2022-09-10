@@ -61,6 +61,7 @@ public static class ListQueryHelper
       "malicious" => AdList.Malicious,
       "adult" => AdList.Adult,
       "other" => AdList.Other,
+      "unknown" => AdList.Unknown,
       _ => throw new ArgumentOutOfRangeException(str)
     };
   }

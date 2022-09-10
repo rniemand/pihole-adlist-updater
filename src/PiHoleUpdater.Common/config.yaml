@@ -4,25 +4,23 @@ paths:
 
 database:
   connection_string: "Server=127.0.0.1;Uid=pihole;Pwd=password;Database=PiHoleDomains;Allow User Variables=true;SslMode=none"
-  insert_batch_size: 10000
-  update_batch_size: 20000
-  lookup_batch_size: 20000
+  insert_batch_size: 15000
+  update_batch_size: 30000
+  lookup_batch_size: 25000
 
 list_generation:
   category_lists: true
   combined_lists: false
 
-block_lists:
+ad_lists:
   - name: suspicious
-    enabled: true
-    entries:
+    sources:
       - url: https://raw.githubusercontent.com/PolishFiltersTeam/KADhosts/master/KADhosts.txt
       - url: https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Spam/hosts
       - url: https://v.firebog.net/hosts/static/w3kbl.txt
 
   - name: advertising
-    enabled: true
-    entries:
+    sources:
       - url: https://adaway.org/hosts.txt
       - url: https://v.firebog.net/hosts/AdguardDNS.txt
       - url: https://v.firebog.net/hosts/Admiral.txt
@@ -35,8 +33,7 @@ block_lists:
       - url: https://abp.oisd.nl/basic/
 
   - name: tracking
-    enabled: true
-    entries:
+    sources:
       - url: https://v.firebog.net/hosts/Easyprivacy.txt
       - url: https://v.firebog.net/hosts/Prigent-Ads.txt
       - url: https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.2o7Net/hosts
@@ -45,8 +42,7 @@ block_lists:
       - url: https://raw.githubusercontent.com/lightswitch05/hosts/master/docs/lists/tracking-aggressive-extended.txt
 
   - name: malicious
-    enabled: true
-    entries:
+    sources:
       - url: https://raw.githubusercontent.com/DandelionSprout/adfilt/master/Alternate%20versions%20Anti-Malware%20List/AntiMalwareHosts.txt
       - url: https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt
       - url: https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt
@@ -62,13 +58,11 @@ block_lists:
 
   - name: adult
     enabled: false
-    entries:
+    sources:
       - url: https://v.firebog.net/hosts/Prigent-Adult.txt
-        enabled: true
 
   - name: other
-    enabled: true
-    entries:
+    sources:
       - url: https://zerodot1.gitlab.io/CoinBlockerLists/hosts_browser
 
 whitelist:

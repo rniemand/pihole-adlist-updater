@@ -13,8 +13,8 @@ public class PiHoleUpdaterConfig
   [YamlMember(Alias = "list_generation")]
   public ListGenerationConfig ListGeneration { get; set; } = new();
   
-  [YamlMember(Alias = "block_lists")]
-  public BlockListCategoryConfig[] BlockLists { get; set; } = Array.Empty<BlockListCategoryConfig>();
+  [YamlMember(Alias = "ad_lists")]
+  public AdListCategoryConfig[] AdListCategories { get; set; } = Array.Empty<AdListCategoryConfig>();
 
   [YamlMember(Alias = "whitelist")]
   public WhiteListConfig Whitelist { get; set; } = new();

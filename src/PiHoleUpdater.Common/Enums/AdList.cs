@@ -7,5 +7,6 @@ public enum AdList
   Tracking,
   Malicious,
   Adult,
-  Other
+  Other,
+  Unknown
 }

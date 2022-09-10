@@ -56,7 +56,7 @@ public static class ServiceCollectionExtensions
       .AddSingleton<IBlockListFileWriter, BlockListFileWriter>()
       .AddSingleton<IBlockListProvider, BlockListProvider>()
       .AddSingleton<IGithubCredsProvider, GithubCredsProvider>()
-      .AddSingleton<IListUpdaterService, ListUpdaterService>()
+      .AddSingleton<IAdListService, AdListService>()
       .AddSingleton<IDomainTrackingService, DomainTrackingService>();
   }
 

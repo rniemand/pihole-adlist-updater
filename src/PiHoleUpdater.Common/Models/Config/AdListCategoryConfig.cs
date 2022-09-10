@@ -4,7 +4,7 @@ using YamlDotNet.Serialization;
 
 namespace PiHoleUpdater.Common.Models.Config;
 
-public class BlockListCategoryConfig
+public class AdListCategoryConfig
 {
   [YamlMember(Alias = "name")]
   public AdList Name
@@ -19,6 +19,6 @@ public class BlockListCategoryConfig
   [YamlMember(Alias = "enabled")]
   public bool Enabled { get; set; } = true;
 
-  [YamlMember(Alias = "entries")]
-  public BlockListConfigEntry[] Entries { get; set; } = Array.Empty<BlockListConfigEntry>();
+  [YamlMember(Alias = "sources")]
+  public AdListSourceConfig[] Sources { get; set; } = Array.Empty<AdListSourceConfig>();
 }

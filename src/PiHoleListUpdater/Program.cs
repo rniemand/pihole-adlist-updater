@@ -12,7 +12,7 @@ ServiceProvider serviceProvider = new ServiceCollection()
 //  .UpdateLocalRepo();
 
 await serviceProvider
-  .GetRequiredService<IListUpdaterService>()
+  .GetRequiredService<IAdListService>()
   .TickAsync(CancellationToken.None);
 
 //serviceProvider
