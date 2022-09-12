@@ -40,3 +40,16 @@ COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 ;
 
+CREATE TABLE `Whitelists` (
+	`EntryId` BIGINT(20) NOT NULL AUTO_INCREMENT,
+	`Enabled` BIT(1) NOT NULL DEFAULT b'1',
+	`IsRegex` BIT(1) NOT NULL DEFAULT b'0',
+	`Order` SMALLINT(6) NOT NULL DEFAULT '255',
+	`Expression` VARCHAR(128) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
+	PRIMARY KEY (`EntryId`) USING BTREE,
+	INDEX `Enabled` (`Enabled`) USING BTREE,
+	INDEX `IsRegex` (`IsRegex`) USING BTREE
+)
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
