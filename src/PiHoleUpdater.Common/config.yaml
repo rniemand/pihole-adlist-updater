@@ -13,6 +13,7 @@ list_generation:
   output_dir: C:\Dev\pihole-adlist\lists
   category_lists: true
   combined_lists: false
+  service_state_file: ./service.state.json
 
 ad_lists:
   - name: suspicious

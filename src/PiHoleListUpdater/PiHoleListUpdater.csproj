@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ProjectGuid>5CE5FBC7-52F6-43F5-B5A0-FA3E52CADB83</ProjectGuid>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
