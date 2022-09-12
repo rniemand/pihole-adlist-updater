@@ -27,6 +27,7 @@ if (config.Repo.Enabled)
  *   - Add support for these values | ":: 0-checksrv.net.daraz.com"
  *   - port additional lists from here | https://obutterbach.medium.com/unlock-the-full-potential-of-pihole-e795342e0e36
  *   - ADD THIS: https://trainax.github.io/PiHoleLists/
+ *   - document usage: Newtonsoft.Json
  *
  * LISTS:
  *   - https://gitlab.com/quidsup/notrack-blocklists/raw/master/notrack-blocklist.txt
