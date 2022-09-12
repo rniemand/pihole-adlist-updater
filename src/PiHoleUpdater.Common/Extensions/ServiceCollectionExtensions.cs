@@ -58,6 +58,8 @@ public static class ServiceCollectionExtensions
       .AddSingleton<IGithubCredsProvider, GithubCredsProvider>()
       .AddSingleton<IAdListService, AdListService>()
       .AddSingleton<IPiHoleUpdaterService, PiHoleUpdaterService>()
+      .AddSingleton<IWhitelistRepo, WhitelistRepo>()
+      .AddSingleton<IAdListRepo, AdListRepo>()
       .AddSingleton<IDomainService, DomainService>();
   }
 
