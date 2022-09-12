@@ -68,7 +68,7 @@ public class AdListService : IAdListService
     foreach (AdListCategoryConfig category in _config.AdListCategories.Where(x => x.Enabled))
     {
       var domains = new HashSet<BlockListEntry>();
-      var adListSources = await GetSourceEntries(category.AdListType);
+      var adListSources = await GetAdListSourcesAsync(category.AdListType);
 
       _logger.LogInformation("Processing list: {list}", category.AdListType);
       foreach (AdListSourceEntry sourceList in adListSources)
@@ -94,7 +94,7 @@ public class AdListService : IAdListService
     }
   }
 
-  private async Task<List<AdListSourceEntry>> GetSourceEntries(AdListType listType)
+  private async Task<List<AdListSourceEntry>> GetAdListSourcesAsync(AdListType listType)
   {
     var dbEntries = await _listRepo.GetSourceEntries(listType);
 

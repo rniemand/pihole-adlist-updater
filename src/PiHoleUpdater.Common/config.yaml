@@ -1,13 +1,13 @@
 database:
   connection_string: "Server=127.0.0.1;Uid=pihole;Pwd=password;Database=PiHoleDomains;Allow User Variables=true;SslMode=none"
-  insert_batch_size: 15000
-  update_batch_size: 30000
+  insert_batch_size: 50000
+  update_batch_size: 25000
   lookup_batch_size: 25000
 
 list_repo:
   checkout_dir: C:\Dev\personal\pihole-adlist
   creds_file: ./github.creds.yaml
-  enabled: true
+  enabled: false
 
 list_generation:
   output_dir: C:\Dev\personal\pihole-adlist\lists
@@ -17,25 +17,11 @@ list_generation:
 
 ad_lists:
   - name: tracking
-    enabled: true
-
   - name: advertising
-    enabled: true
-
   - name: tracking
-    enabled: true
-
   - name: combined
-    enabled: true
-
   - name: malicious
-    enabled: true
-
   - name: adult
-    enabled: true
-
+    enabled: false # over 4M entries
   - name: other
-    enabled: true
-
   - name: spam
-    enabled: true
