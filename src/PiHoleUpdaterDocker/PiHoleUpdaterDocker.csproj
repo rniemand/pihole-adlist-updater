@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>dotnet-PiHoleUpdaterDocker-3B0943B5-3463-45DB-9ECB-9A800CD096E3</UserSecretsId>
+    <ProjectGuid>C8AC3374-2914-4895-9315-AF00AC83D933</ProjectGuid>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 

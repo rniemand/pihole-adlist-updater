@@ -12,4 +12,7 @@ public class ListGenerationConfig
 
   [YamlMember(Alias = "combined_lists")]
   public bool GenerateCombinedLists { get; set; }
+
+  [YamlMember(Alias = "service_state_file")]
+  public string ServiceStateFile { get; set; } = "./service.state.json";
 }

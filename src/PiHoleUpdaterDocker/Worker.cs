@@ -1,21 +1,21 @@
-using PiHoleUpdater.Common.Logging;
+using PiHoleUpdater.Common.Services;
 
 namespace PiHoleUpdaterDocker
 {
   public class Worker : BackgroundService
   {
-    private readonly ILoggerAdapter<Worker> _logger;
+    private readonly IPiHoleUpdaterService _updaterService;
 
-    public Worker(ILoggerAdapter<Worker> logger)
+    public Worker(IPiHoleUpdaterService updaterService)
     {
-      _logger = logger;
+      _updaterService = updaterService;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
       while (!stoppingToken.IsCancellationRequested)
       {
-        _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+        await _updaterService.TickAsync(stoppingToken);
         await Task.Delay(1000, stoppingToken);
       }
     }

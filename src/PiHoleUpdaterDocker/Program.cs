@@ -12,3 +12,5 @@ IHost host = Host.CreateDefaultBuilder(args)
     .Build();
 
 await host.RunAsync();
+
+// document usage: Newtonsoft.Json
