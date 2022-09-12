@@ -8,7 +8,7 @@ namespace PiHoleUpdater.Common.Utils;
 
 public interface IBlockListParser
 {
-  int AppendNewEntries(HashSet<BlockListEntry> domains, AdList list, string rawList);
+  int AppendNewEntries(HashSet<BlockListEntry> domains, AdListType list, string rawList);
 }
 
 public class BlockListParser : IBlockListParser
@@ -23,7 +23,7 @@ public class BlockListParser : IBlockListParser
     _config = config;
   }
 
-  public int AppendNewEntries(HashSet<BlockListEntry> domains, AdList list, string rawList)
+  public int AppendNewEntries(HashSet<BlockListEntry> domains, AdListType list, string rawList)
   {
     if (string.IsNullOrWhiteSpace(rawList))
       return 0;

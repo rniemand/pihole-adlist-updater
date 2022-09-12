@@ -23,3 +23,20 @@ CREATE TABLE `Domains` (
 COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 ;
+
+CREATE TABLE `AdLists` (
+	`AdListId` INT(11) NOT NULL AUTO_INCREMENT,
+	`Enabled` BIT(1) NOT NULL DEFAULT b'1',
+	`AdListType` INT(11) NOT NULL DEFAULT '0',
+	`AdListSource` TINYINT(4) NOT NULL DEFAULT '1',
+	`ListUrl` VARCHAR(256) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
+	`ProjectUrl` VARCHAR(256) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
+	`Maintainer` VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
+	PRIMARY KEY (`AdListId`) USING BTREE,
+	INDEX `Enabled` (`Enabled`) USING BTREE,
+	INDEX `AdListSource` (`AdListSource`) USING BTREE
+)
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
+

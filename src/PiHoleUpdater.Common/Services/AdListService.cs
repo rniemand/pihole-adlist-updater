@@ -87,10 +87,10 @@ public class AdListService : IAdListService
     if (_config.ListGeneration.GenerateCategoryLists)
     {
       _logger.LogInformation("Generating category lists");
-      foreach (var listCategory in Enum.GetNames<AdList>())
+      foreach (var listCategory in Enum.GetNames<AdListType>())
       {
         var listType = ListQueryHelper.AdListFromString(listCategory);
-        if (listType == AdList.Unknown)
+        if (listType == AdListType.Unknown)
           continue;
 
         var adListCategory = _config.AdListCategories

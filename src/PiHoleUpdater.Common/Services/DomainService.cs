@@ -8,7 +8,7 @@ namespace PiHoleUpdater.Common.Services;
 
 public interface IDomainService
 {
-  Task TrackEntriesAsync(AdList list, HashSet<BlockListEntry> listEntries);
+  Task TrackEntriesAsync(AdListType list, HashSet<BlockListEntry> listEntries);
 }
 
 public class DomainService : IDomainService
@@ -28,7 +28,7 @@ public class DomainService : IDomainService
 
 
   // Interface methods
-  public async Task TrackEntriesAsync(AdList list, HashSet<BlockListEntry> listEntries)
+  public async Task TrackEntriesAsync(AdListType list, HashSet<BlockListEntry> listEntries)
   {
     _logger.LogInformation("Processing {count} domains", listEntries.Count);
     var existingDbEntries = (await _domainRepo.GetEntriesAsync(list)).ToHashSet();
@@ -58,7 +58,7 @@ public class DomainService : IDomainService
 
 
   // Internal methods
-  private async Task AddNewEntriesAsync(AdList list, IReadOnlyCollection<BlockListEntry> domains)
+  private async Task AddNewEntriesAsync(AdListType list, IReadOnlyCollection<BlockListEntry> domains)
   {
     var domainsCount = domains.Count;
     if (domainsCount == 0)
@@ -143,7 +143,7 @@ public class DomainService : IDomainService
     await _domainRepo.UpdateSeenCountAsync(batch.ToArray());
   }
 
-  private async Task<HashSet<BlockListEntry>> FindExistingDomainsAsync(AdList list, IReadOnlyCollection<BlockListEntry> listEntries)
+  private async Task<HashSet<BlockListEntry>> FindExistingDomainsAsync(AdListType list, IReadOnlyCollection<BlockListEntry> listEntries)
   {
     if (listEntries.Count == 0)
       return new HashSet<BlockListEntry>();
@@ -199,7 +199,7 @@ public class DomainService : IDomainService
     return existingEntries;
   }
 
-  private async Task HandleCommonListEntriesAsync(AdList list, IReadOnlyCollection<BlockListEntry> entries)
+  private async Task HandleCommonListEntriesAsync(AdListType list, IReadOnlyCollection<BlockListEntry> entries)
   {
     if (entries.Count == 0)
       return;

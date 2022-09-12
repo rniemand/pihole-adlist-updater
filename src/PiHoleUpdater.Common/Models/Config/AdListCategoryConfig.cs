@@ -7,7 +7,7 @@ namespace PiHoleUpdater.Common.Models.Config;
 public class AdListCategoryConfig
 {
   [YamlMember(Alias = "name")]
-  public AdList Name
+  public AdListType Name
   {
     get => ListQueryHelper.AdListFromString(_name);
     set => _name = value.ToString("G").ToLower().Trim();
