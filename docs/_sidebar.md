@@ -3,6 +3,7 @@
 - **Configuration**
 - [config.yaml](./config.yaml.md)
 - [github.creds.yaml](./github.creds.yaml.md)
+- [DB Queries](./db-queries.md)
 - **Development**
 - [Development](./development.md)
 - [External Projects](./external-projects.md)

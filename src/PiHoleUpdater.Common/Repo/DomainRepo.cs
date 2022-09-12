@@ -10,12 +10,12 @@ namespace PiHoleUpdater.Common.Repo;
 
 public interface IDomainRepo
 {
-  Task<IEnumerable<BlockListEntry>> GetEntriesAsync(AdList list);
-  Task<IEnumerable<BlockListEntry>> GetEntriesByDomain(AdList list, string[] domains);
-  Task<int> AssignDomainsToListAsync(AdList list, string[] domains);
-  Task<int> AddEntriesAsync(AdList list, IEnumerable<BlockListEntry> entries);
+  Task<IEnumerable<BlockListEntry>> GetEntriesAsync(AdListType list);
+  Task<IEnumerable<BlockListEntry>> GetEntriesByDomain(AdListType list, string[] domains);
+  Task<int> AssignDomainsToListAsync(AdListType list, string[] domains);
+  Task<int> AddEntriesAsync(AdListType list, IEnumerable<BlockListEntry> entries);
   Task<int> UpdateSeenCountAsync(string[] domains);
-  Task<IEnumerable<SimpleDomainEntity>> GetCompiledListAsync(AdList list);
+  Task<IEnumerable<SimpleDomainEntity>> GetCompiledListAsync(AdListType list);
   Task<IEnumerable<SimpleDomainEntity>> GetCompiledListAsync();
 }
 
@@ -30,7 +30,7 @@ public class DomainRepo : IDomainRepo
 
 
   // Interface methods
-  public async Task<IEnumerable<BlockListEntry>> GetEntriesAsync(AdList list)
+  public async Task<IEnumerable<BlockListEntry>> GetEntriesAsync(AdListType list)
   {
     EnsureConnected();
 
@@ -59,7 +59,7 @@ public class DomainRepo : IDomainRepo
   //  return await _connection.QueryAsync<BlockListEntry>(query, new { domains });
   //}
 
-  public async Task<IEnumerable<BlockListEntry>> GetEntriesByDomain(AdList list, string[] domains)
+  public async Task<IEnumerable<BlockListEntry>> GetEntriesByDomain(AdListType list, string[] domains)
   {
     EnsureConnected();
 
@@ -87,7 +87,7 @@ public class DomainRepo : IDomainRepo
   //  return await _connection.ExecuteAsync(query, new { domains });
   //}
 
-  public async Task<int> AssignDomainsToListAsync(AdList list, string[] domains)
+  public async Task<int> AssignDomainsToListAsync(AdListType list, string[] domains)
   {
     EnsureConnected();
 
@@ -114,7 +114,7 @@ public class DomainRepo : IDomainRepo
   //  return await _connection.ExecuteAsync(query, entries);
   //}
 
-  public async Task<int> AddEntriesAsync(AdList list, IEnumerable<BlockListEntry> entries)
+  public async Task<int> AddEntriesAsync(AdListType list, IEnumerable<BlockListEntry> entries)
   {
     EnsureConnected();
 
@@ -159,7 +159,7 @@ public class DomainRepo : IDomainRepo
     return await _connection.ExecuteAsync(query);
   }
 
-  public async Task<IEnumerable<SimpleDomainEntity>> GetCompiledListAsync(AdList list)
+  public async Task<IEnumerable<SimpleDomainEntity>> GetCompiledListAsync(AdListType list)
   {
     EnsureConnected();
 

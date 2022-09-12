@@ -1,14 +1,14 @@
-using PiHoleUpdater.Common.Models.Config;
 using PiHoleUpdater.Common.Models.Repo;
 using PiHoleUpdater.Common.Repo;
 using System.Text.RegularExpressions;
 using PiHoleUpdater.Common.Enums;
+using PiHoleUpdater.Common.Models;
 
 namespace PiHoleUpdater.Common.Utils;
 
 public interface IBlockListParser
 {
-  int AppendNewEntries(HashSet<BlockListEntry> domains, AdList list, string rawList);
+  Task<int> AppendNewEntries(HashSet<BlockListEntry> domains, AdListType list, string rawList);
 }
 
 public class BlockListParser : IBlockListParser
@@ -16,21 +16,33 @@ public class BlockListParser : IBlockListParser
   private static readonly Regex TrimLineRx = new("((\\d{1,3}\\.){3}\\d{1,}|(\\:[^\\s]+))\\s+",
     RegexOptions.Compiled | RegexOptions.Singleline);
 
-  private readonly PiHoleUpdaterConfig _config;
+  private readonly IWhitelistRepo _whitelistRepo;
 
-  public BlockListParser(PiHoleUpdaterConfig config)
+  public BlockListParser(IWhitelistRepo whitelistRepo)
   {
-    _config = config;
+    _whitelistRepo = whitelistRepo;
   }
 
-  public int AppendNewEntries(HashSet<BlockListEntry> domains, AdList list, string rawList)
+
+  // Public methods
+  public async Task<int> AppendNewEntries(HashSet<BlockListEntry> domains, AdListType list, string rawList)
   {
     if (string.IsNullOrWhiteSpace(rawList))
       return 0;
 
+    var rawWhitelist = await GetWhitelistAsync();
     var listName = ListQueryHelper.StringFromAdList(list);
-    var wlRegex = _config.Whitelist.CompiledRegex;
-    var wlExact = _config.Whitelist.ExactDomains;
+
+    var wlRegex = rawWhitelist
+      .Where(x => x.IsRegex)
+      .Select(x => new Regex(x.Value, RegexOptions.Compiled | RegexOptions.Singleline))
+      .ToList();
+
+    var wlExact = rawWhitelist
+      .Where(x => !x.IsRegex)
+      .Select(x => x.Value)
+      .ToList();
+
     var addedCount = 0;
 
     foreach (var line in rawList.Split("\n", StringSplitOptions.RemoveEmptyEntries))
@@ -76,5 +88,21 @@ public class BlockListParser : IBlockListParser
     }
 
     return addedCount;
+  }
+
+
+  // Internal methods
+  private async Task<List<WhitelistExpression>> GetWhitelistAsync()
+  {
+    var dbEntries = await _whitelistRepo.GetEntriesAsync();
+
+    return dbEntries
+      .Select(entry => new WhitelistExpression
+      {
+        Value = entry.Expression,
+        IsRegex = entry.IsRegex,
+
+      })
+      .ToList();
   }
 }

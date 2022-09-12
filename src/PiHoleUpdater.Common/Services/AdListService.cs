@@ -1,12 +1,12 @@
 using PiHoleUpdater.Common.Abstractions;
 using PiHoleUpdater.Common.Enums;
 using PiHoleUpdater.Common.Logging;
+using PiHoleUpdater.Common.Models;
 using PiHoleUpdater.Common.Models.Config;
 using PiHoleUpdater.Common.Models.Repo;
 using PiHoleUpdater.Common.Providers;
 using PiHoleUpdater.Common.Repo;
 using PiHoleUpdater.Common.Utils;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace PiHoleUpdater.Common.Services;
 
@@ -24,6 +24,7 @@ public class AdListService : IAdListService
   private readonly IDomainService _domainTracker;
   private readonly IDateTimeAbstraction _dateTime;
   private readonly PiHoleUpdaterConfig _config;
+  private readonly IAdListRepo _listRepo;
   private DateTime _nextRunTime;
 
   public AdListService(ILoggerAdapter<AdListService> logger,
@@ -32,10 +33,12 @@ public class AdListService : IAdListService
     IBlockListFileWriter listWriter,
     IDomainService domainTracker,
     IDateTimeAbstraction dateTime,
-    PiHoleUpdaterConfig config)
+    PiHoleUpdaterConfig config,
+    IAdListRepo listRepo)
   {
     _logger = logger;
     _config = config;
+    _listRepo = listRepo;
     _dateTime = dateTime;
     _domainTracker = domainTracker;
     _listProvider = listProvider;
@@ -62,44 +65,26 @@ public class AdListService : IAdListService
   private async Task RunListGenerationAsync()
   {
     _logger.LogInformation("Generating AdLists");
-    foreach (var adListCategory in _config.AdListCategories.Where(x => x.Enabled))
+    foreach (AdListCategoryConfig category in _config.AdListCategories.Where(x => x.Enabled))
     {
       var domains = new HashSet<BlockListEntry>();
-      var listName = adListCategory.Name;
+      var adListSources = await GetAdListSourcesAsync(category.AdListType);
 
-      _logger.LogInformation("Processing list: {list}", listName);
-      foreach (var sourceList in adListCategory.Sources.Where(s => s.Enabled))
+      _logger.LogInformation("Processing list: {list}", category.AdListType);
+      foreach (AdListSourceEntry sourceList in adListSources)
       {
-        sourceList.List = adListCategory.Name;
         var rawListResponse = await _listProvider.GetBlockListAsync(sourceList);
 
-        var addedCount = _listParser.AppendNewEntries(domains, listName, rawListResponse);
+        var addedCount = await _listParser.AppendNewEntries(domains, category.AdListType, rawListResponse);
         if (addedCount == 0)
           continue;
 
-        Console.Write($"\r > Added {addedCount} new entries to {listName}          ");
+        Console.Write($"\r > Added {addedCount} new entries to {category.AdListType}          ");
       }
       Console.WriteLine();
 
-      await _domainTracker.TrackEntriesAsync(listName, domains);
-    }
-
-    if (_config.ListGeneration.GenerateCategoryLists)
-    {
-      _logger.LogInformation("Generating category lists");
-      foreach (var listCategory in Enum.GetNames<AdList>())
-      {
-        var listType = ListQueryHelper.AdListFromString(listCategory);
-        if (listType == AdList.Unknown)
-          continue;
-
-        var adListCategory = _config.AdListCategories
-          .FirstOrDefault(x => x.Name == listType && x.Enabled);
-        if(adListCategory is null)
-          continue;
-
-        await _listWriter.WriteCategoryLists(adListCategory);
-      }
+      await _domainTracker.TrackEntriesAsync(category.AdListType, domains);
+      await _listWriter.WriteCategoryLists(category.AdListType, adListSources);
     }
 
     if (_config.ListGeneration.GenerateCombinedLists)
@@ -107,5 +92,20 @@ public class AdListService : IAdListService
       _logger.LogInformation("Generating combined list");
       await _listWriter.WriteCombinedLists();
     }
+  }
+
+  private async Task<List<AdListSourceEntry>> GetAdListSourcesAsync(AdListType listType)
+  {
+    var dbEntries = await _listRepo.GetSourceEntries(listType);
+
+    return dbEntries.Select(entry => new AdListSourceEntry
+    {
+      Enabled = entry.Enabled,
+      Maintainer = entry.Maintainer,
+      ProjectUrl = entry.ProjectUrl,
+      SourceType = entry.AdListType,
+      ListUrl = entry.ListUrl
+    })
+      .ToList();
   }
 }

@@ -21,5 +21,5 @@ public class AdListSourceConfig
   public bool Enabled { get; set; } = true;
 
   [YamlIgnore]
-  public AdList List { get; set; } = AdList.Unknown;
+  public AdListType List { get; set; } = AdListType.Unknown;
 }

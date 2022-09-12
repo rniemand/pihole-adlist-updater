@@ -4,7 +4,7 @@ namespace PiHoleUpdater.Common.Repo;
 
 public static class ListQueryHelper
 {
-  public static string GenerateWhereFilter(AdList list, string prefix = "")
+  public static string GenerateWhereFilter(AdListType list, string prefix = "")
   {
     var filter = "";
 
@@ -13,67 +13,67 @@ public static class ListQueryHelper
 
     return list switch
     {
-      AdList.Suspicious => filter + "`SuspiciousList` = 1",
-      AdList.Advertising => filter + "`AdvertisingList` = 1",
-      AdList.Tracking => filter + "`TrackingList` = 1",
-      AdList.Malicious => filter + "`MaliciousList` = 1",
-      AdList.Adult => filter + "`AdultList` = 1",
-      AdList.Other => filter + "`OtherList` = 1",
-      AdList.Spam => filter + "`SpamList` = 1",
-      AdList.Combined => filter + "`CombinedList` = 1",
+      AdListType.Suspicious => filter + "`SuspiciousList` = 1",
+      AdListType.Advertising => filter + "`AdvertisingList` = 1",
+      AdListType.Tracking => filter + "`TrackingList` = 1",
+      AdListType.Malicious => filter + "`MaliciousList` = 1",
+      AdListType.Adult => filter + "`AdultList` = 1",
+      AdListType.Other => filter + "`OtherList` = 1",
+      AdListType.Spam => filter + "`SpamList` = 1",
+      AdListType.Combined => filter + "`CombinedList` = 1",
       _ => throw new ArgumentOutOfRangeException(nameof(list), list, null)
     };
   }
 
-  public static string GenerateSelectColumnName(AdList list)
+  public static string GenerateSelectColumnName(AdListType list)
   {
     return list switch
     {
-      AdList.Suspicious => "'suspicious' as `ListName`",
-      AdList.Advertising => "'advertising' as `ListName`",
-      AdList.Tracking => "'tracking' as `ListName`",
-      AdList.Malicious => "'malicious' as `ListName`",
-      AdList.Adult => "'adult' as `ListName`",
-      AdList.Other => "'other' as `ListName`",
-      AdList.Spam => "'spam' as `ListName`",
-      AdList.Combined => "'combined' as `ListName`",
+      AdListType.Suspicious => "'suspicious' as `ListName`",
+      AdListType.Advertising => "'advertising' as `ListName`",
+      AdListType.Tracking => "'tracking' as `ListName`",
+      AdListType.Malicious => "'malicious' as `ListName`",
+      AdListType.Adult => "'adult' as `ListName`",
+      AdListType.Other => "'other' as `ListName`",
+      AdListType.Spam => "'spam' as `ListName`",
+      AdListType.Combined => "'combined' as `ListName`",
       _ => throw new ArgumentOutOfRangeException(nameof(list), list, null)
     };
   }
 
-  public static string GetColumnName(AdList list)
+  public static string GetColumnName(AdListType list)
   {
     return list switch
     {
-      AdList.Suspicious => "SuspiciousList",
-      AdList.Advertising => "AdvertisingList",
-      AdList.Tracking => "TrackingList",
-      AdList.Malicious => "MaliciousList",
-      AdList.Adult => "AdultList",
-      AdList.Other => "OtherList",
-      AdList.Spam => "SpamList",
-      AdList.Combined => "CombinedList",
+      AdListType.Suspicious => "SuspiciousList",
+      AdListType.Advertising => "AdvertisingList",
+      AdListType.Tracking => "TrackingList",
+      AdListType.Malicious => "MaliciousList",
+      AdListType.Adult => "AdultList",
+      AdListType.Other => "OtherList",
+      AdListType.Spam => "SpamList",
+      AdListType.Combined => "CombinedList",
       _ => throw new ArgumentOutOfRangeException(nameof(list), list, null)
     };
   }
 
-  public static AdList AdListFromString(string str)
+  public static AdListType AdListTypeFromString(string str)
   {
     return str.ToLower().Trim() switch
     {
-      "suspicious" => AdList.Suspicious,
-      "advertising" => AdList.Advertising,
-      "tracking" => AdList.Tracking,
-      "malicious" => AdList.Malicious,
-      "adult" => AdList.Adult,
-      "other" => AdList.Other,
-      "spam" => AdList.Spam,
-      "unknown" => AdList.Unknown,
-      "combined" => AdList.Combined,
+      "suspicious" => AdListType.Suspicious,
+      "advertising" => AdListType.Advertising,
+      "tracking" => AdListType.Tracking,
+      "malicious" => AdListType.Malicious,
+      "adult" => AdListType.Adult,
+      "other" => AdListType.Other,
+      "spam" => AdListType.Spam,
+      "unknown" => AdListType.Unknown,
+      "combined" => AdListType.Combined,
       _ => throw new ArgumentOutOfRangeException(str)
     };
   }
 
-  public static string StringFromAdList(AdList list) =>
+  public static string StringFromAdList(AdListType list) =>
     list.ToString("G").ToLower().Trim();
 }
