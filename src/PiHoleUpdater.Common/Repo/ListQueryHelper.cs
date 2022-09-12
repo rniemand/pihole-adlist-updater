@@ -57,7 +57,7 @@ public static class ListQueryHelper
     };
   }
 
-  public static AdListType AdListFromString(string str)
+  public static AdListType AdListTypeFromString(string str)
   {
     return str.ToLower().Trim() switch
     {
