@@ -3,7 +3,7 @@ using PiHoleUpdater.Common.Extensions;
 using PiHoleUpdater.Common.Models.Config;
 using PiHoleUpdater.Common.Services;
 
-var serviceProvider = new ServiceCollection()
+ServiceProvider serviceProvider = new ServiceCollection()
   .AddLoggingAndConfig()
   .AddPiHoleUpdater()
   .BuildServiceProvider();
