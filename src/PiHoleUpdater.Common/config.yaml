@@ -1,16 +1,16 @@
 database:
-  connection_string: "Server=192.168.0.60;Uid=pihole;Pwd=St7Pe8EnNKpP8fpR;Database=PiHoleUpdater;Allow User Variables=true;SslMode=none"
+  connection_string: "Server=127.0.0.1;Uid=pihole;Pwd=password;Database=PiHoleDomains;Allow User Variables=true;SslMode=none"
   insert_batch_size: 15000
   update_batch_size: 30000
   lookup_batch_size: 25000
 
 list_repo:
-  checkout_dir: C:\Dev\pihole-adlist
+  checkout_dir: C:\Dev\personal\pihole-adlist
   creds_file: ./github.creds.yaml
   enabled: true
 
 list_generation:
-  output_dir: C:\Dev\pihole-adlist\lists
+  output_dir: C:\Dev\personal\pihole-adlist\lists
   category_lists: true
   combined_lists: false
   service_state_file: ./service.state.json
@@ -215,10 +215,3 @@ ad_lists:
         type: GitHub
         project_url: https://github.com/matomo-org/referrer-spam-blacklist
         maintainer: "Matomo Analytics"
-
-whitelist:
-  regex:
-    - .*\.whatsapp\.(net|com)$
-    - .*?\.gvt(\d{1,})\.com
-  exact:
-    - fonts.gstatic.com

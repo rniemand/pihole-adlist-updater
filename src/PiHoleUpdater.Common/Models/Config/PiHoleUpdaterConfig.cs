@@ -15,7 +15,4 @@ public class PiHoleUpdaterConfig
   
   [YamlMember(Alias = "ad_lists")]
   public AdListCategoryConfig[] AdListCategories { get; set; } = Array.Empty<AdListCategoryConfig>();
-
-  [YamlMember(Alias = "whitelist")]
-  public WhiteListConfig Whitelist { get; set; } = new();
 }

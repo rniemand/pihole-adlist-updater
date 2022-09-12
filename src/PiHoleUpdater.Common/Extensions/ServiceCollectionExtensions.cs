@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using PiHoleUpdater.Common.Logging;
-using System.Text.RegularExpressions;
 using PiHoleUpdater.Common.Providers;
 using PiHoleUpdater.Common.Repo;
 using PiHoleUpdater.Common.Services;
@@ -72,12 +71,6 @@ public static class ServiceCollectionExtensions
       throw new Exception($"Unable to find configuration file: {exeRelative}");
 
     var configYaml = File.ReadAllText(exeRelative);
-    var config = YamlDeserializer.Deserialize<PiHoleUpdaterConfig>(configYaml);
-
-    config.Whitelist.CompiledRegex = config.Whitelist.RegexPatterns
-      .Select(x => new Regex(x, RegexOptions.Compiled | RegexOptions.Singleline))
-      .ToArray();
-
-    return config;
+    return YamlDeserializer.Deserialize<PiHoleUpdaterConfig>(configYaml);
   }
 }

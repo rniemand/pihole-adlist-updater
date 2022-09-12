@@ -73,7 +73,7 @@ public class AdListService : IAdListService
         sourceList.List = adListCategory.Name;
         var rawListResponse = await _listProvider.GetBlockListAsync(sourceList);
 
-        var addedCount = _listParser.AppendNewEntries(domains, listName, rawListResponse);
+        var addedCount = await _listParser.AppendNewEntries(domains, listName, rawListResponse);
         if (addedCount == 0)
           continue;
 
