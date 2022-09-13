@@ -20,6 +20,7 @@ VALUES
   (2, 2, 'The Block List Project'               , 'https://github.com/blocklistproject'                         , 'https://blocklistproject.github.io/Lists/alt-version/ads-nl.txt'),
   (2, 3, 'firebog'                              , 'https://firebog.net/'                                        , 'https://v.firebog.net/hosts/Prigent-Ads.txt'),
   (2, 2, 'anudeepND'                            , 'https://github.com/anudeepND/blacklist'                      , 'https://raw.githubusercontent.com/anudeepND/blacklist/master/adservers.txt'),
+  (2, 4, 'AdAway'                               , 'https://adaway.org/'                                         , 'https://raw.githubusercontent.com/deathbybandaid/piholeparser/master/Subscribable-Lists/ParsedBlacklists/AdAway-Default-Blocklist.txt'),
 
   -- 3: Tracking
   (3, 3, 'firebog'                              , 'https://firebog.net/'                                        , 'https://v.firebog.net/hosts/Easyprivacy.txt'),
@@ -30,6 +31,10 @@ VALUES
   (3, 5, 'Disconnect.me'                        , 'https://disconnect.me/'                                      , 'https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt'),
   (3, 7, 'Spirillen Marsupilami'                , 'https://gitlab.com/my-privacy-dns/matrix/matrix'             , 'https://gitlab.com/my-privacy-dns/matrix/matrix/-/raw/master/source/tracking/domains.list'),
   (3, 2, 'RooneyMcNibNug'                       , 'https://github.com/RooneyMcNibNug/pihole-stuff'              , 'https://raw.githubusercontent.com/RooneyMcNibNug/pihole-stuff/master/SNAFU.txt'),
+  (3, 6, 'Quids'                                , 'https://gitlab.com/quidsup/notrack-blocklists/'              , 'https://gitlab.com/quidsup/notrack-blocklists/raw/master/notrack-blocklist.txt'),
+  (3, 2, 'notracking'                           , 'https://github.com/notracking/hosts-blocklists'              , 'https://raw.githubusercontent.com/notracking/hosts-blocklists/master/hostnames.txt'),
+  (3, 2, 'r-a-y'                                , 'https://github.com/r-a-y/mobile-hosts'                       , 'https://raw.githubusercontent.com/r-a-y/mobile-hosts/master/AdguardMobileSpyware.txt'),
+  (3, 2, 'pirat28'                              , 'https://github.com/pirat28/IHateTracker'                     , 'https://raw.githubusercontent.com/pirat28/IHateTracker/master/iHateTracker.txt'),
 
   -- 6: Other
   (6, 6, 'Peter Lowe'                           , 'https://patreon.com/blocklist'                               , 'https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext'),
@@ -53,7 +58,10 @@ VALUES
   (5, 3, 'firebog'                              , 'https://firebog.net/'                                        , 'https://v.firebog.net/hosts/Prigent-Adult.txt'),
 
   -- 7: Spam
-  (7, 2, 'Matomo Analytics'                     , 'https://github.com/matomo-org/referrer-spam-blacklist'       , 'https://raw.githubusercontent.com/matomo-org/referrer-spam-blacklist/master/spammers.txt')
+  (7, 2, 'Matomo Analytics'                     , 'https://github.com/matomo-org/referrer-spam-blacklist'       , 'https://raw.githubusercontent.com/matomo-org/referrer-spam-blacklist/master/spammers.txt'),
+
+  -- 10: Facebook
+  (10, 2, 'kowith337'                           , 'https://github.com/kowith337/PersonalFilterListCollection'   , 'https://raw.githubusercontent.com/kowith337/PersonalFilterListCollection/master/hosts/hosts_facebook0.txt')
 ;
 
 

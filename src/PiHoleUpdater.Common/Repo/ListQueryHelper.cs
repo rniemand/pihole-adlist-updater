@@ -13,14 +13,15 @@ public static class ListQueryHelper
 
     return list switch
     {
-      AdListType.Suspicious => filter + "`SuspiciousList` = 1",
-      AdListType.Advertising => filter + "`AdvertisingList` = 1",
-      AdListType.Tracking => filter + "`TrackingList` = 1",
-      AdListType.Malicious => filter + "`MaliciousList` = 1",
-      AdListType.Adult => filter + "`AdultList` = 1",
-      AdListType.Other => filter + "`OtherList` = 1",
-      AdListType.Spam => filter + "`SpamList` = 1",
-      AdListType.Combined => filter + "`CombinedList` = 1",
+      AdListType.Suspicious => filter + "`Suspicious` = 1",
+      AdListType.Advertising => filter + "`Advertising` = 1",
+      AdListType.Tracking => filter + "`Tracking` = 1",
+      AdListType.Malicious => filter + "`Malicious` = 1",
+      AdListType.Adult => filter + "`Adult` = 1",
+      AdListType.Other => filter + "`Other` = 1",
+      AdListType.Spam => filter + "`Spam` = 1",
+      AdListType.Combined => filter + "`Combined` = 1",
+      AdListType.Facebook => filter + "`Facebook` = 1",
       _ => throw new ArgumentOutOfRangeException(nameof(list), list, null)
     };
   }
@@ -37,6 +38,7 @@ public static class ListQueryHelper
       AdListType.Other => "'other' as `ListName`",
       AdListType.Spam => "'spam' as `ListName`",
       AdListType.Combined => "'combined' as `ListName`",
+      AdListType.Facebook => "'facebook' as `ListName`",
       _ => throw new ArgumentOutOfRangeException(nameof(list), list, null)
     };
   }
@@ -45,14 +47,15 @@ public static class ListQueryHelper
   {
     return list switch
     {
-      AdListType.Suspicious => "SuspiciousList",
-      AdListType.Advertising => "AdvertisingList",
-      AdListType.Tracking => "TrackingList",
-      AdListType.Malicious => "MaliciousList",
-      AdListType.Adult => "AdultList",
-      AdListType.Other => "OtherList",
-      AdListType.Spam => "SpamList",
-      AdListType.Combined => "CombinedList",
+      AdListType.Suspicious => "Suspicious",
+      AdListType.Advertising => "Advertising",
+      AdListType.Tracking => "Tracking",
+      AdListType.Malicious => "Malicious",
+      AdListType.Adult => "Adult",
+      AdListType.Other => "Other",
+      AdListType.Spam => "Spam",
+      AdListType.Combined => "Combined",
+      AdListType.Facebook => "Facebook",
       _ => throw new ArgumentOutOfRangeException(nameof(list), list, null)
     };
   }
@@ -70,6 +73,7 @@ public static class ListQueryHelper
       "spam" => AdListType.Spam,
       "unknown" => AdListType.Unknown,
       "combined" => AdListType.Combined,
+      "facebook" => AdListType.Facebook,
       _ => throw new ArgumentOutOfRangeException(str)
     };
   }

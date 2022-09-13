@@ -1,6 +1,18 @@
 # DB Queries
 Useful queries to make things a lot easier.
 
+## AdLists
+
+### Add New List
+```sql
+INSERT INTO `AdLists`
+	(`AdListType`, `AdListSource`, `Maintainer`, `ProjectUrl`, `ListUrl`)
+VALUES
+  (3, 6, 'maintainer' , 'project_url' , 'list_url')
+```
+
+Please refer to [AdListSource](./enums/AdListSource.md) and [AdListType](./enums/AdListType.md) for possible values.
+
 ## Domain Queries
 
 ### Check for Enrty

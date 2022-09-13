@@ -1,5 +1,6 @@
-namespace PiHoleUpdater.Common.Enums;
+# AdListType
 
+```cs
 public enum AdListType
 {
   Unknown = 1,
@@ -10,6 +11,6 @@ public enum AdListType
   Other = 6,
   Spam = 7,
   Combined = 8,
-  Suspicious = 9,
-  Facebook = 10
+  Suspicious = 9
 }
+```

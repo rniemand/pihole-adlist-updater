@@ -8,3 +8,6 @@
 - [Development](./development.md)
 - [External Projects](./external-projects.md)
 - [Tech. Stack](./tech-stack.md)
+- **Enums**
+  - [AdListSource](./enums/AdListSource.md)
+  - [AdListType](./enums/AdListType.md)

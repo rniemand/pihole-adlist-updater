@@ -7,7 +7,7 @@ database:
 list_repo:
   checkout_dir: C:\Dev\personal\pihole-adlist
   creds_file: ./github.creds.yaml
-  enabled: false
+  enabled: true
 
 list_generation:
   output_dir: C:\Dev\personal\pihole-adlist\lists
@@ -16,12 +16,21 @@ list_generation:
   service_state_file: ./service.state.json
 
 ad_lists:
+  - name: facebook
+    enabled: true
   - name: tracking
+    enabled: true
   - name: advertising
+    enabled: true
   - name: tracking
+    enabled: true
   - name: combined
+    enabled: true
   - name: malicious
+    enabled: true
   - name: adult
     enabled: false # over 4M entries
   - name: other
+    enabled: true
   - name: spam
+    enabled: true
