@@ -43,7 +43,7 @@ ENGINE=InnoDB
 ;
 
 CREATE TABLE `Whitelists` (
-	`EntryId` INT(11) NOT NULL DEFAULT '0',
+	`EntryId` INT(11) NOT NULL AUTO_INCREMENT,
 	`Enabled` BIT(1) NOT NULL DEFAULT b'1',
 	`IsRegex` BIT(1) NOT NULL DEFAULT b'0',
 	`Order` SMALLINT(6) NOT NULL DEFAULT '255',
@@ -54,4 +54,6 @@ CREATE TABLE `Whitelists` (
 )
 COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
+AUTO_INCREMENT=8
 ;
+

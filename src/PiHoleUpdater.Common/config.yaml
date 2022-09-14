@@ -1,8 +1,8 @@
 database:
   connection_string: "Server=127.0.0.1;Uid=pihole;Pwd=password;Database=PiHoleDomains;Allow User Variables=true;SslMode=none"
   insert_batch_size: 50000
-  update_batch_size: 25000
-  lookup_batch_size: 25000
+  update_batch_size: 30000
+  lookup_batch_size: 40000
 
 list_repo:
   checkout_dir: C:\Dev\personal\pihole-adlist
